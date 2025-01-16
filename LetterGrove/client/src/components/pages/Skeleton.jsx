@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { GoogleLogin, googleLogout } from "@react-oauth/google";
-import CreateGameButton from "../CreateGameButton";
+import CreateGameButton from "../modules/CreateGameButton";
 
 import "../../utilities.css";
 import "./Skeleton.css";

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import Closebutton from "../assets/Closebutton.png";
+import Closebutton from "../../assets/Closebutton.png";
 import "./LobbyCreationPopup.css";
 import LobbySettings from "./LobbySettings";
+import CreateLobbyButton from "./CreateLobbyButton";
 
 const LobbyCreationPopup = (props) => {
   return (
@@ -17,6 +18,13 @@ const LobbyCreationPopup = (props) => {
       </div>
       <span>
         <LobbySettings gameSettings={props.gameSettings} setGameSettings={props.setGameSettings} />
+      </span>
+      <span>
+        <CreateLobbyButton
+          lobbyCode={props.lobbyCode}
+          gameSettings={props.gameSettings}
+          setGameSettings={props.setGameSettings}
+        />
       </span>
     </div>
   );

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import checkedBox from "../assets/checkbox/checkbox1.png";
-import uncheckedBox from "../assets/checkbox/checkbox0.png";
+import checkedBox from "../../assets/checkbox/checkbox1.png";
+import uncheckedBox from "../../assets/checkbox/checkbox0.png";
 
 // Creating checkbox for settings toggle
 const Checkbox = (props) => {
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(true);
   const handleClick = () => {
     setChecked(!checked);
     props.setGameSettings({ ...props.gameSettings, [props.id]: !checked });
@@ -26,6 +26,7 @@ const IntInput = (props) => {
       <span> {props.text} </span>
       <input
         type="number"
+        placeholder={props.placeholder}
         onChange={(event) => {
           // update text state and change gamesettings
           setText(event.target.value);
@@ -71,6 +72,7 @@ const LobbySettings = (props) => {
           id="steps"
           gameSettings={props.gameSettings}
           setGameSettings={props.setGameSettings}
+          placeholder={props.gameSettings.steps}
         />
       </div>
       <div></div>
@@ -88,6 +90,7 @@ const LobbySettings = (props) => {
           id="pointsModifier"
           gameSettings={props.gameSettings}
           setGameSettings={props.setGameSettings}
+          placeholder={props.gameSettings.pointsModifier}
         />
       </div>
       <div>
@@ -96,8 +99,10 @@ const LobbySettings = (props) => {
           id="minWordLength"
           gameSettings={props.gameSettings}
           setGameSettings={props.setGameSettings}
+          placeholder={props.gameSettings.minWordLength}
         />
       </div>
+      <div></div>
     </div>
   );
 };

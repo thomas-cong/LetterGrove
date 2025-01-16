@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { get, post } from "../utilities";
-import buttonImage from "../assets/640signs1.png";
+import { get, post } from "../../utilities";
+import buttonImage from "../../assets/640signs1.png";
 import "./CreateGameButton.css";
 import LobbyCreationPopup from "./LobbyCreationPopup";
-import "../assets/font.css";
+import "../../assets/font.css";
 
 const CreateGameButton = () => {
   const [LobbyShowing, setLobbyShowing] = useState(false);
@@ -11,12 +11,12 @@ const CreateGameButton = () => {
   const [username, setUsername] = useState("");
 
   const [gameSettings, setGameSettings] = useState({
-    minWordLength: undefined, // int
-    pointsModifier: undefined, // int
+    minWordLength: 3, // int
+    pointsModifier: 1, // int
     mode: "Time", // string
-    steps: undefined, // int
-    defaultLetters: undefined, // checkbox
-    powerUps: undefined, // array
+    steps: 180, // int
+    defaultLetters: true, // checkbox
+    powerUps: [], // array
   });
 
   // handles showing the lobby by state update
@@ -24,7 +24,7 @@ const CreateGameButton = () => {
     // Generates an alphanumeric 5 char sequence for the lobby through api request
     get("/api/generateLobbyCode")
       .then((code) => {
-        setLobbyCode(code.lobbyId);
+        setLobbyCode(code.lobbyCodeGenerated);
         console.log(code);
       })
       .catch(setLobbyCode("ERROR"));
