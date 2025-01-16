@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { GoogleLogin, googleLogout } from "@react-oauth/google";
+import CreateGameButton from "../CreateGameButton";
 
 import "../../utilities.css";
 import "./Skeleton.css";
@@ -9,6 +10,7 @@ const Skeleton = () => {
   const { userId, handleLogin, handleLogout } = useContext(UserContext);
   return (
     <>
+      <CreateGameButton />
       {userId ? (
         <button
           onClick={() => {

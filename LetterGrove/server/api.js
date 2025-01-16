@@ -42,6 +42,14 @@ router.post("/initsocket", (req, res) => {
 // |------------------------------|
 // | write your API methods below!|
 // |------------------------------|
+router.get("/generateLobbyCode", (req, res) => {
+  const lobbyId = Array.from({ length: 5 }, () =>
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".charAt(
+      Math.floor(Math.random() * 62)
+    )
+  ).join("");
+  res.send({ lobbyId });
+});
 
 // anything else falls to this "not found" case
 router.all("*", (req, res) => {
