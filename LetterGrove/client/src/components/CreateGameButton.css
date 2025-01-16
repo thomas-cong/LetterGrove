@@ -1,11 +1,13 @@
-.container {
+.sign {
   position: relative;
-  text-align: center;
-  color: white;
 }
-.centered {
+
+.text {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  top: 0px;
+  left: 0px;
+  width: 640px;
+  color: white;
+  padding: 0px;
+  text-align: center;
 }

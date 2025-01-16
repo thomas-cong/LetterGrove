@@ -1,11 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { get, post } from "../utilities";
 import buttonImage from "../assets/640signs1.png";
 import "./CreateGameButton.css";
+import LobbyCreationPopup from "./LobbyCreationPopup";
+import "../assets/font.css";
 
 const CreateGameButton = () => {
   const [LobbyShowing, setLobbyShowing] = useState(false);
   const [lobbyCode, setLobbyCode] = useState("");
+  const [username, setUsername] = useState("");
+
+  const [gameSettings, setGameSettings] = useState({
+    minWordLength: undefined, // int
+    pointsModifier: undefined, // int
+    mode: "Time", // string
+    steps: undefined, // int
+    defaultLetters: undefined, // checkbox
+    powerUps: undefined, // array
+  });
 
   // handles showing the lobby by state update
   const showLobby = () => {
@@ -21,17 +33,35 @@ const CreateGameButton = () => {
   // handles hiding the button by state update
   const hideLobby = () => {
     setLobbyShowing(false);
+    setLobbyCode("");
+    setUsername("");
   };
+  useEffect(() => {
+    console.log("username: ", username);
+  }, [username]);
 
+  // Conditionally render either the create game button or the damn lobby creation popup
   return (
-    <div className="container">
-      <img src={buttonImage} onClick={showLobby}></img>
-      <h1 className="centered" onClick={showLobby}>
-        Create Game
-      </h1>
-      {LobbyShowing && <button onClick={hideLobby}> Close </button>}
+    <div>
+      {!LobbyShowing && (
+        <div>
+          <img src={buttonImage} onClick={showLobby} className="sign" />
+          <h2 className="text" onClick={showLobby}>
+            Create Game
+          </h2>
+        </div>
+      )}
+      {LobbyShowing && (
+        <LobbyCreationPopup
+          lobbyCode={lobbyCode}
+          hideLobby={hideLobby}
+          setUsername={setUsername}
+          setGameSettings={setGameSettings}
+          gameSettings={gameSettings}
+        />
+      )}
     </div>
-  ); //this just a filler button, we want to replace with actual popup tmrw.
+  );
 };
 
 export default CreateGameButton;

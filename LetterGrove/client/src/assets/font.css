@@ -1,0 +1,9 @@
+@font-face {
+  font-family: "Dogica";
+  src: url("./dogicapixel.ttf") format("ttf");
+  font-weight: normal; /* Optional */
+  font-style: normal; /* Optional */
+}
+* {
+  font-family: "Dogica", sans-serif; /* Fallback fonts */
+}
