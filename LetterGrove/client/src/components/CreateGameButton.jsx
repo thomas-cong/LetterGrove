@@ -31,7 +31,7 @@ const CreateGameButton = () => {
       </h1>
       {LobbyShowing && <button onClick={hideLobby}> Close </button>}
     </div>
-  );
+  ); //this just a filler button, we want to replace with actual popup tmrw.
 };
 
 export default CreateGameButton;
