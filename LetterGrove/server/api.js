@@ -26,7 +26,7 @@ const router = express.Router();
 const socketManager = require("./server-socket");
 
 
-let openLobbies = {};
+const openLobbies = {};
 
 
 router.post("/login", auth.login);
@@ -83,6 +83,7 @@ router.get("/generateLobbyCode", async (req, res) => {
 router.post("/openLobby", (req, res) => {
   const gameSettings = req.body.gameSettings;
   const lobbyCode = req.body.lobbyCode;
+  const username = req.body.username;
 
   // Debug session state
   console.log("Session debug:", {
@@ -114,7 +115,7 @@ router.post("/openLobby", (req, res) => {
     powerUps: gameSettings.powerUps,
     players: [{
       userId: req.user._id,
-      username: req.body.username
+      username: username
     }]
   };
 
@@ -122,10 +123,61 @@ router.post("/openLobby", (req, res) => {
   console.log("Current lobbies:", openLobbies);
   res.send({ message: "Lobby Created" });
 });
+
+
+router.post("/joinLobby", (req, res) => {
+  const lobbyCode = req.body.lobbyCode;
+  const username = req.body.username;
+
+  // Debug session state
+  console.log("Session debug:", {
+    hasSession: !!req.session,
+    sessionUser: req.session?.user,
+    reqUser: req.user,
+    sessionID: req.sessionID
+  });
+
+  // Check if user is authenticated
+  if (!req.user) {
+    console.log("User not authenticated");
+    return res.status(401).send({ error: "Not authenticated" });
+  }
+
+  console.log("Auth state:", {
+    hasUser: !!req.user,
+    userId: req.user._id,
+    username: req.body.username
+  });
+
+  if (openLobbies[lobbyCode]) {
+    const player = {
+      userId: req.user._id,
+      username: username
+    };
+    openLobbies[lobbyCode].players.push(player);
+    console.log("Lobby with ID " + lobbyCode + " joined");
+    console.log("Current lobbies:", openLobbies);
+    res.send({ message: "Lobby Joined" });
+  } else {
+    console.log("Lobby with ID " + lobbyCode + " not found");
+    res.status(404).send({ error: "Lobby not found" });
+  }
+});
+
+router.post("/startGame", (req, res) => {
+  const gameInfo = openLobbies[req.body.lobbyCode];
+  // remove lobbycode from open lobbies
+  delete openLobbies[req.body.lobbyCode];
+  socketManager.startRunningGame({
+    gameInfo: gameInfo, 
+    lobbyCode: req.body.lobbyCode
+  });
+});
+
 // anything else falls to this "not found" case
 router.all("*", (req, res) => {
- console.log(`API route not found: ${req.method} ${req.url}`);
- res.status(404).send({ msg: "API route not found" });
+  console.log(`API route not found: ${req.method} ${req.url}`);
+  res.status(404).send({ msg: "API route not found" });
 });
 
 

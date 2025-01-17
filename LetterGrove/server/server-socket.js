@@ -1,3 +1,5 @@
+const gameLogic = require("./game-logic");
+
 let io;
 
 const userToSocketMap = {}; // maps user ID to socket object
@@ -25,6 +27,35 @@ const removeUser = (user, socket) => {
   if (user) delete userToSocketMap[user._id];
   delete socketToUserMap[socket.id];
 };
+
+/* send game state to specific client */
+const sendUserGameState = (userId, lobbyCode) => {
+  const socket = userToSocketMap[userId];
+  gameState = {
+    board: gameLogic.gameStates[lobbyCode].boards[userId],
+    counter: gameLogic.gameStates[lobbyCode].counter[userId],
+    rankings: gameLogic.gameStates[lobbyCode].rankings,
+    log: gameLogic.gameStates[lobbyCode].log
+  }
+  socket.emit("update", gameState);
+};
+
+const initiateGame = (props) => {
+  const lobbyCode = props.lobbyCode;
+  const gameInfo = props.gameInfo;
+  const minWordLength = gameInfo.minWordLength;
+  const pointsModifier = gameInfo.pointsModifier;
+  const mode = gameInfo.mode;
+  const steps = gameInfo.steps;
+  const defaultLetters = gameInfo.defaultLetters;
+  const powerUps = gameInfo.powerUps;
+  const players = gameInfo.players;
+  // unfinished
+};
+
+
+
+
 
 module.exports = {
   init: (http) => {
