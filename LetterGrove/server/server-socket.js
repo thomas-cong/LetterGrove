@@ -33,6 +33,8 @@ const sendUserGameState = (userId, lobbyCode) => {
   const socket = userToSocketMap[userId];
   gameState = {
     board: gameLogic.gameStates[lobbyCode].boards[userId],
+    points: gameLogic.gameStates[lobbyCode].points[userId],
+    powerUps: gameLogic.gameStates[lobbyCode].powerUps[userId],
     counter: gameLogic.gameStates[lobbyCode].counter[userId],
     rankings: gameLogic.gameStates[lobbyCode].rankings,
     log: gameLogic.gameStates[lobbyCode].log

@@ -36,8 +36,7 @@ const socketManager = require("./server-socket");
 
 // Server configuration below
 // TODO change connection URL after setting up your team database
-const mongoConnectionURL =
-  "mongodb+srv://crazycolors27:i4jpDzhQP9UZietm@cluster0.04huo.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const mongoConnectionURL = process.env.MONGO_SRV;
 // TODO change database name to the name you chose
 const databaseName = "Cluster0";
 
@@ -68,11 +67,6 @@ app.use(
     secret: "session-secret",
     resave: false,
     saveUninitialized: false,
-    cookie: {
-      sameSite: "lax",
-      secure: false, // Set to true if using HTTPS
-      maxAge: 24 * 60 * 60 * 1000 // 24 hours
-    }
   })
 );
 
