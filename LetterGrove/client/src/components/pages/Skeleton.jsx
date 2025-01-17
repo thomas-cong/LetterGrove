@@ -1,7 +1,8 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { GoogleLogin, googleLogout } from "@react-oauth/google";
 import CreateGameButton from "../modules/CreateGameButton";
 import lettergrovelogo from "../../assets/lettergrovelogo.gif";
+import cloudanimation from "../../assets/cloudanimation.gif";
 
 import "../../utilities.css";
 import "./Skeleton.css";
@@ -10,10 +11,13 @@ import "../../assets/font.css";
 
 const Skeleton = () => {
   const { userId, handleLogin, handleLogout } = useContext(UserContext);
+  const [showLogo, setShowLogo] = useState(true);
+
   return (
-    <div>
-      <img src={lettergrovelogo} alt="LetterGrove Logo" className="lettergrove-logo" />
-      {userId && <CreateGameButton />}
+    <div className="skeleton-container">
+      <div className="background-animation" style={{ backgroundImage: `url(${cloudanimation})` }}></div>
+      {showLogo && <img src={lettergrovelogo} alt="LetterGrove Logo" className="lettergrove-logo" />}
+      {userId && <CreateGameButton onShowLobby={() => setShowLogo(false)} onHideLobby={() => setShowLogo(true)} />}
       {userId ? (
         <button
           className="Skeleton-logoutButton"

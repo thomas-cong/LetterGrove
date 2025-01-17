@@ -5,7 +5,7 @@ import "./CreateGameButton.css";
 import LobbyCreationPopup from "./LobbyCreationPopup";
 import "../../assets/font.css";
 
-const CreateGameButton = () => {
+const CreateGameButton = (props) => {
   const [LobbyShowing, setLobbyShowing] = useState(false);
   const [lobbyCode, setLobbyCode] = useState("");
   const [username, setUsername] = useState("");
@@ -29,12 +29,14 @@ const CreateGameButton = () => {
       })
       .catch(setLobbyCode("ERROR"));
     setLobbyShowing(true);
+    props.onShowLobby && props.onShowLobby();
   };
   // handles hiding the button by state update
   const hideLobby = () => {
     setLobbyShowing(false);
     setLobbyCode("");
     setUsername("");
+    props.onHideLobby && props.onHideLobby();
   };
   useEffect(() => {
     console.log("username: ", username);
