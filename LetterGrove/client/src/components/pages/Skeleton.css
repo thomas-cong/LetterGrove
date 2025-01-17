@@ -31,14 +31,11 @@
   filter: drop-shadow(8px 8px 8px rgba(0, 0, 0, 0.5));
 }
 
-.Skeleton-loginButton {
+.google-login-container {
   position: absolute;
-  width: 160px;
-  height: 30px;
   left: 50%;
   top: 50%;
   transform: translate(-50%, 200%);
-  margin: auto;
   z-index: 1;
 }
 
