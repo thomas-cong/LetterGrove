@@ -1,1 +1,40 @@
 /* Fill me in :) */
+/* Fill me in :) */
+
+.lettergrove-logo {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 20px;
+  width: 400px;
+  height: auto;
+}
+
+.Skeleton-logoutButton {
+  width: 160px;
+  height: 30px;
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  margin: auto;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: auto;
+}
+
+.Skeleton-loginButton {
+  position: absolute;
+  left: 50%;
+  top: 60%;
+  transform: translate(-50%, 0);
+  margin: auto;
+}
+
+.lettergrove-logo {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 80%);
+  top: 30px;
+  width: 600px;
+  height: auto;
+}

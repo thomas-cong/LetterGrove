@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import checkedBox from "../../assets/checkbox/checkbox1.png";
 import uncheckedBox from "../../assets/checkbox/checkbox0.png";
+import "./LobbySettings.css";
 
 // Creating checkbox for settings toggle
 const Checkbox = (props) => {
@@ -10,10 +11,10 @@ const Checkbox = (props) => {
     props.setGameSettings({ ...props.gameSettings, [props.id]: !checked });
   };
   return (
-    <span>
-      <span> {props.text} </span>
+    <div className="settings-row">
+      <span className="settings-label">{props.text}</span>
       <img src={checked ? checkedBox : uncheckedBox} onClick={handleClick} />
-    </span>
+    </div>
   );
 };
 
@@ -22,18 +23,19 @@ const IntInput = (props) => {
   const [text, setText] = useState("");
 
   return (
-    <span>
-      <span> {props.text} </span>
+    <div className="settings-row">
+      <span className="settings-label">{props.text}</span>
       <input
         type="number"
         placeholder={props.placeholder}
+        className={props.className}
         onChange={(event) => {
           // update text state and change gamesettings
           setText(event.target.value);
           props.setGameSettings({ ...props.gameSettings, [props.id]: event.target.value });
         }}
       />
-    </span>
+    </div>
   );
 };
 // Dropdown Input for mode selection
@@ -43,8 +45,8 @@ const ModeSelector = (props) => {
   //Select the necessary type of game mode, default is Time
 
   return (
-    <span>
-      <span> Mode </span>
+    <div className="settings-row">
+      <span className="settings-label">Mode</span>
       <select
         onChange={(event) => {
           setMode(event.target.value);
@@ -52,57 +54,46 @@ const ModeSelector = (props) => {
         }}
         defaultValue="Time"
       >
-        <option value="Time">Time (seconds)</option>
-        <option value="Words"> Words </option>
-        <option value="Letters"> Letters </option>
+        <option value="Time">Time (s)</option>
+        <option value="Words">Words</option>
+        <option value="Letters">Letters</option>
       </select>
-    </span>
+    </div>
   );
 };
 
 const LobbySettings = (props) => {
   return (
-    <div>
-      <div>
-        <ModeSelector gameSettings={props.gameSettings} setGameSettings={props.setGameSettings} />
-      </div>
-      <div>
-        <IntInput
-          text={props.gameSettings["mode"]}
-          id="steps"
-          gameSettings={props.gameSettings}
-          setGameSettings={props.setGameSettings}
-          placeholder={props.gameSettings.steps}
-        />
-      </div>
-      <div></div>
-      <div>
-        <Checkbox
-          text="Default Letters"
-          id="defaultLetters"
-          gameSettings={props.gameSettings}
-          setGameSettings={props.setGameSettings}
-        />
-      </div>
-      <div>
-        <IntInput
-          text="Points Modifier"
-          id="pointsModifier"
-          gameSettings={props.gameSettings}
-          setGameSettings={props.setGameSettings}
-          placeholder={props.gameSettings.pointsModifier}
-        />
-      </div>
-      <div>
-        <IntInput
-          text="Min Word Length"
-          id="minWordLength"
-          gameSettings={props.gameSettings}
-          setGameSettings={props.setGameSettings}
-          placeholder={props.gameSettings.minWordLength}
-        />
-      </div>
-      <div></div>
+    <div className="settings-container">
+      <ModeSelector gameSettings={props.gameSettings} setGameSettings={props.setGameSettings} />
+      <IntInput
+        text="Steps"
+        id="steps"
+        className="steps-input"
+        gameSettings={props.gameSettings}
+        setGameSettings={props.setGameSettings}
+        placeholder={props.gameSettings.steps}
+      />
+      <Checkbox
+        text="Default Letters"
+        id="defaultLetters"
+        gameSettings={props.gameSettings}
+        setGameSettings={props.setGameSettings}
+      />
+      <IntInput
+        text="Points Modifier"
+        id="pointsModifier"
+        gameSettings={props.gameSettings}
+        setGameSettings={props.setGameSettings}
+        placeholder={props.gameSettings.pointsModifier}
+      />
+      <IntInput
+        text="Min Word Length"
+        id="minWordLength"
+        gameSettings={props.gameSettings}
+        setGameSettings={props.setGameSettings}
+        placeholder={props.gameSettings.minWordLength}
+      />
     </div>
   );
 };

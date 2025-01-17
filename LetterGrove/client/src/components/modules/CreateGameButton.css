@@ -1,13 +1,17 @@
 .sign {
   position: relative;
+  left: 50%;
+  top: 60%;
+  transform: translate(-50%, 850%);
 }
 
 .text {
   position: absolute;
-  top: 0px;
-  left: 0px;
   width: 640px;
-  color: white;
   padding: 0px;
   text-align: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 380%);
+  cursor: pointer;
 }

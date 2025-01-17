@@ -11,6 +11,8 @@ import { get, post } from "../utilities";
 
 export const UserContext = createContext(null);
 
+import "../assets/font.css";
+
 /**
  * Define the "App" component
  */

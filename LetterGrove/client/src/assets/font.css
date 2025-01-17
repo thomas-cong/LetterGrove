@@ -1,9 +1,9 @@
 @font-face {
-  font-family: "Dogica";
-  src: url("./dogica.ttf") format("ttf");
-  font-weight: normal; /* Optional */
-  font-style: normal; /* Optional */
+  font-family: "Daydream";
+  src: url("./Daydream.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
 }
 * {
-  font-family: "Dogica", sans-serif; /* Fallback fonts */
+  font-family: "Daydream", sans-serif; /* Fallback fonts */
 }

@@ -6,26 +6,33 @@ import CreateLobbyButton from "./CreateLobbyButton";
 
 const LobbyCreationPopup = (props) => {
   return (
-    <div className="center">
-      <div>
-        <img src={Closebutton} onClick={() => props.hideLobby()} className="closeButton" />
-        <h3> Your lobby code is: {props.lobbyCode}</h3>
-        <input
-          type="text"
-          placeholder="Enter your username"
-          onChange={(event) => props.setUsername(event.target.value)}
-        ></input>
+    <div className="mainboard">
+      <div className="center">
+      <img src={Closebutton} onClick={() => props.hideLobby()} className="closeButton" />
+        <div className = "lobbyandusername">
+          <h3>YOUR LOBBY CODE IS: {props.lobbyCode}</h3>
+          <input
+            type="text"
+            placeholder="Enter your username"
+            className="username-input"
+            onChange={(event) => props.setUsername(event.target.value)}
+          />
+        </div>
+
+        <div className = "maincontent">
+          <span>
+            <LobbySettings gameSettings={props.gameSettings} setGameSettings={props.setGameSettings} />
+          </span>
+          <span>
+            <CreateLobbyButton
+              lobbyCode={props.lobbyCode}
+              gameSettings={props.gameSettings}
+              setGameSettings={props.setGameSettings}
+            />
+          </span>
+        </div>
+
       </div>
-      <span>
-        <LobbySettings gameSettings={props.gameSettings} setGameSettings={props.setGameSettings} />
-      </span>
-      <span>
-        <CreateLobbyButton
-          lobbyCode={props.lobbyCode}
-          gameSettings={props.gameSettings}
-          setGameSettings={props.setGameSettings}
-        />
-      </span>
     </div>
   );
 };

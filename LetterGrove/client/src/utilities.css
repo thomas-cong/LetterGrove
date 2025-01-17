@@ -4,18 +4,15 @@
 * and can be used to add general styles; variable definitions
 * for colors; and styles to html, body, and other high level
 * DOMs.
-* 
+*
 * All utility classes start with a `u-` and all do
 * one basic CSS thing (for example, making the font-weight
 * 600 for bolding) or are super generic.
-* 
+*
 * This is 𝙉𝙊𝙏 the place to define classes for components or
 * do rigorous styling. You shoud not need to change this file
 * much after initial creation.
 */
-
-/* TODO: REPLACE WITH YOUR OWN FONT! */
-@import url("https://fonts.googleapis.com/css?family=Roboto&display=swap");
 
 :root {
   --primary: #396dff;
@@ -24,7 +21,7 @@
   --medgrey: #e0e0e0;
   --grey: #f7f7f7;
   --white: #fff;
-
+  --font-family: "dogicapixelbold", sans-serif;
   --xs: 4px;
   --s: 8px;
   --m: 16px;
@@ -34,8 +31,30 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: "Roboto", sans-serif;
-  font-weight: 300;
+  font-family: var(--font-family);
+  font-weight: normal;
+  text-transform: uppercase;
+}
+
+/* Text border styles */
+h1, h2, h3, h4, h5, h6, p, span, div, button, input, a {
+  -webkit-text-stroke: 1px hwb(0 0% 100% / 0.36);
+  text-stroke: 1px black;
+  color: rgb(226, 141, 44);
+}
+
+input::placeholder {
+  text-transform: uppercase;
+  -webkit-text-stroke: 1px black;
+  text-stroke: 1px black;
+  color: white;
+}
+
+button {
+  text-transform: uppercase;
+  -webkit-text-stroke: 1px black;
+  text-stroke: 1px black;
+  color: white;
 }
 
 form {

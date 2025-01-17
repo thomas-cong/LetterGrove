@@ -44,11 +44,9 @@ const CreateGameButton = () => {
   return (
     <div>
       {!LobbyShowing && (
-        <div>
-          <img src={buttonImage} onClick={showLobby} className="sign" />
-          <h2 className="text" onClick={showLobby}>
-            Create Game
-          </h2>
+        <div onClick={showLobby}>
+          <img src={buttonImage} className="sign" />
+          <h2 className="text">Create Lobby</h2>
         </div>
       )}
       {LobbyShowing && (
