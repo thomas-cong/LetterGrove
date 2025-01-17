@@ -5,6 +5,14 @@ import "./SummonLobbyPopup.css";
 import LobbyCreationPopup from "./LobbyCreationPopup";
 import "../../assets/font.css";
 
+/**
+ * SummonLobbyPopup is a component for briningup the lobby creation popup
+ *
+ * Proptypes
+ * @param {popUpShowing} whether any global popup is showing on menu
+ * @param {setPopupShowing} setter for whether any global popup is showing on menu
+ */
+
 const SummonLobbyPopup = (props) => {
   const [LobbyShowing, setLobbyShowing] = useState(false);
   const [lobbyCode, setLobbyCode] = useState("");
@@ -30,6 +38,7 @@ const SummonLobbyPopup = (props) => {
       .catch(setLobbyCode("ERROR"));
     setLobbyShowing(true);
     props.onShowLobby && props.onShowLobby();
+    props.setPopupShowing(true);
   };
   // handles hiding the button by state update
   const hideLobby = () => {
@@ -37,6 +46,7 @@ const SummonLobbyPopup = (props) => {
     setLobbyCode("");
     setUsername("");
     props.onHideLobby && props.onHideLobby();
+    props.setPopupShowing(false);
   };
   useEffect(() => {
     console.log("username: ", username);
@@ -45,13 +55,13 @@ const SummonLobbyPopup = (props) => {
   // Conditionally render either the create game button or the damn lobby creation popup
   return (
     <div>
-      {!LobbyShowing && (
+      {!LobbyShowing && !props.popupShowing && (
         <div onClick={showLobby} className="button-container">
           <img src={buttonImage} className="sign" alt="Wooden Sign" />
           <h2 className="text">Create Lobby</h2>
         </div>
       )}
-      {LobbyShowing && (
+      {LobbyShowing && props.popupShowing && (
         <LobbyCreationPopup
           lobbyCode={lobbyCode}
           hideLobby={hideLobby}
