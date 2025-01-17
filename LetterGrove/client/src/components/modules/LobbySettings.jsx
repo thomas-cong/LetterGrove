@@ -67,7 +67,7 @@ const LobbySettings = (props) => {
     <div className="settings-container">
       <ModeSelector gameSettings={props.gameSettings} setGameSettings={props.setGameSettings} />
       <IntInput
-        text="Steps"
+        text={props.gameSettings.mode}
         id="steps"
         className="steps-input"
         gameSettings={props.gameSettings}
