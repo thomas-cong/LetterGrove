@@ -28,6 +28,7 @@ const LobbyCreationPopup = (props) => {
               lobbyCode={props.lobbyCode}
               gameSettings={props.gameSettings}
               setGameSettings={props.setGameSettings}
+              username={props.username}
             />
           </span>
         </div>

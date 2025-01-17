@@ -68,6 +68,11 @@ app.use(
     secret: "session-secret",
     resave: false,
     saveUninitialized: false,
+    cookie: {
+      sameSite: "lax",
+      secure: false, // Set to true if using HTTPS
+      maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    }
   })
 );
 
