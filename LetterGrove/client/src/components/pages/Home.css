@@ -1,7 +1,7 @@
 /* Fill me in :) */
 /* Fill me in :) */
 
-.skeleton-container {
+.home-container {
   position: relative;
   width: 100vw;
   height: 100vh;
@@ -39,7 +39,7 @@
   z-index: 1;
 }
 
-.Skeleton-logoutButton {
+.home-logoutButton {
   position: absolute;
   width: 160px;
   height: 30px;

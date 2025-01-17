@@ -6,17 +6,17 @@ import cloudanimation from "../../assets/cloudanimation000.png";
 import SummonJoinPopup from "../modules/SummonJoinPopup";
 
 import "../../utilities.css";
-import "./Skeleton.css";
+import "./Home.css";
 import { UserContext } from "../App";
 import "../../assets/font.css";
 
-const Skeleton = () => {
+const Home = () => {
   const { userId, handleLogin, handleLogout } = useContext(UserContext);
   const [showLogo, setShowLogo] = useState(true);
   const [popupShowing, setPopupShowing] = useState(false);
 
   return (
-    <div className="skeleton-container">
+    <div className="home-container">
       <div
         className="background-animation"
         style={{ backgroundImage: `url(${cloudanimation})` }}
@@ -42,7 +42,7 @@ const Skeleton = () => {
       )}
       {userId ? (
         <button
-          className="Skeleton-logoutButton"
+          className="home-logoutButton"
           onClick={() => {
             googleLogout();
             handleLogout();
@@ -59,4 +59,4 @@ const Skeleton = () => {
   );
 };
 
-export default Skeleton;
+export default Home;

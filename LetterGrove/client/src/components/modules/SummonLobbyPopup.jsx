@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { get, post } from "../../utilities";
-import buttonImage from "../../assets/640signs1.png";
+import buttonImage from "../../assets/640signs_1.png";
 import "./SummonLobbyPopup.css";
 import LobbyCreationPopup from "./LobbyCreationPopup";
 import "../../assets/font.css";
