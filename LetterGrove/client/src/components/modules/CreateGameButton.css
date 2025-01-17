@@ -1,17 +1,24 @@
-.sign {
+.button-container {
   position: relative;
-  left: 50%;
-  top: 60%;
-  transform: translate(-50%, 850%);
+  width: 640px;
+  margin: 0 auto;
+  transform: translate(0%, 750%);
+}
+
+.sign {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
 .text {
   position: absolute;
-  width: 640px;
-  padding: 0px;
+  width: 100%;
   text-align: center;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, 380%);
+  transform: translate(-50%, -50%);
   cursor: pointer;
+  margin: 0;
+  padding: 0;
 }
