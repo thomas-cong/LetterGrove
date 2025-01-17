@@ -2,7 +2,7 @@ import React from "react";
 import shortSign from "../../assets/sign(320by64).png";
 import { post } from "../../utilities";
 
-const CreateLobbyButton = (props) => {
+const StartLobbyButton = (props) => {
   const handleClick = () => {
     console.log(props.gameSettings);
     post("/api/openLobby", { lobbyCode: props.lobbyCode, gameSettings: props.gameSettings }).then(
@@ -17,4 +17,4 @@ const CreateLobbyButton = (props) => {
     </div>
   );
 };
-export default CreateLobbyButton;
+export default StartLobbyButton;

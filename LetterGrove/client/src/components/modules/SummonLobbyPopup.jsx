@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { get, post } from "../../utilities";
 import buttonImage from "../../assets/640signs1.png";
-import "./CreateGameButton.css";
+import "./SummonLobbyPopup.css";
 import LobbyCreationPopup from "./LobbyCreationPopup";
 import "../../assets/font.css";
 
-const CreateGameButton = (props) => {
+const SummonLobbyPopup = (props) => {
   const [LobbyShowing, setLobbyShowing] = useState(false);
   const [lobbyCode, setLobbyCode] = useState("");
   const [username, setUsername] = useState("");
@@ -64,4 +64,4 @@ const CreateGameButton = (props) => {
   );
 };
 
-export default CreateGameButton;
+export default SummonLobbyPopup;
