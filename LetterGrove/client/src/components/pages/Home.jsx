@@ -48,7 +48,7 @@ const Home = () => {
             handleLogout();
           }}
         >
-          Logout
+          <div className="home-logoutButton-text">Logout</div>
         </button>
       ) : (
         <div className="google-login-container">

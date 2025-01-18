@@ -2,7 +2,8 @@
   position: relative;
   width: 640px;
   margin: 0 auto;
-  transform: translate(0%, 750%);
+  transform: translate(0%, 650%);
+  margin-bottom: 40px;
 }
 
 .sign {
@@ -21,4 +22,6 @@
   cursor: pointer;
   margin: 0;
   padding: 0;
+  color: rgb(255, 185, 138);
+
 }

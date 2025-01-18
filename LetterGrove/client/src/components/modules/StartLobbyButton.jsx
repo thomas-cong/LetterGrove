@@ -13,6 +13,7 @@ const StartLobbyButton = (props) => {
       mode: props.gameSettings.mode,
       steps: props.gameSettings.steps,
       defaultLetters: props.gameSettings.defaultLetters,
+    };
 
     console.log("Attempting to create lobby with settings:", props.gameSettings);
     post("/api/openLobby", {

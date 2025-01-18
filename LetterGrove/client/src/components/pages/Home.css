@@ -23,7 +23,7 @@
 .lettergrove-logo {
   position: absolute;
   left: 50%;
-  transform: translate(-50%, 80%);
+  transform: translate(-50%, 60%);
   top: 30px;
   width: 600px;
   height: auto;
@@ -35,17 +35,35 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, 200%);
+  transform: translate(-50%, 100%);
   z-index: 1;
 }
 
 .home-logoutButton {
+  position: fixed;
+  top: 0px;
+  right: 30px;
+  width: 150px;
+  height: 80px;
+  background-image: url('../../assets/logout/logout1.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background-image 0.3s ease;
+}
+
+.home-logoutButton:hover {
+  background-image: url('../../assets/logout/logout0.png');
+}
+
+.home-logoutButton-text {
   position: absolute;
-  width: 160px;
-  height: 30px;
-  left: 50%;
   top: 50%;
-  transform: translate(350%, -1300%);
-  margin: auto;
-  z-index: 1;
+  left: 50%;
+  transform: translate(-60%, 30%);
+  font-size: 18px;
+  color: rgb(255, 185, 138);
 }
