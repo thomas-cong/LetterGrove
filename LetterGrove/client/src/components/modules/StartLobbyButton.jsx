@@ -7,6 +7,13 @@ const StartLobbyButton = (props) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
+    const gameSettings = {
+      minWordLength: props.gameSettings.minWordLength,
+      pointsModifier: props.gameSettings.pointsModifier,
+      mode: props.gameSettings.mode,
+      steps: props.gameSettings.steps,
+      defaultLetters: props.gameSettings.defaultLetters,
+
     console.log("Attempting to create lobby with settings:", props.gameSettings);
     post("/api/openLobby", {
       lobbyCode: props.lobbyCode,
