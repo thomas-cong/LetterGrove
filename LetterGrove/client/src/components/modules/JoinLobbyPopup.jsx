@@ -45,15 +45,7 @@ const JoinLobbyPopup = (props) => {
               console.log("Joining lobby:", props.lobbyCode, "as", props.username);
             })
             .catch((error) => {
-              // Handle the error (e.g., show an error message to the user)
-
-              if (error.status === 401) {
-                alert("Please log in to join a lobby");
-              } else if (error.status === 404) {
-                alert("Lobby not found");
-              } else {
-                alert("Failed to join lobby. Please try again.");
-              }
+              console.log("Error joining lobby:", error);
             });
           navigate(`/${props.lobbyCode}`);
         }}
