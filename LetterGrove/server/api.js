@@ -177,6 +177,20 @@ router.get("/lobbyCheck", (req, res) => {
     res.send(false);
   }
 });
+router.get("/gameSettings", (req, res) => {
+  const lobbyCode = req.query.lobbyCode;
+  const lobby = openLobbies[lobbyCode];
+  const gameSettings = {
+    minWordLength: lobby.minWordLength,
+    pointsModifier: lobby.pointsModifier,
+    mode: lobby.mode,
+    steps: lobby.steps,
+    defaultLetters: lobby.defaultLetters,
+    powerups: lobby.powerups,
+  };
+  console.log(gameSettings);
+  res.send(gameSettings);
+});
 
 router.get("/usernames", (req, res) => {
   const lobbyCode = req.query.lobbyCode;
