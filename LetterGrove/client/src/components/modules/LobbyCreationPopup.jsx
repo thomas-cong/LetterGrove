@@ -8,16 +8,18 @@ const LobbyCreationPopup = (props) => {
   return (
     <div className="createdmainboard">
       <img src={Closebutton} onClick={() => props.hideLobby()} className="createdcloseButton" />
-      <div className = "createdlobbyandusername">
+      <div className="createdlobbyandusername">
         <h3>
-          <span style={{ color: 'rgb(94, 129, 255)' }}>YOUR LOBBY CODE IS: </span>
+          <span style={{ color: "rgb(94, 129, 255)" }}>YOUR LOBBY CODE IS: </span>
           <span className="lobby-code">{props.lobbyCode}</span>
         </h3>
         <input
           type="text"
           placeholder="Enter your username"
           className="createdusername-input"
-          onChange={(event) => props.setUsername(event.target.value)}
+          onChange={(event) => {
+            props.setUsername(event.target.value);
+          }}
         />
       </div>
 

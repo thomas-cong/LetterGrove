@@ -48,9 +48,6 @@ const SummonLobbyPopup = (props) => {
     props.onHideLobby && props.onHideLobby();
     props.setPopupShowing(false);
   };
-  useEffect(() => {
-    console.log("username: ", username);
-  }, [username]);
 
   // Conditionally render either the create game button or the damn lobby creation popup
   return (
@@ -68,6 +65,7 @@ const SummonLobbyPopup = (props) => {
           setUsername={setUsername}
           setGameSettings={setGameSettings}
           gameSettings={gameSettings}
+          username={username}
         />
       )}
     </div>

@@ -1,4 +1,6 @@
 import React from "react";
+import { useState, useEffect } from "react";
+import { get, post } from "../../utilities";
 /**
  *  LobbyPlayerList is a component that represents a list of players in a lobby
  *
@@ -7,11 +9,19 @@ import React from "react";
  */
 
 const LobbyUserList = (props) => {
+  const [usernameList, setUsernameList] = useState([]);
+  useEffect(() => {
+    console.log("User list created:");
+    get("/api/usernames", { lobbyCode: props.lobbyCode }).then((players) => {
+      console.log("Players in lobby:", players);
+      setUsernameList(players);
+    });
+  }, []);
   return (
     <div>
       <ul>
-        {props.userList.map((userList, index) => (
-          <li key={index}>{userList}</li>
+        {usernameList.map((username, index) => (
+          <li key={index}>{username}</li>
         ))}
       </ul>
     </div>

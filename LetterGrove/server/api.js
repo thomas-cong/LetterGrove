@@ -93,6 +93,7 @@ router.post("/openLobby", (req, res) => {
     userId: req.user._id,
     username: req.body.username,
   });
+  console.log("Username:", username);
 
   // map lobbyCode to lobby information
   openLobbies[lobbyCode] = {
@@ -157,13 +158,16 @@ router.post("/startGame", (req, res) => {
   });
 });
 
+// @params: lobbyCode- lobby code of the game
 // returns an array of the player ids
 router.get("/players", (req, res) => {
   const lobbyCode = req.query.lobbyCode;
   console.log(openLobbies[lobbyCode].players);
   res.send(Object.values(Object.keys(openLobbies[lobbyCode].players)));
 });
-// returns an array of the player names
+
+// @params: lobbyCode- lobby code of the game
+// returns true if the lobby exists, false otherwise
 router.get("/lobbyCheck", (req, res) => {
   const lobbyCode = req.query.lobbyCode;
   if (openLobbies[lobbyCode]) {
@@ -172,6 +176,11 @@ router.get("/lobbyCheck", (req, res) => {
     res.status(404);
     res.send(false);
   }
+});
+
+router.get("/usernames", (req, res) => {
+  const lobbyCode = req.query.lobbyCode;
+  res.send(Object.values(openLobbies[lobbyCode].players));
 });
 // anything else falls to this "not found" case
 router.all("*", (req, res) => {
