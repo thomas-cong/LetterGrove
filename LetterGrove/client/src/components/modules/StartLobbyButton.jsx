@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import shortSign from "../../assets/320signs_0.png";
 import { post } from "../../utilities";
+import "./StartLobbyButton.css";
 
 const StartLobbyButton = (props) => {
   const navigate = useNavigate();
@@ -42,8 +43,9 @@ const StartLobbyButton = (props) => {
   };
 
   return (
-    <div>
+    <div className="start-lobby-container">
       <img src={shortSign} onClick={handleClick} alt="Start Lobby" style={{ cursor: "pointer" }} />
+      <h2 onClick={handleClick}>Start Lobby</h2>
     </div>
   );
 };

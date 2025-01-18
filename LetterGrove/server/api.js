@@ -163,6 +163,7 @@ router.get("/players", (req, res) => {
   console.log(openLobbies[lobbyCode].players);
   res.send(Object.values(Object.keys(openLobbies[lobbyCode].players)));
 });
+// returns an array of the player names
 
 // anything else falls to this "not found" case
 router.all("*", (req, res) => {
