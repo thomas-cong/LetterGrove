@@ -40,19 +40,25 @@ const Home = () => {
           />
         </div>
       )}
-      {userId ? (
-        <button
-          className="home-logoutButton"
-          onClick={() => {
-            googleLogout();
-            handleLogout();
-          }}
-        >Logout</button>
-      ) : (
-        <div className="google-login-container">
-          <GoogleLogin onSuccess={handleLogin} />
-        </div>
-      )}
+      <div>
+        {userId ? (
+          <div className="home-logoutbutton-container">
+            <button
+              className="home-logoutButton"
+              onClick={() => {
+                googleLogout();
+                handleLogout();
+              }}
+            >
+              <div className="logouttext">Logout</div>
+            </button>
+          </div>
+        ) : (
+          <div className="google-login-container">
+            <GoogleLogin onSuccess={handleLogin} />
+          </div>
+        )}
+      </div>
     </div>
   );
 };
