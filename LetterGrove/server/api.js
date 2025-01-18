@@ -169,6 +169,11 @@ router.post("/startGame", (req, res) => {
   });
 });
 
+router.get("/players", (req, res) => {
+  const lobbyCode = req.query.lobbyCode;
+  res.send(openLobbies[lobbyCode].players);
+});
+
 // anything else falls to this "not found" case
 router.all("*", (req, res) => {
   console.log(`API route not found: ${req.method} ${req.url}`);
