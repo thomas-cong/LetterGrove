@@ -112,6 +112,12 @@ const hasAdjacentLetter = (row, col, board, ARRAY_SIZE) => {
     return false;
 };
 
+const computeDxDy = (x, y, x_node, y_node) => {
+    const dx = Math.sign(x - x_node);
+    const dy = Math.sign(y - y_node);
+    return [dx, dy];
+}
+
 /*
 |--------------------------------------------------------------------------
 | Main Game Logic
@@ -270,8 +276,6 @@ const deepCopyBoard = (board) => {
     return JSON.parse(JSON.stringify(board));
 };
 
-
-
 const enterWord = (userId, props) => {
     /*
     Returns list of potential word positions
@@ -309,6 +313,39 @@ const enterWord = (userId, props) => {
     return suggestions;
 }
 
+const confirmWord = (userId, props) => {
+    /*
+    Finalize selected word on board*/
+    const lobbyCode = props.lobbyCode;
+    const x = props.x;
+    const y = props.y;
+    const x_node = props.x_node;
+    const y_node = props.y_node;
+    const word = props.word;
+    const game = games[lobbyCode];
+    const board = game.userGameStates[userId].board;
+    const directions = [
+        [-1, 0], [1, 0], [0, -1], [0, 1],
+        [-1, -1], [-1, 1], [1, -1], [1, 1]
+    ];
+    const [dx, dy] = computeDxDy(x, y, x_node, y_node);
+    let currentX = x;
+    let currentY = y;
+    for (let i = 0; i < word.length; i++) {
+        if (i === 0) {
+            currentX += dx;
+            currentY += dy;
+            continue;
+        }
+        board[currentX][currentY].visited = true;
+        board[currentX][currentY].letter = word[i];
+        if (i == word.length - 1) {
+            game.userGameStates[userId].endpoints.push([currentX, currentY]);
+        }
+        
+    }
+}
+
 module.exports = {
     randomlyGenerateBoard,
     letterValues,
@@ -316,5 +353,5 @@ module.exports = {
     deepCopyBoard,
     games,
     enterWord,
-
+    confirmWord,
 };

@@ -59,7 +59,7 @@ const initiateGame = (props) => {
     log: [],
   };
   for (const userId in players) {
-    const username = players[userId]
+    const username = players[userId];
     game.userGameStates[userId] = {
       username: username,
       board: gameLogic.deepCopyBoard(board),
