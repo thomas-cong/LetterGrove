@@ -1,8 +1,9 @@
 .closeButton {
   height: 32px;
   position: absolute;
-  top: -70px;
-  right: -80px;
+  top: 10px;
+  right:10px;
+  cursor: pointer;
 
 }
 
@@ -15,19 +16,6 @@
   margin: 0 auto;
 }
 
-.center {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  margin: 0;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 15px;
-}
-
 .mainboard {
   width: 500px;
   height: 300px;
@@ -36,24 +24,13 @@
   border: 2px solid rgb(255, 255, 255);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-}
+  gap: 20px;
 
-.lobbyandusername {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 15px;
-}
-
-.maincontent {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 15px;
 }

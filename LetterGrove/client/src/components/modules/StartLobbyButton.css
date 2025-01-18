@@ -1,14 +1,23 @@
 .start-lobby-container {
   position: relative;
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
 }
 
-.start-lobby-container h2 {
+.text {
   position: absolute;
-  top: 45%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   margin: 0;
+  padding: 0;
+  color: rgb(255, 185, 138);
+  transition: color 0.3s ease;
   white-space: nowrap;
-  cursor: pointer;
+}
+
+.text:hover {
+  color: rgb(255, 219, 156);
 }

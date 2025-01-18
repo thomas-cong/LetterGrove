@@ -1,30 +1,18 @@
 .createdcloseButton {
   height: 48px;
   position: absolute;
-  top: -40px;
-  right: -160px;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
 }
 
-.username-input {
+.createdusername-input {
   width: 290px;
   height: 20px;
   padding: 5px;
   text-align: center;
   display: block;
   margin: 0 auto;
-}
-
-.center {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  margin: 0, 0;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
 }
 
 .createdmainboard {
@@ -35,8 +23,11 @@
   border: 2px solid rgb(255, 255, 255);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 20px;
+  padding: 20px;
   position: fixed;
   top: 50%;
   left: 50%;
@@ -46,22 +37,17 @@
 .createdlobbyandusername {
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  margin-bottom: 10px;
-}
-
-.createdmaincontent {
-  display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 30px;
+  gap: 15px;
+  margin: 15px;
+  width: 100%;
+  text-align: center;
 }
 
-/* Override any hover effects for lobby code */
-.createdlobbyandusername h3 .lobby-code,
-.createdlobbyandusername h3 .lobby-code:hover {
+.lobby-code,
+.lobby-code:hover {
   color: white !important;
   -webkit-text-stroke: 1px hwb(0 0% 100% / 0.36) !important;
-  text-stroke: 1px black !important;
-  text-transform: none !important;
+  pointer-events: none !important;
+  cursor: text !important;
 }
