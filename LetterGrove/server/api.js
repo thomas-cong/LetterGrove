@@ -101,7 +101,7 @@ router.post("/openLobby", (req, res) => {
     mode: gameSettings.mode,
     steps: gameSettings.steps,
     defaultLetters: gameSettings.defaultLetters,
-    powerUps: gameSettings.powerUps,
+    powerups: gameSettings.powerups,
     players: {
       [req.user._id]: username,
     },

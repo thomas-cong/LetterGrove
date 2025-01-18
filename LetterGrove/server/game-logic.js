@@ -328,11 +328,33 @@ const confirmWord = (userId, props) => {
     const [dx, dy] = computeDxDy(x, y, x_node, y_node);
     let currentX = x;
     let currentY = y;
+    let fruitsCollected = {
+        carrots: 0,
+        tomatoes: 0,
+        blueberries: 0,
+        pumpkins: 0
+    };
+    let powerupsCollected = {
+        spade: 0,
+        water: 0,
+        shovel: 0
+    };
+    let pointsGained = 0;
+    let letterUpdates = [];
     for (let i = 0; i < word.length; i++) {
         if (i === 0) {
             currentX += dx;
             currentY += dy;
             continue;
+        }
+        if (board[currentX][currentY].letter === '') {
+            letterUpdates.push({
+                x: currentX,
+                y: currentY,
+                letter: word[i],
+                default: board[currentX][currentY].default,
+                visited: board[currentX][currentY].visited,
+            });
         }
         board[currentX][currentY].visited = true;
         board[currentX][currentY].letter = word[i];
@@ -340,24 +362,48 @@ const confirmWord = (userId, props) => {
             userGameState.endpoints.push([currentX, currentY]);
         }
         if (board[currentX][currentY].powerup !== null) {
-            powerUp = board[currentX][currentY].powerup;
-            userGameState.powerUps[powerUp] += 1; 
+            powerup = board[currentX][currentY].powerup;
+            userGameState.powerups[powerup] += 1; 
             board[currentX][currentY].powerup = null;
         }
         if (board[currentX][currentY].crop !== null) {
             crop = board[currentX][currentY].crop;
             userGameState.points += cropValues[crop];
+            pointsGained += cropValues[crop];
             board[currentX][currentY].crop = null;
         }
         if (board[currentX][currentY].value > 0) {
             userGameState.points += board[currentX][currentY].value;
+            pointsGained += board[currentX][currentY].value;
             board[currentX][currentY].value = 0;
         }
-
         currentX += dx;
         currentY += dy;
     }
-    
+    userGameState.endpoints.push([currentX, currentY]);
+    let logMessage = userGameState.username + " collected " + pointsGained + " points";
+    for (rankInfo in game.rankings) {
+        if (rankInfo.playerId === userId) {
+            rankInfo.score = userGameState.points;
+            break;
+        }
+    }
+    game.rankings.sort((a, b) => b.score - a.score);
+    return {
+        localUpdate: {
+            fruitsCollected: fruitsCollected,
+            powerupsCollected: powerupsCollected,
+            pointsGained: pointsGained,
+            letterUpdates: letterUpdates,
+            totalPoints: userGameState.points,
+            endpoints: userGameState.endpoints
+        },
+        globalUpdate: {
+            logMessage: logMessage,
+            updatedRankings: game.rankings,
+        }
+    }
+
 }
 
 module.exports = {

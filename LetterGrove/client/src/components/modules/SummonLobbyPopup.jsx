@@ -24,7 +24,7 @@ const SummonLobbyPopup = (props) => {
     mode: "Time", // string
     steps: 180, // int
     defaultLetters: true, // checkbox
-    powerUps: [], // array
+    powerups: [], // array
   });
 
   // handles showing the lobby by state update
