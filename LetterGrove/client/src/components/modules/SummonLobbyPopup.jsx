@@ -57,8 +57,8 @@ const SummonLobbyPopup = (props) => {
     <div>
       {!LobbyShowing && !props.popupShowing && (
         <div onClick={showLobby} className="button-container">
-          <img src={buttonImage} className="sign" alt="Wooden Sign" />
-          <h2 className="text">Create Lobby</h2>
+            <img src={buttonImage} className="sign" alt="Wooden Sign" />
+            <h2 className="text">Create Lobby</h2>
         </div>
       )}
       {LobbyShowing && props.popupShowing && (

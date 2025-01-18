@@ -1,27 +1,33 @@
 .button-container {
-  position: relative;
+  position: absolute;
   width: 640px;
   margin: 0 auto;
   transform: translate(0%, 650%);
   margin-bottom: 40px;
+  transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 .sign {
   width: 100%;
   height: auto;
-  display: block;
+  transition: all 0.3s ease;
 }
 
 .text {
   position: absolute;
   width: 100%;
-  text-align: center;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  text-align: center;
   cursor: pointer;
   margin: 0;
   padding: 0;
   color: rgb(255, 185, 138);
+  transition: all 0.3s ease;
+}
 
+.button-container:hover {
+  transform: translate(0%, 650%) scale(1.1);
 }
