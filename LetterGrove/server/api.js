@@ -164,7 +164,15 @@ router.get("/players", (req, res) => {
   res.send(Object.values(Object.keys(openLobbies[lobbyCode].players)));
 });
 // returns an array of the player names
-
+router.get("/lobbyCheck", (req, res) => {
+  const lobbyCode = req.query.lobbyCode;
+  if (openLobbies[lobbyCode]) {
+    res.send(true);
+  } else {
+    res.status(404);
+    res.send(false);
+  }
+});
 // anything else falls to this "not found" case
 router.all("*", (req, res) => {
   console.log(`API route not found: ${req.method} ${req.url}`);

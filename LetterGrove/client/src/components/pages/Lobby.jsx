@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import "../../utilities.css";
 import "../../assets/font.css";
 import LobbyUserList from "../modules/LobbyUserList.jsx";
@@ -8,6 +9,7 @@ import { get } from "../../utilities";
 const Lobby = () => {
   let { lobbyId } = useParams();
   const [u_id, setU_id] = useState("");
+  const [redirect, setRedirect] = useState(false);
 
   // Check auth of user
   useEffect(() => {
@@ -34,7 +36,9 @@ const Lobby = () => {
       }
     });
   }
-
+  get("/api/lobbyCheck", { lobbyCode: lobbyId }).catch((err) => {
+    window.location.href = "/LobbyNotFound";
+  });
   return (
     <div>
       <h2>Lobby Code: {lobbyId}</h2>
