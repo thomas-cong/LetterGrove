@@ -6,11 +6,14 @@ import StartLobbyButton from "./StartLobbyButton";
 
 const LobbyCreationPopup = (props) => {
   return (
-    <div className="mainboard">
+    <div className="createdmainboard">
       <div className="center">
-      <img src={Closebutton} onClick={() => props.hideLobby()} className="closeButton" />
-        <div className = "lobbyandusername">
-          <h3>YOUR LOBBY CODE IS: {props.lobbyCode}</h3>
+      <img src={Closebutton} onClick={() => props.hideLobby()} className="createdcloseButton" />
+        <div className = "createdlobbyandusername">
+          <h3>
+            <span style={{ color: 'rgb(94, 129, 255)' }}>YOUR LOBBY CODE IS: </span>
+            <span className="lobby-code" style={{ color: 'white' }}>{props.lobbyCode}</span>
+          </h3>
           <input
             type="text"
             placeholder="Enter your username"
@@ -19,7 +22,7 @@ const LobbyCreationPopup = (props) => {
           />
         </div>
 
-        <div className = "maincontent">
+        <div className = "createdmaincontent">
           <span>
             <LobbySettings gameSettings={props.gameSettings} setGameSettings={props.setGameSettings} />
           </span>
