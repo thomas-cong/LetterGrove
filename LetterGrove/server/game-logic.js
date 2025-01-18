@@ -4,12 +4,26 @@
 |--------------------------------------------------------------------------
 */
 
+// Game state storage
+const games = {};
+
 // Scrabble-like letter distribution (100 tiles total)
 const letterDistribution = {
-    'E': 12, 'A': 9, 'I': 9, 'O': 8, 'N': 6, 'R': 6, 'T': 6,
-    'L': 4, 'S': 4, 'U': 4, 'D': 4, 'G': 3,
-    'B': 2, 'C': 2, 'M': 2, 'P': 2, 'F': 2, 'H': 2, 'V': 2, 'W': 2, 'Y': 2,
-    'K': 1, 'J': 1, 'X': 1, 'Q': 1, 'Z': 1
+    // Common consonants (heavily weighted)
+    'N': 7, 'R': 7, 'S': 7, 'T': 7, 
+    'L': 6, 'D': 6, 'M': 6,
+    
+    // Medium consonants
+    'B': 3, 'C': 3, 'F': 3, 'G': 3, 'H': 3, 'P': 3,
+    
+    // Vowels (balanced)
+    'E': 6, 'A': 5, 'I': 4, 'O': 3, 'U': 2,
+    
+    // Less common consonants
+    'V': 3, 'W': 3, 'Y': 3,
+    
+    // Rare letters (minimal)
+    'K': 1, 'J': 1, 'X': 1, 'Q': 2, 'Z': 2
 };
 
 // Point values for each letter
@@ -42,38 +56,37 @@ const cropValues = {
  * @returns {string} A randomly selected letter
  */
 const generateRandomLetter = () => {
-    const letters = Object.entries(letterDistribution).flatMap(([letter, count]) => 
-        Array(count).fill(letter)
-    );
-    return letters[Math.floor(Math.random() * letters.length)];
+    // Create a pool of letters based on Scrabble-like distribution
+    const letterPool = [];
+    for (const [letter, weight] of Object.entries(letterDistribution)) {
+        // More common letters should appear more often
+        const frequency = weight;
+        letterPool.push(...Array(frequency).fill(letter));
+    }
+    return letterPool[Math.floor(Math.random() * letterPool.length)];
 };
 
 /**
  * Creates a function that generates random board positions with weighted distribution
  * Higher row/column numbers have higher probability of being selected
- * @param {number} ARRAY_SIZE - Size of the game board
+ * @param {number} size - Size of the game board
  * @returns {Function} Function that returns [row, col] when called
  */
-const createRandomPositionGenerator = (ARRAY_SIZE) => {
-    // Generate weighted rows array
-    const rows = [];
-    for (let i = 0; i < ARRAY_SIZE; i++) {
-        const weight = i + 2 * ARRAY_SIZE;
-        rows.push(...Array(weight).fill(i));
+const createRandomPositionGenerator = (size) => {
+    // Create a pool of all possible positions and shuffle them
+    const positions = [];
+    for (let i = 0; i < size; i++) {
+        for (let j = 0; j < size; j++) {
+            positions.push([i, j]);
+        }
     }
-
-    // Generate weighted columns array
-    const cols = [];
-    for (let i = 0; i < ARRAY_SIZE; i++) {
-        const weight = i + 2 * ARRAY_SIZE;
-        cols.push(...Array(weight).fill(i));
+    // Fisher-Yates shuffle
+    for (let i = positions.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [positions[i], positions[j]] = [positions[j], positions[i]];
     }
-
-    return () => {
-        const row = rows[Math.floor(Math.random() * rows.length)];
-        const col = cols[Math.floor(Math.random() * cols.length)];
-        return [row, col];
-    };
+    let currentIndex = 0;
+    return () => positions[currentIndex++];
 };
 
 /**
@@ -85,9 +98,7 @@ const createRandomPositionGenerator = (ARRAY_SIZE) => {
  * @returns {boolean} True if position has adjacent letters
  */
 const hasAdjacentLetter = (row, col, board, ARRAY_SIZE) => {
-    const directions = [
-        [-1, 0], [1, 0], [0, -1], [0, 1],
-    ];
+    const directions = [[-1, 0], [1, 0], [0, -1], [0, 1]];
     
     for (const [dx, dy] of directions) {
         const newRow = row + dx;
@@ -114,35 +125,26 @@ const hasAdjacentLetter = (row, col, board, ARRAY_SIZE) => {
  */
 const randomlyGenerateBoard = (props) => {
     const DIFFICULTY = props.difficulty;
-    const LETTER_COUNT = null;
-    const POWERUP_COUNT = null;
+    let LETTER_COUNT;
     const CROPS = ['carrots', 'tomatoes', 'blueberries', 'pumpkins'];
     const POWERUPS = ['spade', 'water', 'shovel'];
-    const CROP_COUNTS = {
-        carrots: null,
-        tomatoes: null,
-        blueberries: null,
-        pumpkins: null
-    };
-    const POWERUP_COUNTS = {
-        spade: null,
-        water: null,
-        shovel: null
-    };
+    let CROP_COUNTS;
+    let POWERUP_COUNTS;
     const ARRAY_SIZE = 15;
+
     if (DIFFICULTY === 'easy') {
-        LETTER_COUNT = 15;
+        LETTER_COUNT = 25;
         CROP_COUNTS = {
-            carrots: 5,
-            tomatoes: 5,
-            blueberries: 5,
-            pumpkins: 5
-        }
+            carrots: 2,
+            tomatoes: 2,
+            blueberries: 2,
+            pumpkins: 2
+        };
         POWERUP_COUNTS = {
             spade: 1,
             water: 1,
             shovel: 1
-        }
+        };
     } else if (DIFFICULTY === 'medium') {
         LETTER_COUNT = 25;
         CROP_COUNTS = {
@@ -150,12 +152,12 @@ const randomlyGenerateBoard = (props) => {
             tomatoes: 1,
             blueberries: 1,
             pumpkins: 1
-        }
+        };
         POWERUP_COUNTS = {
             spade: 1,
             water: 1,
             shovel: 1
-        }
+        };
     } else if (DIFFICULTY === 'hard') {
         LETTER_COUNT = 35;
         CROP_COUNTS = {
@@ -163,79 +165,156 @@ const randomlyGenerateBoard = (props) => {
             tomatoes: 1,
             blueberries: 1,
             pumpkins: 1
-        }
+        };
         POWERUP_COUNTS = {
             spade: 1,
             water: 1,
             shovel: 1
-        }
+        };
     }
     
     // Initialize empty board
-    const board = Array(ARRAY_SIZE).fill().map(() => Array(ARRAY_SIZE).fill({
+    const board = Array(ARRAY_SIZE).fill().map(() => Array(ARRAY_SIZE).fill().map(() => ({
         letter: '',
         powerup: null,
         crop: null,
         default: false,
         value: 0,
         visited: false,
-    }));
+    })));
 
     // Place first letter in top-left corner
-    board[0][0].letter = generateRandomLetter();
-    board[0][0].default = true;
-    board[0][0].value = letterValues[board[0][0].letter];
-    board[0][0].visited = true;
+    const firstLetter = generateRandomLetter();
+    board[0][0] = {
+        letter: firstLetter,
+        powerup: null,
+        crop: null,
+        default: true,
+        value: letterValues[firstLetter],
+        visited: false
+    };
 
     // Place remaining letters
     let remainingLetters = LETTER_COUNT - 1;
     const generatePosition = createRandomPositionGenerator(ARRAY_SIZE);
-    
-    while (remainingLetters > 0) {
+    let attempts = 0;
+    const MAX_ATTEMPTS = 1000;
+
+    // Track available positions for crops and powerups
+    const availablePositions = new Set();
+    for (let i = 0; i < ARRAY_SIZE; i++) {
+        for (let j = 0; j < ARRAY_SIZE; j++) {
+            if (i !== 0 || j !== 0) { // Skip first position
+                availablePositions.add(`${i},${j}`);
+            }
+        }
+    }
+
+    while (remainingLetters > 0 && attempts < MAX_ATTEMPTS) {
         const [row, col] = generatePosition();
-        
         if (board[row][col].letter === '' && !hasAdjacentLetter(row, col, board, ARRAY_SIZE)) {
             const letter = generateRandomLetter();
             board[row][col] = {
-                letter: letter,
+                letter,
                 powerup: null,
                 crop: null,
                 default: true,
                 value: letterValues[letter],
                 visited: false
             };
+            availablePositions.delete(`${row},${col}`);
             remainingLetters--;
         }
+        attempts++;
     }
 
-    for (let crop in CROPS) {
+    // Place crops in remaining spaces
+    for (const crop of CROPS) {
         let remainingCrop = CROP_COUNTS[crop];
-        while (remainingCrop > 0) {
-            const [row, col] = generatePosition();
-            if (board[row][col].letter === '' && board[row][col].crop === null) {
-                board[row][col].crop = crop;
-                board[row][col].value = cropValues[crop];
-                remainingCrop--;
-            }
+        const positions = Array.from(availablePositions);
+        
+        while (remainingCrop > 0 && positions.length > 0) {
+            const randomIndex = Math.floor(Math.random() * positions.length);
+            const [row, col] = positions[randomIndex].split(',').map(Number);
+            
+            board[row][col].crop = crop;
+            board[row][col].value = cropValues[crop];
+            
+            positions.splice(randomIndex, 1);
+            availablePositions.delete(`${row},${col}`);
+            remainingCrop--;
         }
     }
 
-    for (let powerup in POWERUPS) {
+    // Place powerups in remaining spaces
+    for (const powerup of POWERUPS) {
         let remainingPowerUp = POWERUP_COUNTS[powerup];
-        while (remainingPowerUp > 0) {
-            const [row, col] = generatePosition();
-            if (board[row][col].letter === '' && board[row][col].crop === null && board[row][col].powerup === null) {
-                board[row][col].powerup = powerup;
-                remainingPowerUp--;
-            }
+        const positions = Array.from(availablePositions);
+        
+        while (remainingPowerUp > 0 && positions.length > 0) {
+            const randomIndex = Math.floor(Math.random() * positions.length);
+            const [row, col] = positions[randomIndex].split(',').map(Number);
+            
+            board[row][col].powerup = powerup;
+            
+            positions.splice(randomIndex, 1);
+            availablePositions.delete(`${row},${col}`);
+            remainingPowerUp--;
         }
     }
     
     return board;
 };
 
+const deepCopyBoard = (board) => {
+    return JSON.parse(JSON.stringify(board));
+};
+
+
+
+const enterWord = (userId, props) => {
+    /*
+    Returns list of potential word positions
+    */
+    const x = props.x;
+    const y = props.y;
+    const word = props.word;
+    const lobbyCode = props.lobbyCode;
+    const board = games[lobbyCode].userGameStates[userId].board;
+    const directions = [
+        [-1, 0], [1, 0], [0, -1], [0, 1],
+        [-1, -1], [-1, 1], [1, -1], [1, 1]
+    ];
+
+    const suggestions = [];
+    direction: for (const [dx, dy] of directions) {
+        let lastX = x + dx*(word.length-1);
+        let lastY = y + dy*(word.length-1);
+        if (lastX >= 0 && lastX < 15 && lastY >= 0 && lastY < 15) {
+            let suggestion = [];
+            let currentX = x;
+            let currentY = y;
+            for (let i = 0; i < word.length; i++) {
+                if (board[currentX][currentY].letter === '' || 
+                    board[currentX][currentY].letter !== word[i]) {
+                    continue direction;
+                }
+                suggestion.push([currentX, currentY, word[i]]);
+                currentX += dx;
+                currentY += dy;
+            }
+            suggestions.push(suggestion);
+        }
+    }
+    return suggestions;
+}
+
 module.exports = {
     randomlyGenerateBoard,
     letterValues,
-    cropValues
+    cropValues,
+    deepCopyBoard,
+    games,
+    enterWord,
+
 };

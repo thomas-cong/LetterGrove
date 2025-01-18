@@ -113,10 +113,9 @@ router.post("/openLobby", (req, res) => {
     steps: gameSettings.steps,
     defaultLetters: gameSettings.defaultLetters,
     powerUps: gameSettings.powerUps,
-    players: [{
-      userId: req.user._id,
-      username: username
-    }]
+    players: {
+      [req.user._id]: username
+    },
   };
 
   console.log("Lobby with ID " + lobbyCode + " opened");
@@ -150,11 +149,7 @@ router.post("/joinLobby", (req, res) => {
   });
 
   if (openLobbies[lobbyCode]) {
-    const player = {
-      userId: req.user._id,
-      username: username
-    };
-    openLobbies[lobbyCode].players.push(player);
+    openLobbies[lobbyCode].players[req.user._id] = username;
     console.log("Lobby with ID " + lobbyCode + " joined");
     console.log("Current lobbies:", openLobbies);
     res.send({ message: "Lobby Joined" });
@@ -168,8 +163,8 @@ router.post("/startGame", (req, res) => {
   const gameInfo = openLobbies[req.body.lobbyCode];
   // remove lobbycode from open lobbies
   delete openLobbies[req.body.lobbyCode];
-  socketManager.startRunningGame({
-    gameInfo: gameInfo, 
+  socketManager.initiateGame({
+    gameInfo: gameInfo,
     lobbyCode: req.body.lobbyCode
   });
 });

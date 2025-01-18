@@ -29,51 +29,51 @@ const removeUser = (user, socket) => {
 };
 
 /* send game state to specific client */
-const sendUserGameState = (userId, lobbyCode) => {
+const sendUserGame = (userId, lobbyCode) => {
   const socket = userToSocketMap[userId];
-  gameState = {
-    board: gameLogic.gameStates[lobbyCode].boards[userId],
-    points: gameLogic.gameStates[lobbyCode].points[userId],
-    powerUps: gameLogic.gameStates[lobbyCode].powerUps[userId],
-    counter: gameLogic.gameStates[lobbyCode].counter[userId],
-    rankings: gameLogic.gameStates[lobbyCode].rankings,
-    log: gameLogic.gameStates[lobbyCode].log
+  game = {
+    username: gameLogic.games[lobbyCode].userGameStates[userId].username,
+    board: gameLogic.games[lobbyCode].userGameStates[userId].board,
+    points: gameLogic.games[lobbyCode].userGameStates[userId].points,
+    powerUps: gameLogic.games[lobbyCode].userGameStates[userId].powerUps,
+    counter: gameLogic.games[lobbyCode].counter,
+    rankings: gameLogic.games[lobbyCode].rankings,
+    log: gameLogic.games[lobbyCode].log
   }
-  socket.emit("update", gameState);
+  socket.emit("update", game);
 };
 
 const initiateGame = (props) => {
   const lobbyCode = props.lobbyCode;
   const gameInfo = props.gameInfo;
   const players = gameInfo.players;
-  
-  gameState = {}
-  for (let player in players) {
-    let player_id = player.userId;
-    let username = player.username;
-    gameState[player_id] = {
+
+  board = gameLogic.randomlyGenerateBoard({
+    difficulty: gameInfo.difficulty,
+  });
+  game = { 
+    userGameStates: {},
+    players: players,
+    counter: 0,
+    rankings: [],
+    log: [],
+  };
+  for (const userId in players) {
+    const username = players[userId]
+    game.userGameStates[userId] = {
       username: username,
-      board: null,
+      board: gameLogic.deepCopyBoard(board),
       points: 0,
       powerUps: {
         spade: 0,
         water: 0,
         shovel: 0
       },
-      counter: 0,
-      rankings: [],
-      log: []
+      endpoints: [[0, 0]]
     }
   }
-  board = gameLogic.randomlyGenerateBoard({
-    difficulty: gameInfo.difficulty,
-  });
-
+  gameLogic.games[lobbyCode] = game;
 };
-
-
-
-
 
 module.exports = {
   init: (http) => {
@@ -85,6 +85,12 @@ module.exports = {
         const user = getUserFromSocketID(socket.id);
         removeUser(user, socket);
       });
+      socket.on("enter word", (props) => {
+        const user = getUserFromSocketID(socket.id);
+        if (user && user._id in gameLogic.games[props.lobbyCode].players) {
+          gameLogic.enterWord(user._id, props);
+        }
+      });
     });
   },
 
@@ -94,5 +100,7 @@ module.exports = {
   getSocketFromUserID: getSocketFromUserID,
   getUserFromSocketID: getUserFromSocketID,
   getSocketFromSocketID: getSocketFromSocketID,
+  getAllConnectedUsers: getAllConnectedUsers,
   getIo: () => io,
+  initiateGame: initiateGame
 };
