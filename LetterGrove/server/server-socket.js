@@ -73,6 +73,9 @@ const initiateGame = (props) => {
     }
   }
   gameLogic.games[lobbyCode] = game;
+  for (const userId in players) {
+    sendUserGame(userId, lobbyCode);
+  }
 };
 
 module.exports = {

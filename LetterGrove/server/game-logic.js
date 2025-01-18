@@ -197,7 +197,7 @@ const randomlyGenerateBoard = (props) => {
         crop: null,
         default: true,
         value: letterValues[firstLetter],
-        visited: false
+        visited: true
     };
 
     // Place remaining letters
@@ -323,11 +323,8 @@ const confirmWord = (userId, props) => {
     const y_node = props.y_node;
     const word = props.word;
     const game = games[lobbyCode];
-    const board = game.userGameStates[userId].board;
-    const directions = [
-        [-1, 0], [1, 0], [0, -1], [0, 1],
-        [-1, -1], [-1, 1], [1, -1], [1, 1]
-    ];
+    const userGameState = game.userGameStates[userId];
+    const board = userGameState.board;
     const [dx, dy] = computeDxDy(x, y, x_node, y_node);
     let currentX = x;
     let currentY = y;
@@ -340,10 +337,27 @@ const confirmWord = (userId, props) => {
         board[currentX][currentY].visited = true;
         board[currentX][currentY].letter = word[i];
         if (i == word.length - 1) {
-            game.userGameStates[userId].endpoints.push([currentX, currentY]);
+            userGameState.endpoints.push([currentX, currentY]);
         }
-        
+        if (board[currentX][currentY].powerup !== null) {
+            powerUp = board[currentX][currentY].powerup;
+            userGameState.powerUps[powerUp] += 1; 
+            board[currentX][currentY].powerup = null;
+        }
+        if (board[currentX][currentY].crop !== null) {
+            crop = board[currentX][currentY].crop;
+            userGameState.points += cropValues[crop];
+            board[currentX][currentY].crop = null;
+        }
+        if (board[currentX][currentY].value > 0) {
+            userGameState.points += board[currentX][currentY].value;
+            board[currentX][currentY].value = 0;
+        }
+
+        currentX += dx;
+        currentY += dy;
     }
+    
 }
 
 module.exports = {
