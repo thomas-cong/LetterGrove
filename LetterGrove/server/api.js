@@ -20,8 +20,7 @@ const router = express.Router();
 
 //initialize socket
 const socketManager = require("./server-socket");
-
-const openLobbies = {};
+const { openLobbies } = require("./shared-state");
 
 router.post("/login", auth.login);
 router.post("/logout", auth.logout);
@@ -208,4 +207,5 @@ router.all("*", (req, res) => {
   res.status(404).send({ msg: "API route not found" });
 });
 
+// Export the router directly for Express to use
 module.exports = router;

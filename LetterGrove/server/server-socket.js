@@ -1,4 +1,5 @@
 const gameLogic = require("./game-logic");
+const { openLobbies } = require("./shared-state");
 
 let io;
 
@@ -133,6 +134,7 @@ const handleEndGame = (props) => {
 const joinSocket = (props) => {
   const lobbyCode = props.lobbyCode;
   const user = getUserFromSocketID(props.socketid);
+  console.log(openLobbies);
   if (user && user._id in Object.values(Object.keys(openLobbies[props.lobbyCode].players))) {
     userToSocketMap[user._id].join(lobbyCode);
   }
