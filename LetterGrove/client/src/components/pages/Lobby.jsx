@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 import "../../utilities.css";
 import "../../assets/font.css";
+import SettingsDisplay from "../modules/SettingsDisplay.jsx";
 import LobbyUserList from "../modules/LobbyUserList.jsx";
 import { get } from "../../utilities";
 import { socket } from "../../client-socket";
@@ -41,10 +42,12 @@ const Lobby = () => {
   get("/api/lobbyCheck", { lobbyCode: lobbyId }).catch((err) => {
     window.location.href = "/LobbyNotFound";
   });
+
   return (
     <div>
       <h2>Lobby Code: {lobbyId}</h2>
       <LobbyUserList lobbyCode={lobbyId} />
+      <SettingsDisplay lobbyCode={lobbyId} />
     </div>
   );
 };
