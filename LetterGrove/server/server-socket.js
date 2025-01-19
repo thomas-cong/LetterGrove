@@ -33,7 +33,7 @@ const removeUser = (user, socket) => {
  * @param {string} userId - ID of the user to send game state to
  * @param {string} lobbyCode - Code of the lobby to get game state from
  * @returns {void}
- * 
+ *
  */
 const sendUserInitialGame = (userId, lobbyCode) => {
   const socket = userToSocketMap[userId];
@@ -45,8 +45,8 @@ const sendUserInitialGame = (userId, lobbyCode) => {
     powerups: gameLogic.games[lobbyCode].userGameStates[userId].powerups,
     counter: gameLogic.games[lobbyCode].counter,
     rankings: gameLogic.games[lobbyCode].rankings,
-    log: gameLogic.games[lobbyCode].log
-  }
+    log: gameLogic.games[lobbyCode].log,
+  };
   socket.emit("initial game", game);
 };
 
@@ -58,7 +58,7 @@ const initiateGame = (props) => {
   board = gameLogic.randomlyGenerateBoard({
     difficulty: gameInfo.difficulty,
   });
-  game = { 
+  game = {
     userGameStates: {},
     players: players,
     gameStatus: "waiting",
@@ -76,16 +76,16 @@ const initiateGame = (props) => {
       powerups: {
         spade: 0,
         water: 0,
-        shovel: 0
+        shovel: 0,
       },
-      endpoints: [[0, 0]]
-    }
+      endpoints: [[0, 0]],
+    };
   }
   for (const userId in Object.keys(players)) {
     game.rankings.push({
       playerId: userId,
       username: players[userId],
-      score: 0
+      score: 0,
     });
   }
   gameLogic.games[lobbyCode] = game;
@@ -97,22 +97,22 @@ const initiateGame = (props) => {
 
 const startRunningGame = (props) => {
   const lobbyCode = props.lobbyCode;
-  const game =  gameLogic.games[lobbyCode];
+  const game = gameLogic.games[lobbyCode];
   game.timeRemaining = props.time;
 
   game.timerInterval = setInterval(() => {
     game.timeRemaining--;
-    
+
     if (game.timeRemaining === 0) {
       game.gameStatus = "ended";
-      handleEndGame({lobbyCode: lobbyCode, reason: "Time's up"});
+      handleEndGame({ lobbyCode: lobbyCode, reason: "Time's up" });
       clearInterval(game.timerInterval);
       return;
     }
-    
+
     io.in(lobbyCode).emit("time update", { timeRemaining: game.timeRemaining });
   }, 1000);
-}
+};
 
 const handleEndGame = (props) => {
   const lobbyCode = props.lobbyCode;
@@ -122,21 +122,21 @@ const handleEndGame = (props) => {
     winnerUsername: game.rankings[0].username,
     winnerScore: game.rankings[0].score,
     finalRankings: game.rankings,
-  }
+  };
   clearInterval(game.timerInterval);
   io.to(props.lobbyCode).emit("game over", {
     results: gameResults,
     reason: props.reason,
   });
-}
+};
 
 const joinSocket = (props) => {
   const lobbyCode = props.lobbyCode;
   const user = getUserFromSocketID(props.socketid);
-  if (user && user._id in Object.values(Object.keys(gameLogic.games[props.lobbyCode].players))) {
+  if (user && user._id in Object.values(Object.keys(openLobbies[props.lobbyCode].players))) {
     userToSocketMap[user._id].join(lobbyCode);
   }
-}
+};
 
 module.exports = {
   init: (http) => {
@@ -147,6 +147,10 @@ module.exports = {
         const user = getUserFromSocketID(socket.id);
         removeUser(user, socket);
       });
+      socket.on("join socket", (props) => {
+        props.socketid = socket.id;
+        joinSocket(props);
+      });
       socket.on("enter word", (props) => {
         const user = getUserFromSocketID(socket.id);
         const game = gameLogic.games[props.lobbyCode];
@@ -155,7 +159,10 @@ module.exports = {
         if (!game || game.gameStatus !== "active") return;
 
         let suggestions;
-        if (user && user._id in Object.values(Object.keys(gameLogic.games[props.lobbyCode].players))) {
+        if (
+          user &&
+          user._id in Object.values(Object.keys(gameLogic.games[props.lobbyCode].players))
+        ) {
           suggestions = gameLogic.enterWord(user._id, props);
           /**
            * Emits word suggestions based on current board state
@@ -175,7 +182,10 @@ module.exports = {
         if (!game || game.gameStatus !== "active") return;
 
         let output;
-        if (user && user._id in Object.values(Object.keys(gameLogic.games[props.lobbyCode].players))) {
+        if (
+          user &&
+          user._id in Object.values(Object.keys(gameLogic.games[props.lobbyCode].players))
+        ) {
           output = gameLogic.confirmWord(user._id, props);
           /**
            * Emits updates specific to the current user
@@ -188,17 +198,17 @@ module.exports = {
            * @param {Array} localUpdate.endpoints - Updated valid endpoints for next word
            */
           socket.emit("user update", output.localUpdate);
-        /**
-         * Emits updates that affect all players in the game
-         * @param {Object} globalUpdate
-         * @param {string} globalUpdate.logMessage - Message to display in game log
-         * @param {Array<{playerId: string, username: string, score: number}>} globalUpdate.updatedRankings - Current rankings sorted by score
-         */
+          /**
+           * Emits updates that affect all players in the game
+           * @param {Object} globalUpdate
+           * @param {string} globalUpdate.logMessage - Message to display in game log
+           * @param {Array<{playerId: string, username: string, score: number}>} globalUpdate.updatedRankings - Current rankings sorted by score
+           */
           io.to(props.lobbyCode).emit("global update", output.globalUpdate);
           // check if game is over
           if (gameLogic.games[props.lobbyCode].gameStatus === "ended") {
             let winnerMessage = output.globalUpdate.updatedRankings[0].username + " wins!";
-            handleEndGame({lobbyCode: props.lobbyCode, reason: winnerMessage});
+            handleEndGame({ lobbyCode: props.lobbyCode, reason: winnerMessage });
           }
         }
       });
