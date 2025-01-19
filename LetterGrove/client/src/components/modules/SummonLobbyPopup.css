@@ -16,7 +16,7 @@
 
 .summonlobbypopuptext {
   position: absolute;
-  width: 100%;
+  width: 280px;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);

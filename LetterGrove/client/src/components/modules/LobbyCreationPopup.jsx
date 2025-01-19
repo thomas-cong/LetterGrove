@@ -11,7 +11,7 @@ const LobbyCreationPopup = (props) => {
       <div className="createdlobbyandusername">
         <h3>
           <span style={{ color: "rgb(94, 129, 255)" }}>YOUR LOBBY CODE IS: </span>
-          <span className="lobby-code">{props.lobbyCode}</span>
+          <span className="lobbycreationlobbycode">{props.lobbyCode}</span>
         </h3>
         <input
           type="text"

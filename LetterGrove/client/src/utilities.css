@@ -59,13 +59,14 @@ a {
 .settings-row span:hover,
 .settings-container span:hover,
 .createdlobbyandusername:hover,
-.createdlobbyandusername h3:hover,
-.createdlobbyandusername span:hover,
+.createdlobbyandusername h3:not(.lobbycreationlobbycode):hover,
+.createdlobbyandusername span:not(.lobbycreationlobbycode):hover,
 .settings-row .settings-label:hover,
+
 option:hover {
   color: rgb(94, 129, 255) !important;
   -webkit-text-stroke: 1px hwb(0 0% 100% / 0.36) !important;
-  text-stroke: 1px black !important;
+  cursor: text !important;
 }
 
 h1:hover,

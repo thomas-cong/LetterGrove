@@ -52,7 +52,7 @@ const JoinLobbyPopup = (props) => {
         }}
       >
         <img src={shortSign} alt="Start Lobby" style={{ cursor: "pointer" }} />
-        <h2 className="text">Join Lobby</h2>
+        <h2 className="joinlobbytext">Join Lobby</h2>
       </div>
     </div>
   );
