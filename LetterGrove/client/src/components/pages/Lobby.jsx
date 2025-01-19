@@ -3,12 +3,17 @@ import { useParams } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 import "../../utilities.css";
 import "../../assets/font.css";
+import "./Lobby.css";
+import SettingsDisplay from "../modules/SettingsDisplay.jsx";
 import LobbyUserList from "../modules/LobbyUserList.jsx";
+import StartGameButton from "../modules/StartGameButton.jsx";
 import { get } from "../../utilities";
+import { socket } from "../../client-socket";
 
 const Lobby = () => {
   let { lobbyId } = useParams();
   const [u_id, setU_id] = useState("");
+  const [showLobby, setShowLobby] = useState(true);
 
   // Check auth of user
   useEffect(() => {
@@ -33,16 +38,37 @@ const Lobby = () => {
       if (!found) {
         window.location.href = "/";
       }
+      // Join the lobby room
+      socket.emit("join socket", { lobbyCode: lobbyId });
     });
   }
   get("/api/lobbyCheck", { lobbyCode: lobbyId }).catch((err) => {
     window.location.href = "/LobbyNotFound";
   });
+
   return (
-    <div>
-      <h2>Lobby Code: {lobbyId}</h2>
-      <LobbyUserList lobbyCode={lobbyId} />
-    </div>
+    <>
+      {showLobby ? (
+        <div className="lobby-container">
+          <div className="lobby-content">
+            <div className="lobby-header">
+              <h2 className="lobby-code">Lobby Code: {lobbyId}</h2>
+            </div>
+            <div className="lobby-sections">
+              <div className="lobby-section">
+                <LobbyUserList lobbyCode={lobbyId} />
+              </div>
+              <div className="lobby-section">
+                <SettingsDisplay lobbyCode={lobbyId} />
+              </div>
+            </div>
+            <StartGameButton lobbyCode={lobbyId} setShowLobby={setShowLobby} showLobby={showLobby} />
+          </div>
+        </div>
+      ) : (
+        <div>Game Showing</div>
+      )}
+    </>
   );
 };
 

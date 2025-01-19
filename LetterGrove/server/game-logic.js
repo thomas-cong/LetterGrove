@@ -389,6 +389,9 @@ const confirmWord = (userId, props) => {
         }
     }
     game.rankings.sort((a, b) => b.score - a.score);
+    if (userGameState.points >= game.pointsToWin) {
+        game.gameStatus = "ended";
+    }
     return {
         localUpdate: {
             fruitsCollected: fruitsCollected,
