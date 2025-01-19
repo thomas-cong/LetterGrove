@@ -106,10 +106,12 @@ router.post("/openLobby", (req, res) => {
     players: {
       [req.user._id]: username,
     },
+    lobbyOwner: req.user._id,
   };
 
   console.log("Lobby with ID " + lobbyCode + " opened");
   console.log("Current lobbies:", openLobbies);
+  socketManager.joinSocket({ lobbyCode: lobbyCode });
   res.send({ message: "Lobby Created" });
 });
 
@@ -141,6 +143,7 @@ router.post("/joinLobby", (req, res) => {
     openLobbies[lobbyCode].players[req.user._id] = username;
     console.log("Lobby with ID " + lobbyCode + " joined");
     console.log("Current lobbies:", openLobbies);
+    socketManager.joinSocket({ lobbyCode: lobbyCode });
     res.send({ message: "Lobby Joined" });
   } else {
     console.log("Lobby with ID " + lobbyCode + " not found");
@@ -150,6 +153,9 @@ router.post("/joinLobby", (req, res) => {
 
 router.post("/startGame", (req, res) => {
   const gameInfo = openLobbies[req.body.lobbyCode];
+  if (gameInfo.lobbyOwner != req.user._id) {
+    return res.status(401).send({ error: "Not authorized" });
+  }
   // remove lobbycode from open lobbies
   delete openLobbies[req.body.lobbyCode];
   socketManager.initiateGame({

@@ -8,6 +8,7 @@ import SettingsDisplay from "../modules/SettingsDisplay.jsx";
 import LobbyUserList from "../modules/LobbyUserList.jsx";
 import StartGameButton from "../modules/StartGameButton.jsx";
 import { get } from "../../utilities";
+import { socket } from "../../client-socket";
 
 const Lobby = () => {
   let { lobbyId } = useParams();
@@ -37,6 +38,8 @@ const Lobby = () => {
       if (!found) {
         window.location.href = "/";
       }
+      // Join the lobby room
+      socket.emit("join socket", { lobbyCode: lobbyId });
     });
   }
   get("/api/lobbyCheck", { lobbyCode: lobbyId }).catch((err) => {
