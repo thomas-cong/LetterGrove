@@ -6,6 +6,11 @@
   cursor: pointer;
 }
 
+.createdcloseButton:hover {
+  transform: scale(1.1);
+  transition: all 0.3s ease;
+}
+
 .createdusername-input {
   width: 290px;
   height: 20px;

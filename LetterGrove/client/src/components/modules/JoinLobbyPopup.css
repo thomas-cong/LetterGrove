@@ -7,6 +7,11 @@
 
 }
 
+.closeButton:hover {
+  transform: scale(1.1);
+  transition: all 0.3s ease;
+}
+
 .username-input {
   width: 290px;
   height: 20px;
@@ -33,4 +38,31 @@
   transform: translate(-50%, -50%);
   gap: 20px;
 
+}
+
+.text {
+  width: 220px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  padding: 0;
+  color: rgb(255, 185, 138);
+  transition: color 0.3s ease;
+  white-space: nowrap;
+}
+
+.join-lobby-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+
+.join-lobby-container:hover {
+  color: rgb(255, 219, 156);
+  transform: scale(1.1);
+  transition: all 0.3s ease;
 }

@@ -3,6 +3,7 @@ import Closebutton from "../../assets/closebutton.png";
 import "./JoinLobbyPopup.css";
 import { post } from "../../utilities";
 import { useNavigate } from "react-router-dom";
+import shortSign from "../../assets/320signs_0.png";
 
 /**
  * JoinLobbyPopup is a component that represents username input and lobby code input
@@ -35,7 +36,7 @@ const JoinLobbyPopup = (props) => {
         onChange={(e) => props.setUsername(e.target.value)}
         className="username-input"
       />
-      <button
+      <div className="join-lobby-container"
         onClick={() => {
           post("/api/joinLobby", {
             lobbyCode: props.lobbyCode,
@@ -50,8 +51,9 @@ const JoinLobbyPopup = (props) => {
           navigate(`/${props.lobbyCode}`);
         }}
       >
-        Join Lobby
-      </button>
+        <img src={shortSign} alt="Start Lobby" style={{ cursor: "pointer" }} />
+        <h2 className="text">Join Lobby</h2>
+      </div>
     </div>
   );
 };

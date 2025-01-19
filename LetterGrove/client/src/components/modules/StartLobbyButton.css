@@ -6,7 +6,7 @@
   cursor: pointer;
 }
 
-.text {
+.startlobbytext {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -18,6 +18,10 @@
   white-space: nowrap;
 }
 
-.text:hover {
+.start-lobby-container:hover {
   color: rgb(255, 219, 156);
+  transform: scale(1.1);
+  transition: all 0.3s ease;
+
+
 }

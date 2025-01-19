@@ -51,10 +51,9 @@
   width: 128px;
   height: 36px;
   position: absolute;
-  top: 40px;
-  right: 40px;
+  top: 60px;
+  right: 60px;
   z-index: 1;
-  background-color: rgb(255, 0, 0);
   cursor: pointer;
 }
 
@@ -82,6 +81,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 }
 
 .logouttext {
@@ -89,8 +89,5 @@
   font-size: 18px;
   transform: translate(-10px, 19px);
   transition: all 0.3s ease;
+  cursor: pointer;
 }
-
-/* .home-logoutButton {
-  background-image: url("../../assets/logout/logout0.png");
-} */

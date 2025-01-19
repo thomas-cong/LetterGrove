@@ -47,7 +47,7 @@ const StartLobbyButton = (props) => {
   return (
     <div onClick={handleClick} className="start-lobby-container">
       <img src={shortSign} alt="Start Lobby" style={{ cursor: "pointer" }} />
-      <h2 className="text">Start Lobby</h2>
+      <h2 className="startlobbytext">Start Lobby</h2>
     </div>
   );
 };
