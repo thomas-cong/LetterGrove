@@ -225,6 +225,9 @@ module.exports = {
   getSocketFromSocketID: getSocketFromSocketID,
   getAllConnectedUsers: getAllConnectedUsers,
   getIo: () => io,
+  sendUserInitialGame: sendUserInitialGame,
   initiateGame: initiateGame,
+  handleEndGame: handleEndGame,
+  startRunningGame: startRunningGame,
   joinSocket: joinSocket,
 };
