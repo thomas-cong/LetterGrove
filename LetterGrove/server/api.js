@@ -111,7 +111,7 @@ router.post("/openLobby", (req, res) => {
 
   console.log("Lobby with ID " + lobbyCode + " opened");
   console.log("Current lobbies:", openLobbies);
-  socketManager.joinSocket({ lobbyCode: lobbyCode });
+  socketManager.joinSocket({ lobbyCode: lobbyCode, socketid: req.user._id });
   res.send({ message: "Lobby Created" });
 });
 
