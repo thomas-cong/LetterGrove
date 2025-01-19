@@ -8,8 +8,6 @@ const StartLobbyButton = (props) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    console.log("Username:", props.username);
-
     const gameSettings = {
       minWordLength: props.gameSettings.minWordLength,
       pointsModifier: props.gameSettings.pointsModifier,
