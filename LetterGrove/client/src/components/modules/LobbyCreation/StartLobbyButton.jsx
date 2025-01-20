@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import shortSign from "../../assets/320signs_0.png";
-import { post } from "../../utilities";
+import shortSign from "../../../assets/320signs_1.png";
+import { post } from "../../../utilities";
 import "./StartLobbyButton.css";
 
 const StartLobbyButton = (props) => {
