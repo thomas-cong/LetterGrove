@@ -91,3 +91,7 @@
   transition: all 0.3s ease;
   cursor: pointer;
 }
+
+.logouttext:hover {
+  color: rgb(255, 219, 156);
+}

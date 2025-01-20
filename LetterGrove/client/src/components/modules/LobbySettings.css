@@ -23,6 +23,15 @@ input[type="number"] {
   text-align: center;
 }
 
+select {
+  cursor: pointer;
+  color: rgb(94, 129, 255);
+}
+
+select option {
+  cursor: pointer;
+}
+
 input[type="number"] {
   width: 30px;
 }

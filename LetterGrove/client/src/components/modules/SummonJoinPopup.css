@@ -37,3 +37,7 @@ h2 {
   padding: 0;
   color: rgb(255, 185, 138);
 }
+
+.joinalobbytext:hover {
+  color: rgb(255, 219, 156);
+}

@@ -8,12 +8,6 @@
   cursor: pointer;
 }
 
-.summonlobbypopupsign {
-  width: 100%;
-  height: auto;
-  transition: all 0.3s ease;
-}
-
 .summonlobbypopuptext {
   position: absolute;
   width: 280px;
@@ -26,6 +20,10 @@
   padding: 0;
   color: rgb(255, 185, 138);
   transition: all 0.3s ease;
+}
+
+.summonlobbypopuptext:hover {
+  color: rgb(255, 219, 156);
 }
 
 .button-container:hover {
