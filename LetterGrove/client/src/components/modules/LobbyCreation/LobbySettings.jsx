@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import checkedBox from "../../assets/checkbox/checkbox1.png";
-import uncheckedBox from "../../assets/checkbox/checkbox0.png";
+import checkedBox from "../../../assets/checkbox/checkbox1.png";
+import uncheckedBox from "../../../assets/checkbox/checkbox0.png";
 import "./LobbySettings.css";
 
 // Creating checkbox for settings toggle

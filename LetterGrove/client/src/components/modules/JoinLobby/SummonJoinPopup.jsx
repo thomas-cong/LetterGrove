@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { get, post } from "../../utilities";
-import buttonImage from "../../assets/640signs_0.png";
-import LobbyCreationPopup from "./LobbyCreationPopup";
-import "../../assets/font.css";
+import { get, post } from "../../../utilities";
+import buttonImage from "../../../assets/640signs_0.png";
+import "../../../assets/font.css";
 import "./SummonJoinPopup.css";
 import JoinLobbyPopup from "./JoinLobbyPopup";
 /**

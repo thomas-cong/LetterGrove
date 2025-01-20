@@ -1,53 +1,79 @@
-import React, { useEffect, useRef, useContext } from "react";
+import React, { useEffect, useRef, useContext, useState } from "react";
 import { UserContext } from "../App.jsx";
-import themeMusic from "../../assets/LetterGroveTheme.mp3";
 import "./BackgroundMusic.css";
+
+// Import theme files directly
+import theme1 from "../../assets/Themes/Theme1LetterGrove.mp3";
+import theme2 from "../../assets/Themes/ThemeTwoLetterGrove.mp3";
+
+const themeFiles = [theme1, theme2];
 
 const BackgroundMusic = () => {
   const audioRef = useRef(null);
   const { userId } = useContext(UserContext);
+  const [currentThemeIndex, setCurrentThemeIndex] = useState(0);
+  const [hasInteracted, setHasInteracted] = useState(false);
 
-  useEffect(() => {
-    console.log("BackgroundMusic component mounted");
-    console.log("Theme music path:", themeMusic);
-    console.log("Current userId:", userId);
-
-    if (audioRef.current && userId) {
-      audioRef.current.volume = 0.5;
-
-      // Add event listeners for debugging
-      audioRef.current.addEventListener("playing", () => {
-        console.log("Audio started playing");
-      });
-
-      audioRef.current.addEventListener("error", (e) => {
-        console.error("Audio error:", e);
-      });
-
-      const playPromise = audioRef.current.play();
-
-      if (playPromise !== undefined) {
-        playPromise
-          .then(() => {
-            console.log("Audio playback started successfully");
-          })
-          .catch((error) => {
-            console.error("Audio playback failed:", error);
-          });
-      }
+  const playNextTheme = () => {
+    if (themeFiles.length > 0) {
+      setCurrentThemeIndex((prevIndex) => (prevIndex + 1) % themeFiles.length);
     }
+  };
 
-    // Cleanup function
-    return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.removeEventListener("playing", () => {});
-        audioRef.current.removeEventListener("error", () => {});
+  // Effect for handling click events
+  useEffect(() => {
+    const handleFirstClick = () => {
+      console.log("Click detected");
+      console.log("hasInteracted:", hasInteracted);
+      console.log("audioRef.current:", audioRef.current);
+      
+      if (!hasInteracted && audioRef.current) {
+        console.log("Attempting to play audio");
+        setHasInteracted(true);
+        audioRef.current.volume = 0.5;
+        audioRef.current.play().catch((error) => {
+          console.error("Error playing audio:", error);
+        });
       }
     };
-  }, [userId]); // Now depends on userId changes
 
-  return <audio ref={audioRef} src={themeMusic} loop className="background-music" />;
+    document.addEventListener("click", handleFirstClick);
+    return () => document.removeEventListener("click", handleFirstClick);
+  }, [hasInteracted]);
+
+  // Effect for initial setup and cleanup
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = 0.5;
+
+      const onPlaying = () => {
+        console.log("Audio started playing");
+      };
+
+      const onEnded = () => {
+        console.log("Theme ended, playing next theme");
+        playNextTheme();
+      };
+
+      const onError = (e) => {
+        console.error("Audio error:", e);
+      };
+
+      audioRef.current.addEventListener("playing", onPlaying);
+      audioRef.current.addEventListener("ended", onEnded);
+      audioRef.current.addEventListener("error", onError);
+
+      return () => {
+        if (audioRef.current) {
+          audioRef.current.removeEventListener("playing", onPlaying);
+          audioRef.current.removeEventListener("ended", onEnded);
+          audioRef.current.removeEventListener("error", onError);
+        }
+      };
+    }
+  }, [currentThemeIndex]);
+
+  return <audio ref={audioRef} src={themeFiles[currentThemeIndex]} preload="auto" loop={false} />;
 };
 
 export default BackgroundMusic;

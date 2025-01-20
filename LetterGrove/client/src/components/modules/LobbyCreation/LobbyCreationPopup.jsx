@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Closebutton from "../../assets/Closebutton.png";
+import Closebutton from "../../../assets/Closebutton.png";
 import "./LobbyCreationPopup.css";
 import LobbySettings from "./LobbySettings";
 import StartLobbyButton from "./StartLobbyButton";
