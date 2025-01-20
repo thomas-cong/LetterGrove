@@ -38,6 +38,10 @@ const removeUser = (user, socket) => {
  */
 const sendUserInitialGame = (userId, lobbyCode) => {
   const socket = userToSocketMap[userId];
+  if (!socket) {
+    console.log("No socket found for user " + userId);
+    return;
+  }
   game = {
     lobbyCode: lobbyCode,
     username: gameLogic.games[lobbyCode].userGameStates[userId].username,
@@ -55,6 +59,7 @@ const initiateGame = (props) => {
   const lobbyCode = props.lobbyCode;
   const gameInfo = props.gameInfo;
   const players = gameInfo.players;
+  console.log(gameInfo);
 
   board = gameLogic.randomlyGenerateBoard({
     difficulty: gameInfo.difficulty,
@@ -68,7 +73,7 @@ const initiateGame = (props) => {
     log: [],
     pointsToWin: 100,
   };
-  for (const userId in Object.keys(players)) {
+  for (const userId in players) {
     const username = players[userId];
     game.userGameStates[userId] = {
       username: username,
@@ -82,7 +87,7 @@ const initiateGame = (props) => {
       endpoints: [[0, 0]],
     };
   }
-  for (const userId in Object.keys(players)) {
+  for (const userId in players) {
     game.rankings.push({
       playerId: userId,
       username: players[userId],
@@ -91,7 +96,9 @@ const initiateGame = (props) => {
   }
   gameLogic.games[lobbyCode] = game;
   gameLogic.games[lobbyCode].gameStatus = "active";
-  for (const userId in Object.keys(players)) {
+  console.log(players);
+  for (const userId in players) {
+    console.log(userId);
     sendUserInitialGame(userId, lobbyCode);
   }
 };
