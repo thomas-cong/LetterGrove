@@ -4,6 +4,7 @@ import SummonLobbyPopup from "../modules/LobbyCreation/SummonLobbyPopup";
 import lettergrovelogo from "../../assets/lettergrovelogo.gif";
 import cloudanimation from "../../assets/cloudanimation000.png";
 import SummonJoinPopup from "../modules/JoinLobby/SummonJoinPopup";
+import SummonCreditsPopup from "../modules/Credits/SummonCreditsPopup";
 
 import "../../utilities.css";
 import "./Home.css";
@@ -35,6 +36,12 @@ const Home = () => {
           <SummonJoinPopup
             onShowJoin={() => setShowLogo(false)}
             onHideJoin={() => setShowLogo(true)}
+            popupShowing={popupShowing}
+            setPopupShowing={setPopupShowing}
+          />
+          <SummonCreditsPopup
+            onShowCredits={() => setShowLogo(false)}
+            onHideCredits={() => setShowLogo(true)}
             popupShowing={popupShowing}
             setPopupShowing={setPopupShowing}
           />

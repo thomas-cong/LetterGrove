@@ -12,24 +12,40 @@ const BackgroundMusic = () => {
   const audioRef = useRef(null);
   const { userId } = useContext(UserContext);
   const [currentThemeIndex, setCurrentThemeIndex] = useState(0);
-  
+  const [hasInteracted, setHasInteracted] = useState(false);
+
   const playNextTheme = () => {
     if (themeFiles.length > 0) {
       setCurrentThemeIndex((prevIndex) => (prevIndex + 1) % themeFiles.length);
     }
   };
 
+  // Effect for handling click events
+  useEffect(() => {
+    const handleFirstClick = () => {
+      console.log("Click detected");
+      console.log("hasInteracted:", hasInteracted);
+      console.log("audioRef.current:", audioRef.current);
+      
+      if (!hasInteracted && audioRef.current) {
+        console.log("Attempting to play audio");
+        setHasInteracted(true);
+        audioRef.current.volume = 0.5;
+        audioRef.current.play().catch((error) => {
+          console.error("Error playing audio:", error);
+        });
+      }
+    };
+
+    document.addEventListener("click", handleFirstClick);
+    return () => document.removeEventListener("click", handleFirstClick);
+  }, [hasInteracted]);
+
   // Effect for initial setup and cleanup
   useEffect(() => {
-    console.log("BackgroundMusic component mounted");
-    console.log("Current theme:", themeFiles[currentThemeIndex]);
-    console.log("Current userId:", userId);
-    console.log("Available themes:", themeFiles);
-
-    if (audioRef.current && userId && themeFiles.length > 0) {
+    if (audioRef.current) {
       audioRef.current.volume = 0.5;
 
-      // Add event listeners for debugging and theme cycling
       const onPlaying = () => {
         console.log("Audio started playing");
       };
@@ -47,48 +63,17 @@ const BackgroundMusic = () => {
       audioRef.current.addEventListener("ended", onEnded);
       audioRef.current.addEventListener("error", onError);
 
-      // Initial play
-      const playPromise = audioRef.current.play();
-
-      if (playPromise !== undefined) {
-        playPromise
-          .then(() => {
-            console.log("Audio playback started successfully");
-          })
-          .catch((error) => {
-            console.error("Audio playback failed:", error);
-          });
-      }
-
-      // Cleanup function
       return () => {
         if (audioRef.current) {
-          audioRef.current.pause();
           audioRef.current.removeEventListener("playing", onPlaying);
           audioRef.current.removeEventListener("ended", onEnded);
           audioRef.current.removeEventListener("error", onError);
         }
       };
     }
-  }, [userId]); // Only re-run when userId changes
+  }, [currentThemeIndex]);
 
-  // Effect to handle theme changes
-  useEffect(() => {
-    if (audioRef.current && themeFiles.length > 0) {
-      audioRef.current.load(); // Load the new source
-      const playPromise = audioRef.current.play();
-      
-      if (playPromise !== undefined) {
-        playPromise.catch((error) => {
-          console.error("Error playing new theme:", error);
-        });
-      }
-    }
-  }, [currentThemeIndex]); // Re-run when theme changes
-
-  return themeFiles.length > 0 ? (
-    <audio ref={audioRef} src={themeFiles[currentThemeIndex]} className="background-music" />
-  ) : null;
+  return <audio ref={audioRef} src={themeFiles[currentThemeIndex]} preload="auto" loop={false} />;
 };
 
 export default BackgroundMusic;
