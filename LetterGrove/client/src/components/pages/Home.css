@@ -85,6 +85,8 @@
 }
 
 .logouttext {
+  -webkit-text-stroke: 1px hwb(0 0% 100% / 0.36);
+  font-family: "Daydream", sans-serif;
   color: rgb(255, 185, 138);
   font-size: 18px;
   transform: translate(-10px, 19px);
