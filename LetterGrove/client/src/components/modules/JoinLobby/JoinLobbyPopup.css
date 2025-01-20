@@ -53,6 +53,10 @@
   white-space: nowrap;
 }
 
+.joinlobbytext:hover {
+  color: rgb(255, 219, 156);
+}
+
 .join-lobby-container {
   position: relative;
   display: flex;
@@ -62,7 +66,6 @@
 }
 
 .join-lobby-container:hover {
-  color: rgb(255, 219, 156);
   transform: scale(1.1);
   transition: all 0.3s ease;
 }

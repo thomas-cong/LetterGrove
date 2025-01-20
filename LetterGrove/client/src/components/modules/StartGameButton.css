@@ -11,11 +11,7 @@
 
 .sign {
   cursor: pointer;
-  transition: transform 0.2s;
-}
-
-.sign:hover {
-  transform: scale(1.05);
+  transition: all 0.3s ease;
 }
 
 .sign-text {

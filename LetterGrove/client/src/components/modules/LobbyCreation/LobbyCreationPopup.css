@@ -54,15 +54,3 @@
   text-align: center;
   color: rgb(255, 255, 255) !important;
 }
-
-.lobbycreationlobbycode:hover {
-  color: rgb(255, 255, 255) !important;
-}
-
-/* .lobby-code,
-.lobby-code:hover {
-  color: white !important;
-  -webkit-text-stroke: 1px hwb(0 0% 100% / 0.36) !important;
-  pointer-events: none !important;
-  cursor: text !important;
-} */
