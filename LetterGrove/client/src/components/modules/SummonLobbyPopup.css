@@ -19,7 +19,6 @@
   margin: 0;
   padding: 0;
   color: rgb(255, 185, 138);
-  transition: all 0.3s ease;
 }
 
 .summonlobbypopuptext:hover {
@@ -28,4 +27,5 @@
 
 .button-container:hover {
   transform: translate(0%, 650%) scale(1.1);
+  transition: all 0.3s ease;
 }

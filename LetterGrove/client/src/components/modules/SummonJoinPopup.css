@@ -41,3 +41,8 @@ h2 {
 .joinalobbytext:hover {
   color: rgb(255, 219, 156);
 }
+
+.button-container:hover {
+  transform: translate(0%, 650%) scale(1.1);
+  transition: all 0.3s ease;
+}
