@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import buttonImage from "../../../assets/640signs_2.png";
+import buttonImage from "../../../assets/640signs_3.png";
 import "../../../assets/font.css";
 import CreditsPopup from "./CreditsPopup";
 import "./SummonCreditsPopup.css";
