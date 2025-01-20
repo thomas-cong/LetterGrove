@@ -56,17 +56,24 @@ const Lobby = () => {
             </div>
             <div className="lobby-sections">
               <div className="lobby-section">
+                <h3>Players</h3>
                 <LobbyUserList lobbyCode={lobbyId} />
               </div>
               <div className="lobby-section">
                 <SettingsDisplay lobbyCode={lobbyId} />
               </div>
             </div>
-            <StartGameButton lobbyCode={lobbyId} setShowLobby={setShowLobby} showLobby={showLobby} />
+            <div className="start-button-container">
+              <StartGameButton
+                lobbyCode={lobbyId}
+                setShowLobby={setShowLobby}
+                showLobby={showLobby}
+              />
+            </div>
           </div>
         </div>
       ) : (
-        <div>Game Showing</div>
+        <Navigate to={`/game/${lobbyId}`} />
       )}
     </>
   );

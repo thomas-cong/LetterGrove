@@ -9,6 +9,8 @@ import { socket } from "../client-socket";
 
 import { get, post } from "../utilities";
 
+import BackgroundMusic from "./modules/BackgroundMusic";
+
 export const UserContext = createContext(null);
 
 import "../assets/font.css";
@@ -51,6 +53,7 @@ const App = () => {
 
   return (
     <UserContext.Provider value={authContextValue}>
+      <BackgroundMusic />
       <Outlet />
     </UserContext.Provider>
   );

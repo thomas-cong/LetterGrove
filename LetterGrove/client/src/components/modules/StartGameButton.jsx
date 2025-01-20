@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import shortSign from "../../assets/320signs_2.png";
 import { post } from "../../utilities";
 import CloudAnimation from "./CloudAnimation";
+import "./StartGameButton.css";
 
 // Import cloud entering images
 import firstBottomLeft from "../../assets/CLOUDENTERING/FIRST_CLOUDENTERING_BOTTOM_LEFT.png";
@@ -35,10 +36,12 @@ const StartGameButton = (props) => {
   };
 
   return (
-    <div>
+    <div className="start-game-button">
       <CloudAnimation isActive={showAnimation} cloudImages={cloudImages} />
-      <img src={shortSign} onClick={handleClick} className="sign" alt="Wooden Sign" />
-      <h2>Start Game</h2>
+      <div className="sign-container">
+        <img src={shortSign} onClick={handleClick} className="sign" alt="Wooden Sign" />
+        <h2 className="sign-text">Start Game</h2>
+      </div>
     </div>
   );
 };

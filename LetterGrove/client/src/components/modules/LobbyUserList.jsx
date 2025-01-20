@@ -19,8 +19,6 @@ const LobbyUserList = (props) => {
   }, []);
   return (
     <div>
-      <h3>Users in Lobby</h3>
-
       <ul>
         {usernameList.map((username, index) => (
           <li key={index}>{username}</li>
