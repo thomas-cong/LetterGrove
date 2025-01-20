@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import buttonImage from "../../../assets/640signs_2.png";
+import buttonImage from "../../../assets/640signs_3.png";
 import "../../../assets/font.css";
 import CreditsPopup from "./CreditsPopup";
+import "./SummonCreditsPopup.css";
 
 /**
  * SummonCreditsPopup is a component for bringing up the credits popup
@@ -31,7 +32,7 @@ const SummonCreditsPopup = (props) => {
       {!showCredits && !props.popupShowing && (
         <div onClick={openCredits} className="button-container">
           <img src={buttonImage} className="summoncreditspopupsign" alt="Wooden Sign" />
-          <h2 className="summoncreditspopup">Credits</h2>
+          <h2 className="summoncreditspopuptext">Credits</h2>
         </div>
       )}
       {props.popupShowing && showCredits && (

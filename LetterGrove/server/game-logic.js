@@ -130,7 +130,7 @@ const computeDxDy = (x, y, x_node, y_node) => {
  * @returns {Array} Generated game board
  */
 const randomlyGenerateBoard = (props) => {
-    const DIFFICULTY = props.difficulty;
+    const DIFFICULTY = 'easy';
     let LETTER_COUNT;
     const CROPS = ['carrots', 'tomatoes', 'blueberries', 'pumpkins'];
     const POWERUPS = ['spade', 'water', 'shovel'];

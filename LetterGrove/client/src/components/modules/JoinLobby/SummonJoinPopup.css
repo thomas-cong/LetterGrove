@@ -26,6 +26,9 @@ h2 {
 }
 
 .joinalobbytext {
+  font-size: 24px;
+  -webkit-text-stroke: 1px hwb(0 0% 100% / 0.36);
+  font-family: "Daydream", sans-serif;
   position: absolute;
   width: 255px;
   text-align: center;

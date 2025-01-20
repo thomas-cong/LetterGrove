@@ -41,6 +41,9 @@
 }
 
 .joinlobbytext {
+  font-size: 24px;
+  -webkit-text-stroke: 1px hwb(0 0% 100% / 0.36);
+  font-family: "Daydream", sans-serif;
   width: 220px;
   position: absolute;
   top: 50%;

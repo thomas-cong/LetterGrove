@@ -8,11 +8,10 @@ const LobbyCreationPopup = (props) => {
   return (
     <div className="createdmainboard">
       <img src={Closebutton} onClick={() => props.hideLobby()} className="createdcloseButton" />
-      <div className="createdlobbyandusername">
-        <h3>
-          <span style={{ color: "rgb(94, 129, 255)" }}>YOUR LOBBY CODE IS: </span>
-          <span className="lobbycreationlobbycode">{props.lobbyCode}</span>
-        </h3>
+      <div>
+          <div style={{ color: "rgb(94, 129, 255)", fontSize: "40px" }}>YOUR LOBBY CODE IS: </div>
+          <div className="lobbycreationlobbycode">{props.lobbyCode}</div>
+          <div style={{ marginBottom: "20px" }}></div>
         <input
           type="text"
           placeholder="Enter your username"
