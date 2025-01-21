@@ -324,6 +324,9 @@ const randomlyGenerateBoard = (props) => {
     }
   }
 
+  console.log("Current Board State:");
+  console.log(board.map(row => row.map(cell => cell.letter || "_").join(" ")).join("\n"));
+
   return board;
 };
 
@@ -362,7 +365,7 @@ const enterWord = (userId, props) => {
       let currentX = x;
       let currentY = y;
       for (let i = 0; i < word.length; i++) {
-        console.log("Board Tile:", board[currentX][currentY].letter);
+        console.log("Board Tile:", board[currentY][currentX].letter);
         console.log("Word Tile:", word[i]);
 
         // use the y first, since it is getting the row then getting the column
@@ -414,46 +417,47 @@ const confirmWord = (userId, props) => {
   };
   let pointsGained = 0;
   let letterUpdates = [];
+  console.log();
   for (let i = 0; i < word.length; i++) {
+    console.log("x: " + currentX + " y: " + currentY + " board: " + board[currentY][currentX].letter);
     if (i === 0) {
       currentX += dx;
       currentY += dy;
       continue;
     }
-    if (board[currentX][currentY].letter === "") {
+    if (board[currentY][currentX].letter === "") {
       letterUpdates.push({
         x: currentX,
         y: currentY,
         letter: word[i],
-        default: board[currentX][currentY].default,
-        visited: board[currentX][currentY].visited,
+        default: board[currentY][currentX].default,
+        visited: board[currentY][currentX].visited,
       });
     }
-    board[currentX][currentY].visited = true;
-    board[currentX][currentY].letter = word[i];
-    if (i == word.length - 1) {
+    board[currentY][currentX].visited = true;
+    board[currentY][currentX].letter = word[i];
+    if (i === word.length - 1) {
       userGameState.endpoints.push([currentX, currentY]);
     }
-    if (board[currentX][currentY].powerup !== null) {
-      powerup = board[currentX][currentY].powerup;
+    if (board[currentY][currentX].powerup !== null) {
+      powerup = board[currentY][currentX].powerup;
       userGameState.powerups[powerup] += 1;
-      board[currentX][currentY].powerup = null;
+      board[currentY][currentX].powerup = null;
     }
-    if (board[currentX][currentY].crop !== null) {
-      crop = board[currentX][currentY].crop;
+    if (board[currentY][currentX].crop !== null) {
+      crop = board[currentY][currentX].crop;
       userGameState.points += cropValues[crop];
       pointsGained += cropValues[crop];
-      board[currentX][currentY].crop = null;
+      board[currentY][currentX].crop = null;
     }
-    if (board[currentX][currentY].value > 0) {
-      userGameState.points += board[currentX][currentY].value;
-      pointsGained += board[currentX][currentY].value;
-      board[currentX][currentY].value = 0;
+    if (board[currentY][currentX].value > 0) {
+      userGameState.points += board[currentY][currentX].value;
+      pointsGained += board[currentY][currentX].value;
+      board[currentY][currentX].value = 0;
     }
     currentX += dx;
     currentY += dy;
   }
-  userGameState.endpoints.push([currentX, currentY]);
   let logMessage = userGameState.username + " collected " + pointsGained + " points";
   for (rankInfo in game.rankings) {
     if (rankInfo.playerId === userId) {

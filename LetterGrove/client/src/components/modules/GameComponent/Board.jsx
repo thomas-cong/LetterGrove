@@ -107,15 +107,15 @@ const Board = (props) => {
 
   // Set up socket listener for suggestions
   useEffect(() => {
-    socket.on("suggestions", (suggestions) => {
+    const suggestionModifier = (suggestions) => {
       console.log("Suggestions:", suggestions);
       props.setSuggestions(suggestions);
-    });
+    };
+
+    socket.on("suggestions", suggestionModifier);
 
     return () => {
-      socket.off("suggestions", (suggestions) => {
-        props.setSuggestions(suggestions);
-      });
+      socket.off("suggestions", suggestionModifier);
     };
   }, []);
 

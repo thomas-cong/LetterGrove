@@ -227,6 +227,8 @@ module.exports = {
           socket.emit("suggestions", suggestions);
           console.log("Emitted suggestions:", suggestions);
         } else {
+          console.log(user);
+          console.log(game.players[user._id]);
           console.log("User validation failed");
         }
       });
