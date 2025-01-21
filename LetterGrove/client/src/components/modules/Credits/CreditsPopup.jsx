@@ -28,6 +28,8 @@ const CreditsPopup = (props) => {
             Game logic was implemented by Steve Zhang, and frontend development was completed by
             Leon Chen and Thomas Cong.
           </div>
+        </h3>
+        <h3>
           <div style={{ color: "rgb(94, 129, 255)" }}>We hope you enjoy playing LetterGrove!</div>
         </h3>
       </div>

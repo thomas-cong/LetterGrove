@@ -38,8 +38,8 @@ const StartGameButton = (props) => {
   return (
     <div className="start-game-button">
       <CloudAnimation isActive={showAnimation} cloudImages={cloudImages} />
-      <div className="sign-container">
-        <img src={shortSign} onClick={handleClick} className="sign" alt="Wooden Sign" />
+      <div className="sign-container" onClick={handleClick}>
+        <img src={shortSign} className="sign" alt="Wooden Sign" />
         <h2 className="sign-text">Start Game</h2>
       </div>
     </div>
