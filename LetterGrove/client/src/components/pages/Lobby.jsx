@@ -51,9 +51,7 @@ const Lobby = () => {
       {showLobby ? (
         <div className="lobby-container">
           <div className="lobby-content">
-            <div className="lobby-header">
-              <h2 className="lobby-code">Lobby Code: {lobbyId}</h2>
-            </div>
+            <div className="lobby-code">Lobby Code: {lobbyId}</div>
             <div className="lobby-sections">
               <div className="lobby-section">
                 <h3>Players</h3>
