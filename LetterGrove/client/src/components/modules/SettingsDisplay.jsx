@@ -19,7 +19,6 @@ const SettingsDisplay = (props) => {
 
   return (
     <div>
-      <h3>Game Settings</h3>
       <p>Mode: {settings.mode}</p>
       <p>Steps: {settings.steps}</p>
       <p>Min Word Length: {settings.minWordLength}</p>

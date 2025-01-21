@@ -54,10 +54,11 @@ const Lobby = () => {
             <div className="lobby-code">Lobby Code: {lobbyId}</div>
             <div className="lobby-sections">
               <div className="lobby-section">
-                <h3>Players</h3>
+                <div style={{ color: "rgb(94, 129, 255)", fontSize: "40px" }}>Players</div>
                 <LobbyUserList lobbyCode={lobbyId} />
               </div>
               <div className="lobby-section">
+                <div style={{ color: "rgb(94, 129, 255)", fontSize: "40px" }}>Game Settings</div>
                 <SettingsDisplay lobbyCode={lobbyId} />
               </div>
             </div>
