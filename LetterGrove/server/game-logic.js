@@ -160,12 +160,6 @@ const hasAdjacentLetter = (row, col, board, ARRAY_SIZE) => {
   return false;
 };
 
-const computeDxDy = (x, y, x_node, y_node) => {
-  const dx = Math.sign(x_node - x);
-  const dy = Math.sign(y_node - y);
-  return [dx, dy];
-};
-
 /*
 |--------------------------------------------------------------------------
 | Main Game Logic
@@ -180,7 +174,7 @@ const computeDxDy = (x, y, x_node, y_node) => {
 const randomlyGenerateBoard = (props) => {
   const DIFFICULTY = "easy";
   let LETTER_COUNT;
-  const CROPS = ["carrots", "tomatoes", "blueberries", "pumpkins"];
+  const CROPS = ["carrot", "tomato", "blueberry", "pumpkin"];
   const POWERUPS = ["spade", "water", "shovel"];
   let CROP_COUNTS;
   let POWERUP_COUNTS;
@@ -189,10 +183,10 @@ const randomlyGenerateBoard = (props) => {
   if (DIFFICULTY === "easy") {
     LETTER_COUNT = 25;
     CROP_COUNTS = {
-      carrots: 2,
-      tomatoes: 2,
-      blueberries: 2,
-      pumpkins: 2,
+      carrot: 2,
+      tomato: 2,
+      blueberry: 2,
+      pumpkin: 2,
     };
     POWERUP_COUNTS = {
       spade: 1,
@@ -202,10 +196,10 @@ const randomlyGenerateBoard = (props) => {
   } else if (DIFFICULTY === "medium") {
     LETTER_COUNT = 25;
     CROP_COUNTS = {
-      carrots: 1,
-      tomatoes: 1,
-      blueberries: 1,
-      pumpkins: 1,
+      carrot: 1,
+      tomato: 1,
+      blueberry: 1,
+      pumpkin: 1,
     };
     POWERUP_COUNTS = {
       spade: 1,
@@ -215,10 +209,10 @@ const randomlyGenerateBoard = (props) => {
   } else if (DIFFICULTY === "hard") {
     LETTER_COUNT = 35;
     CROP_COUNTS = {
-      carrots: 1,
-      tomatoes: 1,
-      blueberries: 1,
-      pumpkins: 1,
+      carrot: 1,
+      tomato: 1,
+      blueberry: 1,
+      pumpkin: 1,
     };
     POWERUP_COUNTS = {
       spade: 1,
@@ -401,14 +395,14 @@ const confirmWord = (userId, props) => {
   const game = games[lobbyCode];
   const userGameState = game.userGameStates[userId];
   const board = userGameState.board;
-  const [dx, dy] = computeDxDy(x, y, x_one_step, y_one_step);
+  const [dx, dy] = [x_one_step, y_one_step];
   let currentX = x;
   let currentY = y;
-  let fruitsCollected = {
-    carrots: 0,
-    tomatoes: 0,
-    blueberries: 0,
-    pumpkins: 0,
+  let cropsCollected = {
+    carrot: 0,
+    tomato: 0,
+    blueberry: 0,
+    pumpkin: 0,
   };
   let powerupsCollected = {
     spade: 0,
@@ -443,12 +437,14 @@ const confirmWord = (userId, props) => {
       powerup = board[currentY][currentX].powerup;
       userGameState.powerups[powerup] += 1;
       board[currentY][currentX].powerup = null;
+      powerupsCollected[powerup] += 1;
     }
     if (board[currentY][currentX].crop !== null) {
       crop = board[currentY][currentX].crop;
       userGameState.points += cropValues[crop];
       pointsGained += cropValues[crop];
       board[currentY][currentX].crop = null;
+      cropsCollected[crop] += 1;
     }
     if (board[currentY][currentX].value > 0) {
       userGameState.points += board[currentY][currentX].value;
@@ -473,7 +469,7 @@ const confirmWord = (userId, props) => {
   userGameState.words_formed += 1;
   return {
     localUpdate: {
-      fruitsCollected: fruitsCollected,
+      cropsCollected: cropsCollected,
       powerupsCollected: powerupsCollected,
       pointsGained: pointsGained,
       letterUpdates: letterUpdates,

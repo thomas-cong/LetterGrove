@@ -153,14 +153,14 @@ const getLetterTile = (letter, isDefault) => {
  */
 const getCropImage = (cropType) => {
   switch (cropType.toLowerCase()) {
-    case "blueberries":
-      return blueberrys;
-    case "carrots":
+    case "carrot":
       return carrots;
-    case "pumpkins":
-      return pumpkin;
-    case "tomatoes":
+    case "tomato":
       return tomato;
+    case "blueberry":
+      return blueberrys;
+    case "pumpkin":
+      return pumpkin;
     default:
       return null;
   }
@@ -225,8 +225,8 @@ const Tile = (props) => {
     }
     if (params.isSuggestionEnd) {
       // Calculate the difference between the clicked tile and the selected tile to get direction
-      let x_diff = Math.round((params.tileX + 1 - props.selectedX) / props.suggestedWord.length);
-      let y_diff = Math.round((params.tileY + 1 - props.selectedY) / props.suggestedWord.length);
+      let x_diff = Math.sign(params.tileX - props.selectedX);
+      let y_diff = Math.sign(params.tileY - props.selectedY);
       console.log(x_diff, y_diff);
 
       // Emit console signal to confirm word.
