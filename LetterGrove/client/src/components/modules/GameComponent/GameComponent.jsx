@@ -1,10 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { socket } from "../../../client-socket";
 import { post } from "../../../utilities";
+import Board from "./Board";
+import WordInput from "./WordInput";
 
 const GameComponent = (props) => {
   post("/api/startGame", { lobbyCode: props.lobbyCode });
   const [word, setWord] = useState("");
+  const [x, setX] = useState(0);
+  const [y, setY] = useState(0);
+
+  // Should be an array of pairs
+  const [endpoints, setEndpoints] = useState([[0, 0]]);
+  const [lettersUpdated, setLettersUpdated] = useState([]);
   const [gameState, setGameState] = useState({
     lobbyCode: "",
     username: "",
@@ -19,7 +27,6 @@ const GameComponent = (props) => {
   useEffect(() => {
     // Listen for initial game state
     socket.on("initial game", (game) => {
-      console.log("Received initial game state:", game);
       setGameState(game);
     });
 
@@ -29,12 +36,34 @@ const GameComponent = (props) => {
     };
   }, []);
 
+  useEffect(() => {
+    // Listen for updated game state
+    //Update the letter placement, and the points
+    socket.on("user update", (info) => {
+      setGameState((prevState) => ({
+        ...prevState,
+        points: info.totalPoints,
+      }));
+      setLettersUpdated(info.lettersUpdated);
+      setEndpoints(info.endpoints);
+      console.log(info.endpoints);
+    });
+    socket.on("global update", (info) => {});
+  }, []);
+
   return (
     <div>
-      <Board board={gameState.board} points={gameState.points} username={gameState.username} />
+      <Board
+        board={gameState.board}
+        points={gameState.points}
+        username={gameState.username}
+        endpoints={endpoints}
+      />
+      <WordInput word={word} setWord={setWord} x={x} y={y} setX={setX} setY={setY} />
+
       {/* <Counter counter={gameState.counter} />
       <Log log={gameState.log} />
-      <WordInput word={word} setWord={setWord} />
+      
       <Rankings rankings={gameState.rankings} /> */}
     </div>
   );
