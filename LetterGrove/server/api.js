@@ -152,6 +152,9 @@ router.post("/joinLobby", (req, res) => {
 
 router.post("/startGame", (req, res) => {
   const gameInfo = openLobbies[req.body.lobbyCode];
+  if (!gameInfo) {
+    return res.status(404).send({ error: "Lobby not found" });
+  }
   console.log(req.body.lobbyCode);
   console.log(openLobbies);
   if (gameInfo.lobbyOwner != req.user._id) {

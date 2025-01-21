@@ -50,7 +50,7 @@ const Home = () => {
       <div>
         {userId ? (
           <div className="home-logoutbutton-container">
-            <button
+            <div
               className="home-logoutButton"
               onClick={() => {
                 googleLogout();
@@ -58,7 +58,7 @@ const Home = () => {
               }}
             >
               <div className="logouttext">Logout</div>
-            </button>
+            </div>
           </div>
         ) : (
           <div className="google-login-container">

@@ -392,6 +392,8 @@ const confirmWord = (userId, props) => {
     if (userGameState.points >= game.pointsToWin) {
         game.gameStatus = "ended";
     }
+    userGameState.letters_collected += letterUpdates.length;
+    userGameState.words_formed += 1;
     return {
         localUpdate: {
             fruitsCollected: fruitsCollected,

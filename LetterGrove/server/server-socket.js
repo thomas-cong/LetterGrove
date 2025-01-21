@@ -1,5 +1,7 @@
 const gameLogic = require("./game-logic");
 const { openLobbies } = require("./shared-state");
+const CompletedGame = require("./models/completed-game");
+const User = require("./models/user");
 
 let io;
 
@@ -85,6 +87,9 @@ const initiateGame = (props) => {
         shovel: 0,
       },
       endpoints: [[0, 0]],
+      letters_collected: 0,
+      words_formed: 0,
+      powerups_used: 0,
     };
   }
   for (const userId in players) {
@@ -132,6 +137,39 @@ const handleEndGame = (props) => {
     finalRankings: game.rankings,
   };
   clearInterval(game.timerInterval);
+  let boards = {};
+  for (const userId in game.players) {
+    boards[userId] = game.userGameStates[userId].board;
+  }
+  const completedGame = new CompletedGame({
+    boards: boards,
+    players: game.players,
+    finalRankings: game.rankings,
+  });
+  for (const userId in game.players) {
+    const userGameState = game.userGameStates[userId];
+    User.findByIdAndUpdate(
+      userId,
+      {
+        $inc: {
+          games_played: 1,
+          wins: game.rankings[0].score === userGameState.points ? 1 : 0,
+          letters: userGameState.letters_collected || 0,
+          powerups: userGameState.powerups_used || 0,
+          words: userGameState.words_formed || 0,
+          points: userGameState.points || 0
+        }
+      },
+      { new: true }
+    ).then((user) => {
+      console.log(`Updated stats for user ${user.name}`);
+    }).catch((err) => {
+      console.log(`Error updating user ${userId}:`, err);
+    });
+  }
+  completedGame.save().then((game) => {
+    console.log("Game saved:", game);
+  });
   io.to(props.lobbyCode).emit("game over", {
     results: gameResults,
     reason: props.reason,
