@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+
 import { get, post } from "../../../utilities";
+import { socket } from "../../../client-socket";
+import "./Tile.css";
+
+// Import crop tile images
 import blueberrys from "../../../assets/tiles/blueberrys.png";
 import carrots from "../../../assets/tiles/carrots.png";
 import pumpkin from "../../../assets/tiles/pumpkin.png";
 import tomato from "../../../assets/tiles/tomato.png";
 import grassTile from "../../../assets/tiles/Grass_Tile_01.png";
 import nullTile from "../../../assets/tiles/nulltile.png";
-import "./Tile.css";
 
-// Import all letter tiles
+// Import all letter and default letter tile images
 import letterA from "../../../assets/tiles/Letter_Tile_01.png";
 import letterB from "../../../assets/tiles/Letter_Tile_02.png";
 import letterC from "../../../assets/tiles/Letter_Tile_03.png";
@@ -36,7 +41,6 @@ import letterX from "../../../assets/tiles/Letter_Tile_24.png";
 import letterY from "../../../assets/tiles/Letter_Tile_25.png";
 import letterZ from "../../../assets/tiles/Letter_Tile_26.png";
 
-// Import all default letter tiles
 import defaultA from "../../../assets/tiles/Default_Letter_Tile_1.png";
 import defaultB from "../../../assets/tiles/Default_Letter_Tile_2.png";
 import defaultC from "../../../assets/tiles/Default_Letter_Tile_3.png";
@@ -64,6 +68,10 @@ import defaultX from "../../../assets/tiles/Default_Letter_Tile_24.png";
 import defaultY from "../../../assets/tiles/Default_Letter_Tile_25.png";
 import defaultZ from "../../../assets/tiles/Default_Letter_Tile_26.png";
 
+/**
+ * Maps letters to their corresponding tile images
+ * Used for rendering the correct letter tile based on the cell's letter value
+ */
 const letterTiles = {
   A: letterA,
   B: letterB,
@@ -93,6 +101,10 @@ const letterTiles = {
   Z: letterZ,
 };
 
+/**
+ * Maps letters to their corresponding default tile images
+ * Used when a letter tile needs to be shown in its default state
+ */
 const defaultLetterTiles = {
   A: defaultA,
   B: defaultB,
@@ -122,12 +134,24 @@ const defaultLetterTiles = {
   Z: defaultZ,
 };
 
+/**
+ * Gets the appropriate letter tile image based on the letter and whether it should use default styling
+ * @param {string} letter - The letter to display (A-Z)
+ * @param {boolean} isDefault - If true, uses the default (grey) version of the letter tile
+ * @returns {string} Path to the appropriate letter tile image
+ */
 const getLetterTile = (letter, isDefault) => {
+  if (!letter) return null;
+  letter = letter.toUpperCase();
   return isDefault ? defaultLetterTiles[letter] : letterTiles[letter];
 };
 
+/**
+ * Gets the appropriate crop tile image based on the crop type
+ * @param {string} cropType - The type of crop to display (blueberries, carrots, pumpkins, tomatoes)
+ * @returns {string} Path to the crop image, or null if crop type is invalid
+ */
 const getCropImage = (cropType) => {
-  console.log("Crop type:", cropType);
   switch (cropType.toLowerCase()) {
     case "blueberries":
       return blueberrys;
@@ -138,44 +162,121 @@ const getCropImage = (cropType) => {
     case "tomatoes":
       return tomato;
     default:
-      console.log("No matching crop found for:", cropType);
       return null;
   }
 };
 
+/**
+ * Tile Component - Represents a single tile on the game board
+ *
+ * Each tile can contain:
+ * - A background (grass)
+ * - A letter (either placed or suggested)
+ * - A crop (if planted)
+ *
+ * The tile can be:
+ * - Empty (showing null tile)
+ * - Contain a letter (showing letter tile)
+ * - Be part of a suggestion (showing letter with suggestion styling)
+ * - Be visited (showing visited styling)
+ * - Be an endpoint (can be clicked to start word formation)
+ *
+ * @param {Object} props
+ * @param {Object} props.cell - Contains tile state information
+ * @param {string} props.cell.letter - The letter on this tile (if any)
+ * @param {boolean} props.cell.visited - Whether this tile has been used in a word
+ * @param {boolean} props.cell.default - Whether to use default styling for the letter
+ * @param {boolean} props.cell.isSuggestion - Whether this tile is part of a suggestion
+ * @param {boolean} props.cell.isSuggestionEnd - Whether this tile is the end of a suggestion
+ * @param {string} props.cell.crop - The type of crop on this tile (if any)
+ * @param {number} props.tileX - X coordinate of the tile on the board
+ * @param {number} props.tileY - Y coordinate of the tile on the board
+ * @param {number} props.selectedX - Currently selected X coordinate
+ * @param {number} props.selectedY - Currently selected Y coordinate
+ * @param {boolean} props.isEndpoint - Whether this tile can be used as a word endpoint
+ * @param {boolean} props.endPointSelected - Whether any endpoint is currently selected
+ * @param {Function} props.setEndPointSelected - Updates endpoint selection state
+ * @param {Function} props.setSelectedX - Updates selected X coordinate
+ * @param {Function} props.setSelectedY - Updates selected Y coordinate
+ * @param {string} props.suggestedWord - Currently inputted word
+ */
 const Tile = (props) => {
+  let { lobbyId } = useParams();
+  // Animation state for letter appearance
   const [isAnimating, setIsAnimating] = useState(true);
 
+  /**
+   * Handles tile clicks to check if it's a valid endpoint
+   * Updates game state with selected coordinates if valid
+   * @param {Object} params Parameters for endpoint checking
+   * @param {boolean} params.isEndpoint Whether this tile is a valid endpoint
+   * @param {number} params.x X coordinate of clicked tile
+   * @param {number} params.y Y coordinate of clicked tile
+   */
   const checkEndpoint = (params) => {
-    console.log("Checking endpoint:", params);
     if (params.isEndpoint) {
-      console.log("Endpoint found at:", params.x, params.y);
+      console.log("Endpoint found at:", params.tileX, params.tileY);
+      props.setEndPointSelected(true);
+      props.setSelectedX(params.tileX);
+      props.setSelectedY(params.tileY);
     } else {
-      console.log("No endpoint found at:", params.x, params.y);
+      console.log("No endpoint found at:", params.tileX, params.tileY);
+      props.setEndPointSelected(false);
+    }
+    if (params.isSuggestionEnd) {
+      // Calculate the difference between the clicked tile and the selected tile to get direction
+      let x_diff = Math.round((params.tileX + 1 - props.selectedX) / props.suggestedWord.length);
+      let y_diff = Math.round((params.tileY + 1 - props.selectedY) / props.suggestedWord.length);
+      console.log(x_diff, y_diff);
+
+      // Emit console signal to confirm word.
+      socket.emit("confirm word", {
+        lobbyCode: lobbyId,
+        x: props.selectedX,
+        y: props.selectedY,
+        x_one_step: x_diff,
+        y_one_step: y_diff,
+        word: props.suggestedWord,
+      });
+    } else {
+      return;
     }
   };
 
+  // Reset animation when letter changes
   useEffect(() => {
     setIsAnimating(true);
     const timer = setTimeout(() => setIsAnimating(false), 500);
     return () => clearTimeout(timer);
   }, [props.cell.letter]);
 
+  // Use dynamic class names for styling tiles
   return (
-    <div 
-      className={`tile ${props.cell.visited ? "visited" : ""}`}
-      
+    <div
+      className={`tile ${props.cell.visited ? "visited" : ""} ${
+        props.cell.isSuggestion ? "suggestion" : ""
+      } ${props.cell.isSuggestionEnd ? "suggestion-end" : ""}`}
     >
       <img src={grassTile} alt="grass" className="grass-background" />
       {!props.cell.letter && <img src={nullTile} alt="null" className="tile-background" />}
       {props.cell.letter && (
         <img
-          src={getLetterTile(props.cell.letter, props.cell.default)}
+          src={getLetterTile(props.cell.letter, !props.cell.isSuggestion && props.cell.default)}
           alt={props.cell.letter}
-          className={`letter-tile ${isAnimating ? "falling" : ""}`}
-          onClick={() => checkEndpoint({ isEndpoint: props.isEndpoint, x: props.x, y: props.y }
+          className={`letter-tile ${isAnimating ? "falling" : ""} ${
+            props.cell.isSuggestion ? "suggestion-letter" : ""
+          } ${props.cell.isSuggestionEnd ? "suggestion-end-letter" : ""}`}
+          onClick={() =>
+            checkEndpoint({
+              isEndpoint: props.isEndpoint,
+              isSuggestionEnd: props.cell.isSuggestionEnd,
+              tileX: props.tileX,
+              tileY: props.tileY,
+            })
+          }
         />
       )}
+      {/* Crop image overlay shown when a crop is planted (z-index: 4) */}
       {props.cell.crop && (
         <img src={getCropImage(props.cell.crop)} alt={props.cell.crop} className="crop-image" />
       )}

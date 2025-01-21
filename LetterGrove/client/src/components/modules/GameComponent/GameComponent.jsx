@@ -7,10 +7,12 @@ import WordInput from "./WordInput";
 const GameComponent = (props) => {
   post("/api/startGame", { lobbyCode: props.lobbyCode });
   const [word, setWord] = useState("");
-  const [x, setX] = useState(0);
-  const [y, setY] = useState(0);
+  const [suggestions, setSuggestions] = useState([]);
 
-  // Should be an array of pairs
+  // Game state management
+  const [endPointSelected, setEndPointSelected] = useState(true);
+  const [selectedX, setSelectedX] = useState(0);
+  const [selectedY, setSelectedY] = useState(0);
   const [endpoints, setEndpoints] = useState([[0, 0]]);
   const [lettersUpdated, setLettersUpdated] = useState([]);
   const [gameState, setGameState] = useState({
@@ -24,33 +26,83 @@ const GameComponent = (props) => {
     log: [],
   });
 
+  //@{params} letters updated
+  //@{params} board
+  const updateLetters = (params) => {
+    let updatedLetters = params.lettersUpdated;
+    console.log("Updated letters:");
+    console.log(updatedLetters);
+
+    // Create a deep copy of the board
+    let newBoard = JSON.parse(JSON.stringify(params.board));
+
+    for (let i = 0; i < updatedLetters.length; i++) {
+      let x = updatedLetters[i].x;
+      let y = updatedLetters[i].y;
+      let letter = updatedLetters[i].letter;
+      newBoard[y][x] = {
+        ...newBoard[y][x], // preserve existing tile properties
+        letter: letter,
+        crop: "",
+        powerup: "",
+        visited: true,
+        default: false,
+        isSuggestion: false,
+        isSuggestionEnd: false,
+      };
+    }
+
+    setGameState((prevState) => ({
+      ...prevState,
+      board: newBoard,
+    }));
+  };
+  // Set up socket listeners
   useEffect(() => {
-    // Listen for initial game state
-    socket.on("initial game", (game) => {
+    // Initial game state
+    const handleInitialGame = (game) => {
       setGameState(game);
-    });
-
-    // Cleanup socket listener and animation when component unmounts
-    return () => {
-      socket.off("initial game");
     };
-  }, []);
 
-  useEffect(() => {
-    // Listen for updated game state
-    //Update the letter placement, and the points
-    socket.on("user update", (info) => {
+    // User-specific updates (letters, points, endpoints)
+    const handleUserUpdate = (info) => {
+      // Reset the suggestions since this only plays on user update
+      setSuggestions([]);
+
+      console.log("User update:", info);
       setGameState((prevState) => ({
         ...prevState,
         points: info.totalPoints,
       }));
-      setLettersUpdated(info.lettersUpdated);
+      setLettersUpdated(info.letterUpdates);
       setEndpoints(info.endpoints);
-      console.log(info.endpoints);
-    });
-    socket.on("global update", (info) => {});
-  }, []);
+    };
 
+    // Global game updates (rankings, log messages)
+    const handleGlobalUpdate = (info) => {
+      setGameState((prevState) => ({
+        ...prevState,
+        rankings: info.updatedRankings,
+        log: [...prevState.log, info.logMessage],
+      }));
+    };
+
+    // Set up listeners
+    socket.on("initial game", handleInitialGame);
+    socket.on("user update", handleUserUpdate);
+    socket.on("global update", handleGlobalUpdate);
+
+    // Cleanup listeners on unmount
+    return () => {
+      socket.off("initial game", handleInitialGame);
+      socket.off("user update", handleUserUpdate);
+      socket.off("global update", handleGlobalUpdate);
+    };
+  }, []); // Empty dependency array since we want to set up listeners only once
+
+  useEffect(() => {
+    updateLetters({ lettersUpdated: lettersUpdated, board: gameState.board });
+  }, [lettersUpdated]);
   return (
     <div>
       <Board
@@ -58,12 +110,30 @@ const GameComponent = (props) => {
         points={gameState.points}
         username={gameState.username}
         endpoints={endpoints}
+        endPointSelected={endPointSelected}
+        setEndPointSelected={setEndPointSelected}
+        selectedX={selectedX}
+        selectedY={selectedY}
+        setSelectedX={setSelectedX}
+        setSelectedY={setSelectedY}
+        lettersUpdated={lettersUpdated}
+        setLettersUpdated={setLettersUpdated}
+        setSuggestions={setSuggestions}
+        suggestions={suggestions}
       />
-      <WordInput word={word} setWord={setWord} x={x} y={y} setX={setX} setY={setY} />
+      <WordInput
+        word={word}
+        setWord={setWord}
+        selectedX={selectedX}
+        selectedY={selectedY}
+        endpointSelected={endPointSelected}
+        lobbyCode={props.lobbyCode}
+        board={gameState.board}
+        suggestions={suggestions}
+      />
 
       {/* <Counter counter={gameState.counter} />
       <Log log={gameState.log} />
-      
       <Rankings rankings={gameState.rankings} /> */}
     </div>
   );

@@ -23,12 +23,7 @@ const BackgroundMusic = () => {
   // Effect for handling click events
   useEffect(() => {
     const handleFirstClick = () => {
-      console.log("Click detected");
-      console.log("hasInteracted:", hasInteracted);
-      console.log("audioRef.current:", audioRef.current);
-
       if (!hasInteracted && audioRef.current) {
-        console.log("Attempting to play audio");
         setHasInteracted(true);
         audioRef.current.volume = 0.5;
         audioRef.current.play().catch((error) => {
@@ -46,12 +41,9 @@ const BackgroundMusic = () => {
     if (audioRef.current) {
       audioRef.current.volume = 0.5;
 
-      const onPlaying = () => {
-        console.log("Audio started playing");
-      };
+      const onPlaying = () => {};
 
       const onEnded = () => {
-        console.log("Theme ended, playing next theme");
         playNextTheme();
       };
 
