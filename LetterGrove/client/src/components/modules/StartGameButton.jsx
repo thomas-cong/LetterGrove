@@ -26,13 +26,10 @@ const StartGameButton = (props) => {
 
   const handleClick = () => {
     setShowAnimation(true);
-    post("/api/startGame", { lobbyCode: props.lobbyCode }).then((res) => {
-      console.log(res);
-      // Wait for animation to complete before changing view
-      setTimeout(() => {
-        props.setShowLobby(false);
-      }, 2500); // Increased duration to account for all layers
-    });
+    // Wait for animation to complete before changing view
+    setTimeout(() => {
+      props.setShowLobby(false);
+    }, 2500); // Increased duration to account for all layers
   };
 
   return (

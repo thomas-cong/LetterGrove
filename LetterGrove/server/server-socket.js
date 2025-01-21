@@ -157,15 +157,17 @@ const handleEndGame = (props) => {
           letters: userGameState.letters_collected || 0,
           powerups: userGameState.powerups_used || 0,
           words: userGameState.words_formed || 0,
-          points: userGameState.points || 0
-        }
+          points: userGameState.points || 0,
+        },
       },
       { new: true }
-    ).then((user) => {
-      console.log(`Updated stats for user ${user.name}`);
-    }).catch((err) => {
-      console.log(`Error updating user ${userId}:`, err);
-    });
+    )
+      .then((user) => {
+        console.log(`Updated stats for user ${user.name}`);
+      })
+      .catch((err) => {
+        console.log(`Error updating user ${userId}:`, err);
+      });
   }
   completedGame.save().then((game) => {
     console.log("Game saved:", game);
@@ -203,25 +205,33 @@ module.exports = {
         const game = gameLogic.games[props.lobbyCode];
 
         // check that game is still going on
-        if (!game || game.gameStatus !== "active") return;
+        if (!game || game.gameStatus !== "active") {
+          console.log("Game or status check failed:");
+          console.log("games:", gameLogic.games);
+          console.log("lobby code:", props.lobbyCode);
+          console.log("game:", game);
+          console.log("game status:", game?.gameStatus);
+          return;
+        }
 
-        let suggestions;
-        if (
-          user &&
-          user._id in Object.values(Object.keys(gameLogic.games[props.lobbyCode].players))
-        ) {
+        console.log("User check:");
+        console.log("user:", user);
+        console.log("user._id:", user._id);
+        console.log("players:", game.players);
+        console.log("player keys:", Object.keys(game.players));
+
+        // Fix the player check
+        if (user && game.players[user._id]) {
+          console.log("User is a valid player, getting suggestions");
           suggestions = gameLogic.enterWord(user._id, props);
-          /**
-           * Emits word suggestions based on current board state
-           * @param {Object} suggestions
-           * @param {Array<string>} suggestions.validWords - List of valid words that can be formed
-           * @param {Array<{x: number, y: number}>} suggestions.path - Coordinates showing path for each word
-           * @param {number} suggestions.points - Potential points for suggested word
-           */
           socket.emit("suggestions", suggestions);
+          console.log("Emitted suggestions:", suggestions);
+        } else {
+          console.log("User validation failed");
         }
       });
       socket.on("confirm word", (props) => {
+        console.log("confirm word");
         const user = getUserFromSocketID(socket.id);
         const game = gameLogic.games[props.lobbyCode];
 
@@ -229,10 +239,7 @@ module.exports = {
         if (!game || game.gameStatus !== "active") return;
 
         let output;
-        if (
-          user &&
-          user._id in Object.values(Object.keys(gameLogic.games[props.lobbyCode].players))
-        ) {
+        if (user && game.players[user._id]) {
           output = gameLogic.confirmWord(user._id, props);
           /**
            * Emits updates specific to the current user

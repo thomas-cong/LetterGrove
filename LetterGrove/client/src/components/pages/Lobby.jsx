@@ -7,6 +7,7 @@ import "./Lobby.css";
 import SettingsDisplay from "../modules/SettingsDisplay.jsx";
 import LobbyUserList from "../modules/LobbyUserList.jsx";
 import StartGameButton from "../modules/StartGameButton.jsx";
+import GameComponent from "../modules/GameComponent/GameComponent.jsx";
 import { get } from "../../utilities";
 import { socket } from "../../client-socket";
 
@@ -72,7 +73,7 @@ const Lobby = () => {
           </div>
         </div>
       ) : (
-        <Navigate to={`/game/${lobbyId}`} />
+        <GameComponent lobbyCode={lobbyId} />
       )}
     </>
   );

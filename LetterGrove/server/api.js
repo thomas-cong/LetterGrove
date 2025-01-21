@@ -156,15 +156,23 @@ router.post("/startGame", (req, res) => {
   if (!gameInfo) {
     return res.status(404).send({ error: "Lobby not found" });
   }
+  console.log(req.body.lobbyCode);
+  console.log(openLobbies);
   if (gameInfo.lobbyOwner != req.user._id) {
     return res.status(401).send({ error: "Not authorized" });
   }
-  // remove lobbycode from open lobbies
-  delete openLobbies[req.body.lobbyCode];
   socketManager.initiateGame({
     gameInfo: gameInfo,
     lobbyCode: req.body.lobbyCode,
   });
+});
+router.post("/deleteLobby", (req, res) => {
+  const lobbyCode = req.body.lobbyCode;
+  if (openLobbies[lobbyCode].lobbyOwner != req.user._id) {
+    return res.status(401).send({ error: "Not authorized" });
+  }
+  delete openLobbies[lobbyCode];
+  res.send({ message: "Lobby Deleted" });
 });
 
 // @params: lobbyCode- lobby code of the game

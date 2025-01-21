@@ -23,12 +23,7 @@ const BackgroundMusic = () => {
   // Effect for handling click events
   useEffect(() => {
     const handleFirstClick = () => {
-      console.log("Click detected");
-      console.log("hasInteracted:", hasInteracted);
-      console.log("audioRef.current:", audioRef.current);
-      
       if (!hasInteracted && audioRef.current) {
-        console.log("Attempting to play audio");
         setHasInteracted(true);
         audioRef.current.volume = 0.5;
         audioRef.current.play().catch((error) => {
@@ -46,12 +41,9 @@ const BackgroundMusic = () => {
     if (audioRef.current) {
       audioRef.current.volume = 0.5;
 
-      const onPlaying = () => {
-        console.log("Audio started playing");
-      };
+      const onPlaying = () => {};
 
       const onEnded = () => {
-        console.log("Theme ended, playing next theme");
         playNextTheme();
       };
 
@@ -63,6 +55,13 @@ const BackgroundMusic = () => {
       audioRef.current.addEventListener("ended", onEnded);
       audioRef.current.addEventListener("error", onError);
 
+      // Play the new theme when it changes
+      if (hasInteracted) {
+        audioRef.current.play().catch((error) => {
+          console.error("Error playing new theme:", error);
+        });
+      }
+
       return () => {
         if (audioRef.current) {
           audioRef.current.removeEventListener("playing", onPlaying);
@@ -71,9 +70,8 @@ const BackgroundMusic = () => {
         }
       };
     }
-  }, [currentThemeIndex]);
+  }, [currentThemeIndex, hasInteracted]);
 
   return <audio ref={audioRef} src={themeFiles[currentThemeIndex]} preload="auto" loop={false} />;
 };
-
 export default BackgroundMusic;
