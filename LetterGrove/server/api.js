@@ -12,6 +12,7 @@ const express = require("express");
 // import models so we can interact with the database
 const User = require("./models/user");
 const LobbyCode = require("./models/lobby-code");
+const CompletedGame = require("./models/completed-game");
 // import authentication library
 const auth = require("./auth");
 
@@ -204,7 +205,55 @@ router.get("/usernames", (req, res) => {
   const lobbyCode = req.query.lobbyCode;
   res.send(Object.values(openLobbies[lobbyCode].players));
 });
+
+router.get("/playerStats", (req, res) => {
+  if (!req.user) {
+    return res.status(401).send({ error: "Not logged in" });
+  }
+
+  User.findById(req.user._id)
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send({ error: "User not found" });
+      }
+      res.send({
+        name: user.name,
+        gamesPlayed: user.games_played,
+        wins: user.wins,
+        letters: user.letters,
+        powerups: user.powerups,
+        words: user.words,
+        points: user.points,
+        score: user.score,
+        rank: user.rank,
+      });
+    })
+    .catch((err) => {
+      console.log(`Failed to get user stats: ${err}`);
+      res.status(500).send({ error: "Failed to get user stats" });
+    });
+});
+
+router.get("/completedGames", (req, res) => {
+  if (!req.user) {
+    return res.status(401).send({ error: "Not logged in" });
+  }
+
+  const CompletedGame = require("./models/completed-game");
+  // Find games where the player's ID exists in the players object
+  CompletedGame.find({ [`players.${req.user._id}`]: { $exists: true } })
+    .sort({ _id: -1 }) // Sort by newest first (assuming ObjectId contains timestamp)
+    .then((games) => {
+      res.send(games);
+    })
+    .catch((err) => {
+      console.log(`Failed to get completed games: ${err}`);
+      res.status(500).send({ error: "Failed to get completed games" });
+    });
+});
+
 // anything else falls to this "not found" case
+
 router.all("*", (req, res) => {
   console.log(`API route not found: ${req.method} ${req.url}`);
   res.status(404).send({ msg: "API route not found" });
