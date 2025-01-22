@@ -6,7 +6,7 @@ import WordInput from "./WordInput";
 import Counter from "./Counter";
 
 const GameComponent = (props) => {
-  post("/api/startGame", { lobbyCode: props.lobbyCode });
+  // post("/api/startGame", { lobbyCode: props.lobbyCode });
   const [word, setWord] = useState("");
   const [suggestions, setSuggestions] = useState([]);
 
