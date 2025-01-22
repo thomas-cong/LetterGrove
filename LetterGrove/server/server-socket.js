@@ -54,6 +54,7 @@ const sendUserInitialGame = (userId, lobbyCode) => {
     rankings: gameLogic.games[lobbyCode].rankings,
     log: gameLogic.games[lobbyCode].log,
   };
+  console.log("POOP " + game.board);
   socket.emit("initial game", game);
 };
 
@@ -104,7 +105,7 @@ const initiateGame = (props) => {
   console.log(players);
   for (const userId in players) {
     console.log(userId);
-          sendUserInitialGame(userId, lobbyCode);
+      sendUserInitialGame(userId, lobbyCode);
   }
 };
 
@@ -182,10 +183,16 @@ const joinSocket = (props) => {
   const lobbyCode = props.lobbyCode;
   const user = getUserFromSocketID(props.socketid);
   console.log(openLobbies);
-  if (user && user._id in Object.values(Object.keys(openLobbies[props.lobbyCode].players))) {
+  if (user && openLobbies[props.lobbyCode] && openLobbies[props.lobbyCode].players[user._id]) {
     userToSocketMap[user._id].join(lobbyCode);
+    console.log(`User ${user._id} joined room ${lobbyCode}`);
   }
 };
+
+const lobbyToGameTransition = (props) => {
+  io.to(props.lobbyCode).emit("lobby to game transition");
+  console.log("lobby game transition emitted");
+}
 
 module.exports = {
   init: (http) => {
@@ -284,4 +291,5 @@ module.exports = {
   handleEndGame: handleEndGame,
   startRunningGame: startRunningGame,
   joinSocket: joinSocket,
+  lobbyToGameTransition: lobbyToGameTransition
 };

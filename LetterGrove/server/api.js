@@ -151,6 +151,22 @@ router.post("/joinLobby", (req, res) => {
   }
 });
 
+router.post("/lobbyToGameTransition", (req, res) => {
+  const gameInfo = openLobbies[req.body.lobbyCode];
+  if (!gameInfo) {
+    return res.status(404).send({ error: "Lobby not found" });
+  }
+  console.log(req.body.lobbyCode);
+  console.log(openLobbies);
+  if (gameInfo.lobbyOwner != req.user._id) {
+    return res.status(401).send({ error: "Not authorized" });
+  }
+  console.log("MADE IT HERE!");
+  socketManager.lobbyToGameTransition({
+    lobbyCode: req.body.lobbyCode,
+  });
+})
+
 router.post("/startGame", (req, res) => {
   const gameInfo = openLobbies[req.body.lobbyCode];
   if (!gameInfo) {
