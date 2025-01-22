@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { get, post } from "../../../utilities";
 import buttonImage from "../../../assets/640signs_1.png";
 import "./SummonLobbyPopup.css";
-import LobbyCreationPopup from "./LobbyCreationPopup";
+import LobbyCreationPopup from "../LobbyCreation/LobbyCreationPopup";
 import "../../../assets/font.css";
 
 /**
@@ -54,8 +54,8 @@ const SummonLobbyPopup = (props) => {
     <div>
       {!LobbyShowing && !props.popupShowing && (
         <div onClick={showLobby} className="button-container">
-          <img src={buttonImage} className="sign" alt="Wooden Sign" />
-          <h2 className="summonlobbypopuptext">Create Lobby</h2>
+          <img src={buttonImage} className="homepagesign" alt="Wooden Sign" />
+          <h2 className="homepagesigntext">Create Lobby</h2>
         </div>
       )}
       {LobbyShowing && props.popupShowing && (

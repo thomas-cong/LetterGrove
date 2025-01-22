@@ -35,8 +35,8 @@ const SummonJoinPopup = (props) => {
     <div>
       {!showJoinPopup && !props.popupShowing && (
         <div onClick={openJoin} className="button-container">
-          <img src={buttonImage} className="sign" alt="Wooden Sign" />
-          <h2 className="joinalobbytext">Join a Lobby</h2>
+          <img src={buttonImage} className="homepagesign" alt="Wooden Sign" />
+          <h2 className="homepagesigntext">Join a Lobby</h2>
         </div>
       )}
       {props.popupShowing && showJoinPopup && (

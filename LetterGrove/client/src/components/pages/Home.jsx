@@ -26,7 +26,7 @@ const Home = () => {
         <img src={lettergrovelogo} alt="LetterGrove Logo" className="lettergrove-logo" />
       )}
       {userId && (
-        <div>
+        <div className="buttonscontainer">
           <SummonLobbyPopup
             onShowLobby={() => setShowLogo(false)}
             onHideLobby={() => setShowLogo(true)}
@@ -49,14 +49,14 @@ const Home = () => {
       )}
       <div>
         {userId ? (
-          <div className="home-logoutbutton-container">
-            <div
-              className="home-logoutButton"
-              onClick={() => {
-                googleLogout();
-                handleLogout();
-              }}
-            >
+          <div
+            className="home-logoutbutton-container"
+            onClick={() => {
+              googleLogout();
+              handleLogout();
+            }}
+          >
+            <div className="home-logoutButton">
               <div className="logouttext">Logout</div>
             </div>
           </div>
