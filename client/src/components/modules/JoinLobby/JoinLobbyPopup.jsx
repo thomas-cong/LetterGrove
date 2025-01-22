@@ -1,5 +1,5 @@
 import React from "react";
-import Closebutton from "../../../assets/closebutton.png";
+import Closebutton from "../../../assets/Closebutton.png";
 import "./JoinLobbyPopup.css";
 import { post } from "../../../utilities";
 import { useNavigate } from "react-router-dom";
