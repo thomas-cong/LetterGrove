@@ -441,8 +441,6 @@ const confirmWord = (userId, props) => {
     }
     if (board[currentY][currentX].crop !== null) {
       crop = board[currentY][currentX].crop;
-      userGameState.points += cropValues[crop];
-      pointsGained += cropValues[crop];
       board[currentY][currentX].crop = null;
       cropsCollected[crop] += 1;
     }
