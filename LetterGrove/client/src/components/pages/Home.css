@@ -37,15 +37,13 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, 100%);
+  transform: translate(-50%, 100%) scale(1.2);
   z-index: 1;
-  width: 20vw;
-  min-width: 200px;
-  max-width: 300px;
+  width: auto;
 }
 
 .google-login-container:hover {
-  transform: translate(-50%, 100%) scale(1.1);
+  transform: translate(-50%, 100%) scale(1.32);
   transition: all 0.3s ease;
 }
 
