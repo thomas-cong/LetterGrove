@@ -68,15 +68,15 @@ const Lobby = () => {
             <div className="start-button-container">
               <StartGameButton
                 lobbyCode={lobbyId}
-                setGameState={setGameState}
-                gameState={gameState}
+                setLobbyState={setLobbyState}
+                lobbyState={lobbyState}
               />
             </div>
           </div>
         </div>
       )}
       {lobbyState === "game" && (
-        <GameComponent lobbyCode={lobbyId} setGameState={setGameState} gameState={gameState} />
+        <GameComponent lobbyCode={lobbyId} setLobbyState={setLobbyState} lobbyState={lobbyState} />
       )}
       {lobbyState === "end" && <GameEndPopup />}
     </>

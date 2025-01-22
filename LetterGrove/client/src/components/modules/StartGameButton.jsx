@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import shortSign from "../../assets/320signs_2.png";
 import { post } from "../../utilities";
 import CloudAnimation from "./CloudAnimation";
@@ -27,8 +27,13 @@ const StartGameButton = (props) => {
 
   useEffect(() => {
     socket.on("initial game", () => {
-      props.setLobbyState("game");
+      console.log("initial game received, playing animation");
       setShowAnimation(true);
+
+      // Wait for animation to complete before changing view
+      setTimeout(() => {
+        props.setLobbyState("game");
+      }, 1500);
     });
 
     return () => {
@@ -37,10 +42,8 @@ const StartGameButton = (props) => {
   }, []);
 
   const handleClick = () => {
-    // Wait for animation to complete before changing view
-    setTimeout(() => {
-      post("/api/startGame", { lobbyCode: props.lobbyCode });
-    }, 1500); // Increased duration to account for all layers
+    // Only send the start game request, don't set animation here
+    post("/api/startGame", { lobbyCode: props.lobbyCode });
   };
 
   return (
