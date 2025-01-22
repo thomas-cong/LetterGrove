@@ -7,8 +7,8 @@ import AlertBox from "../AlertBox/AlertBox";
 
 const StartLobbyButton = (props) => {
   const navigate = useNavigate();
-  const [showAlert, setShowAlert] = React.useState(true); // Set to true for testing
-  const [alertMessage, setAlertMessage] = React.useState("testmessage"); // Test message
+  const [showAlert, setShowAlert] = React.useState(false); // Set to true for testing
+  const [alertMessage, setAlertMessage] = React.useState(""); // Test message
 
   const handleClick = () => {
     const gameSettings = {
