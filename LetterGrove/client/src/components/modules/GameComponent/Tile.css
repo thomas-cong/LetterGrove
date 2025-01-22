@@ -1,3 +1,12 @@
+/**
+ * Tile Component Styles
+ * 
+ * This CSS file defines the visual appearance of game tiles and their various states.
+ * It includes styles for tile containers, letter tiles, and different tile states
+ * such as visited, hovered, and animated.
+ */
+
+/* Base tile container */
 .tile {
   position: relative;
   width: 32px;
@@ -6,40 +15,42 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  transition: opacity 0.3s ease;
 }
 
-.tile img {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
-  -ms-interpolation-mode: nearest-neighbor;
+/* Letter tile image styling */
+.letter-tile {
+  z-index: 3;
+  transition: transform 0.2s ease, filter 0.2s ease;
 }
 
-.grass-background {
-  z-index: 1;
-}
-
+/* Tile background image */
 .tile-background {
   z-index: 2;
   border-radius: 3px;
 }
 
-.letter-tile {
-  z-index: 3;
-  transition: transform 0.2s;
-}
-
-.letter-tile.falling {
-  animation: fallIn 0.5s ease-in;
-}
-
+/* Crop image styling */
 .crop-image {
   z-index: 3;
 }
 
+/* Animation for letter appearance */
+.letter-tile.falling {
+  animation: fallIn 0.5s ease-in;
+}
+
+/* Visited tile state */
+.tile.visited {
+  opacity: 1;
+}
+
+/* Hover effects for letter tiles */
+.tile:hover .letter-tile {
+  transform: scale(1.1);
+}
+
+/* Letter appearance animation keyframes */
 @keyframes fallIn {
   0% {
     transform: translateY(-100%) scale(0.8);
@@ -57,18 +68,7 @@
   }
 }
 
-.tile.visited {
-  opacity: 0.9;
-}
-
-.tile.visited img {
-  filter: grayscale(20%);
-}
-
-.tile:hover .letter-tile {
-  transform: scale(1.1);
-}
-
+/* Suggestion styles */
 .tile.suggestion {
   position: relative;
 }
@@ -119,6 +119,7 @@
   transform: scale(1.05);
 }
 
+/* Confirm suggestion button */
 .confirm-suggestion {
   position: fixed;
   bottom: 20px;
