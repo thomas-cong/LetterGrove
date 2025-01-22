@@ -16,7 +16,7 @@ const Lobby = () => {
   let { lobbyId } = useParams();
 
   const [u_id, setU_id] = useState("");
-  const [gameState, setGameState] = useState("lobby");
+  const [lobbyState, setLobbyState] = useState("lobby");
 
   // Check auth of user
   useEffect(() => {
@@ -51,7 +51,7 @@ const Lobby = () => {
 
   return (
     <>
-      {gameState === "lobby" && (
+      {lobbyState === "lobby" && (
         <div className="lobby-container">
           <div className="lobby-content">
             <div className="lobby-code">Lobby Code: {lobbyId}</div>
@@ -75,10 +75,10 @@ const Lobby = () => {
           </div>
         </div>
       )}
-      {gameState === "game" && (
+      {lobbyState === "game" && (
         <GameComponent lobbyCode={lobbyId} setGameState={setGameState} gameState={gameState} />
       )}
-      {gameState === "end" && <GameEndPopup />}
+      {lobbyState === "end" && <GameEndPopup />}
     </>
   );
 };

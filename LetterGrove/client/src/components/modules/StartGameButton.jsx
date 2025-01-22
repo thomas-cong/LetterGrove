@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import shortSign from "../../assets/320signs_2.png";
 import { post } from "../../utilities";
 import CloudAnimation from "./CloudAnimation";
+import { socket } from "../../client-socket";
 import "./StartGameButton.css";
 
 // Import cloud entering images
@@ -24,12 +25,21 @@ const StartGameButton = (props) => {
     { bottom: lastBottomLeft, top: lastTopRight },
   ];
 
+  useEffect(() => {
+    socket.on("initial game", () => {
+      props.setLobbyState("game");
+      setShowAnimation(true);
+    });
+
+    return () => {
+      socket.off("initial game");
+    };
+  }, []);
+
   const handleClick = () => {
-    setShowAnimation(true);
     // Wait for animation to complete before changing view
     setTimeout(() => {
       post("/api/startGame", { lobbyCode: props.lobbyCode });
-      props.setGameState("game");
     }, 1500); // Increased duration to account for all layers
   };
 
