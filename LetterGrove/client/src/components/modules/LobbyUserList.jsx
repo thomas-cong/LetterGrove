@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { get, post } from "../../utilities";
+import { socket } from "../../client-socket";
 /**
  *  LobbyPlayerList is a component that represents a list of players in a lobby
  *
@@ -11,12 +12,26 @@ import { get, post } from "../../utilities";
 const LobbyUserList = (props) => {
   const [usernameList, setUsernameList] = useState([]);
   useEffect(() => {
-    console.log("User list created:");
-    get("/api/usernames", { lobbyCode: props.lobbyCode }).then((players) => {
-      console.log("Players in lobby:", players);
-      setUsernameList(players);
-    });
+    const handleUpdateLobbyUserList = (players) => {
+      let tempUsernameList = [];
+      for (let userId in players) {
+        tempUsernameList.push(players[userId]);
+      }
+      setUsernameList(tempUsernameList);
+    };
+    socket.on("update lobby user list", handleUpdateLobbyUserList);
+    return () => {
+      socket.off("update lobby user list", handleUpdateLobbyUserList);
+    };
   }, []);
+
+  // useEffect(() => {
+  //   console.log("User list created:");
+  //   get("/api/usernames", { lobbyCode: props.lobbyCode }).then((players) => {
+  //     console.log("Players in lobby:", players);
+  //     setUsernameList(players);
+  //   });
+  // }, []);
   return (
     <div>
       <ul>
