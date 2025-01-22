@@ -1,19 +1,68 @@
 .creditsmainboard {
-    width: 700px;
-    height: 600px;
-    background-color: rgba(255, 255, 255, 0.671);
-    border-radius: 10px;
-    border: 2px solid rgb(255, 255, 255);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    padding-right: 50px;
-    padding-left: 50px;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
+  width: min(700px, 80vw);
+  height: min(500px, 70vh);
+  background-color: rgba(255, 255, 255, 0.671);
+  border-radius: min(10px, 1vw);
+  border: min(2px, 0.2vw) solid rgb(255, 255, 255);
+  box-shadow: 0 0 min(10px, 1vw) rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: min(30px, 3vw);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  overflow-y: auto;
+  max-height: 80vh;
+}
+
+.credits {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: min(15px, 1.5vh);
+  width: 100%;
+}
+
+.creditsmainboard::-webkit-scrollbar {
+  width: min(8px, 1vw);
+}
+
+.creditsmainboard::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+.creditsmainboard::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.creditsmainboard::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.creditsmainboard h1 {
+  font-size: max(20px, min(2.5vw, 28px));
+  margin-bottom: min(15px, 1.5vh);
+  text-align: center;
+}
+
+.creditsmainboard p {
+  font-size: max(14px, min(1.8vw, 18px));
+  text-align: center;
+  margin: min(8px, 0.8vh) 0;
+  line-height: 1.4;
+}
+
+.creditsmainboard a {
+  font-size: max(14px, min(1.8vw, 18px));
+  color: #0066cc;
+  text-decoration: none;
+}
+
+.creditsmainboard a:hover {
+  text-decoration: underline;
+}

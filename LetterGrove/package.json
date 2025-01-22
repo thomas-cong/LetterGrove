@@ -38,7 +38,7 @@
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1",
     "url-loader": "^4.1.1",
-    "watch": "^1.0.2"
+    "watch": "^0.13.0"
   },
   "devDependencies": {
     "@vitejs/plugin-react-swc": "^3.0.0",

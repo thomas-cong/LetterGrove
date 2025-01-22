@@ -1,10 +1,9 @@
 .closeButton {
-  height: 32px;
+  height: min(48px, 4vw);
   position: absolute;
-  top: 10px;
-  right:10px;
+  top: 1vh;
+  left: 1vw;
   cursor: pointer;
-
 }
 
 .closeButton:hover {
@@ -13,21 +12,23 @@
 }
 
 .username-input {
-  width: 290px;
-  height: 20px;
-  padding: 5px;
+  width: 60%;
+  min-width: 200px;
+  height: min(20px, 6vh);
+  padding: min(5px, 0.5vh);
   text-align: center;
   display: block;
   margin: 0 auto;
+  font-size: clamp(24px, 36px - 4vw, 36px);
 }
 
 .mainboard {
-  width: 500px;
-  height: 300px;
+  width: min(500px, 60vw);
+  height: min(300px, 50vh);
   background-color: rgba(255, 255, 255, 0.671);
-  border-radius: 10px;
-  border: 2px solid rgb(255, 255, 255);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  border-radius: min(10px, 1vw);
+  border: min(2px, 0.2vw) solid rgb(255, 255, 255);
+  box-shadow: 0 0 min(10px, 1vw) rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -36,15 +37,14 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  gap: 20px;
-
+  gap: min(20px, 2vh);
 }
 
 .joinlobbytext {
-  font-size: 24px;
-  -webkit-text-stroke: 1px hwb(0 0% 100% / 0.36);
+  font-size: max(20px, min(2.5vw, 24px));
+  -webkit-text-stroke: min(1px, 0.1vw) hwb(0 0% 100% / 0.36);
   font-family: "Daydream", sans-serif;
-  width: 220px;
+  width: auto;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -65,7 +65,16 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   cursor: pointer;
+  width: 60%;
+}
+
+.join-lobby-container img {
+  width: 100%;
+  height: auto;
+  min-width: 200px;
+  position: relative;
 }
 
 .join-lobby-container:hover {

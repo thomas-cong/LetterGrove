@@ -4,6 +4,7 @@
   top: 1vh;
   left: 1vw;
   cursor: pointer;
+  z-index: 2;
 }
 
 .createdcloseButton:hover {
@@ -12,36 +13,118 @@
 }
 
 .createdusername-input {
-  width: min(290px, 25vw);
-  height: min(20px, 2vh);
+  width: 45%;
+  min-width: 300px;
+  height: 20px;
   padding: 0.5vh;
   text-align: center;
   display: block;
   margin: 0 auto;
+  font-size: max(16px, min(2.2vw, 24px));
 }
 
 .createdmainboard {
-  width: min(700px, 80vw);
-  height: min(600px, 80vh);
+  width: min(700px, 80%);
+  height: fit-content;
+  max-height: 70%;
   background-color: rgba(255, 255, 255, 0.671);
-  border-radius: 10px;
-  border: 2px solid rgb(255, 255, 255);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: min(20px, 2vh);
-  padding: min(20px, 2vw);
+  border-radius: min(10px, 1vw);
+  border: min(2px, 0.2vw) solid rgb(255, 255, 255);
+  box-shadow: 0 0 min(10px, 1vw) rgba(0, 0, 0, 0.3);
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  overflow-y: auto;
+}
+
+.createdmainboard::-webkit-scrollbar {
+  width: min(8px, 1vw);
+}
+
+.createdmainboard::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+.createdmainboard::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.createdmainboard::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: min(15px, 1.8vh);
+  padding: min(25px, 2.5vw);
+  padding-top: 5%;
+}
+
+.lobby-code-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: min(15px, 1.5vh);
+  width: 100%;
+}
+
+.lobby-code-title {
+  color: rgb(94, 129, 255);
+  font-size: max(32px, min(3.5vw, 40px));
+  text-align: center;
+  width: 100%;
 }
 
 .lobbycreationlobbycode {
-  font-size: clamp(20px, 32px - 0.8vw, 32px);
+  font-size: max(28px, min(3vw, 36px));
   width: 100%;
   text-align: center;
   color: rgb(15, 21, 141) !important;
+  margin: min(10px, 1vh) 0;
 }
+
+.createdmainboard h1 {
+  font-size: max(24px, min(2.8vw, 32px));
+  text-align: center;
+}
+
+.createdmainboard p {
+  font-size: max(16px, min(2.2vw, 24px));
+  text-align: center;
+  margin: min(8px, 0.8vh) 0;
+  line-height: 1.4;
+}
+
+.createdmainboard button {
+  font-size: max(16px, min(2.2vw, 24px));
+}
+
+/* Add styles for the sign and start lobby text */
+.homepagesign {
+  width: min(320px, 35vw);
+  min-width: 200px;
+  height: auto;
+}
+
+.homepagesigntext {
+  font-size: max(24px, min(2.8vw, 32px));
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  white-space: nowrap;
+  color: rgb(255, 185, 138);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* @media (min-height: 600px) {
+  .createdmainboard {
+    overflow-y: auto;
+  }
+} */
