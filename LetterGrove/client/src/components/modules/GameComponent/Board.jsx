@@ -114,6 +114,10 @@ const Board = (props) => {
 
     socket.on("suggestions", suggestionModifier);
 
+    // Update board using letters updated
+
+    // params.lettersUpdated
+
     return () => {
       socket.off("suggestions", suggestionModifier);
     };
