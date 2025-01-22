@@ -1,7 +1,7 @@
 import React from "react";
 import "./AlertBox.css";
 import alertSign from "../../../assets/AlertBox.png";
-import closeButton from "../../../assets/closebutton.png";
+import closeButton from "../../../assets/Closebutton.png";
 
 // @param {message} message to be displayed
 // @param {showAlert} boolean to show the alert

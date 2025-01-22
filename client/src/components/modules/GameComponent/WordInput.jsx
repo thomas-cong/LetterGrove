@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { socket } from "../../../client-socket.js";
-import ConfirmImage from "../../../assets/confirm.png";
+import ConfirmImage from "../../../assets/Confirm.png";
 
 /**
  * WordInput Component - Handles word input and submission for the game
