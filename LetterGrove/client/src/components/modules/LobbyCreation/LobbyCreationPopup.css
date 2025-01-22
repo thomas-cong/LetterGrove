@@ -1,8 +1,8 @@
 .createdcloseButton {
-  height: 48px;
+  height: min(48px, 4vw);
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 1vh;
+  left: 1vw;
   cursor: pointer;
 }
 
@@ -12,17 +12,17 @@
 }
 
 .createdusername-input {
-  width: 290px;
-  height: 20px;
-  padding: 5px;
+  width: min(290px, 25vw);
+  height: min(20px, 2vh);
+  padding: 0.5vh;
   text-align: center;
   display: block;
   margin: 0 auto;
 }
 
 .createdmainboard {
-  width: 700px;
-  height: 600px;
+  width: min(700px, 80vw);
+  height: min(600px, 80vh);
   background-color: rgba(255, 255, 255, 0.671);
   border-radius: 10px;
   border: 2px solid rgb(255, 255, 255);
@@ -31,8 +31,8 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 20px;
-  padding: 20px;
+  gap: min(20px, 2vh);
+  padding: min(20px, 2vw);
   position: fixed;
   top: 50%;
   left: 50%;
@@ -40,7 +40,7 @@
 }
 
 .lobbycreationlobbycode {
-  font-size: 32px;
+  font-size: clamp(20px, 32px - 0.8vw, 32px);
   width: 100%;
   text-align: center;
   color: rgb(15, 21, 141) !important;
