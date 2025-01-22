@@ -1,0 +1,42 @@
+.alert-box {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.alert-box p {
+  position: absolute;
+  color: white;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  z-index: 2;
+  font-size: 24px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.alert-box img.alert-sign {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  z-index: 1;
+}
+
+.alert-box img.close-button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  z-index: 3;
+  transition: transform 0.2s;
+}
+
+.alert-box img.close-button:hover {
+  transform: scale(1.1);
+}

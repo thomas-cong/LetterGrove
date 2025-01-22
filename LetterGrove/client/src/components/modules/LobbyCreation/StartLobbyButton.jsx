@@ -3,9 +3,12 @@ import { useNavigate } from "react-router-dom";
 import shortSign from "../../../assets/320signs_1.png";
 import { post } from "../../../utilities";
 import "./StartLobbyButton.css";
+import AlertBox from "../AlertBox/AlertBox";
 
 const StartLobbyButton = (props) => {
   const navigate = useNavigate();
+  const [showAlert, setShowAlert] = React.useState(false); // Set to true for testing
+  const [alertMessage, setAlertMessage] = React.useState(""); // Test message
 
   const handleClick = () => {
     const gameSettings = {
@@ -35,9 +38,11 @@ const StartLobbyButton = (props) => {
         console.log("Error creating lobby:", error);
         // Handle the error (e.g., show an error message to the user)
         if (error.status === 401) {
-          alert("Please log in to create a lobby");
+          setAlertMessage("Please log in to create a lobby.");
+          setShowAlert(true);
         } else {
-          alert("Failed to create lobby. Please try again.");
+          setAlertMessage("Failed to create lobby. Please try again.");
+          setShowAlert(true);
         }
       });
   };
@@ -46,6 +51,7 @@ const StartLobbyButton = (props) => {
     <div onClick={handleClick} className="start-lobby-container">
       <img src={shortSign} alt="Start Lobby" style={{ cursor: "pointer" }} />
       <h2 className="startlobbytext">Start Lobby</h2>
+      {showAlert && <AlertBox message={alertMessage} setShowAlert={setShowAlert} />}
     </div>
   );
 };
