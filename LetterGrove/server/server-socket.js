@@ -199,11 +199,17 @@ const joinSocket = (props) => {
     userToSocketMap[user._id].join(lobbyCode);
     console.log(`User ${user._id} joined room ${lobbyCode}`);
   }
+  updateLobbyUserList({ lobbyCode: props.lobbyCode });
 };
 
 const lobbyToGameTransition = (props) => {
   io.to(props.lobbyCode).emit("lobby to game transition");
   console.log("lobby game transition emitted");
+};
+
+const updateLobbyUserList = (props) => {
+  io.to(props.lobbyCode).emit("update lobby user list", openLobbies[props.lobbyCode].players);
+  console.log("update lobby user list emitted");
 };
 
 module.exports = {
@@ -304,4 +310,5 @@ module.exports = {
   startRunningGame: startRunningGame,
   joinSocket: joinSocket,
   lobbyToGameTransition: lobbyToGameTransition,
+  updateLobbyUserList: updateLobbyUserList,
 };
