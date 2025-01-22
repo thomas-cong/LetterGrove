@@ -6,67 +6,67 @@ import { socket } from "../../../client-socket";
 import "./Tile.css";
 
 // Import crop tile images
-import blueberrys from "../../../assets/tiles/blueberrys.png";
-import carrots from "../../../assets/tiles/carrots.png";
-import pumpkin from "../../../assets/tiles/pumpkin.png";
-import tomato from "../../../assets/tiles/tomato.png";
-import grassTile from "../../../assets/tiles/Grass_Tile_01.png";
-import nullTile from "../../../assets/tiles/nulltile.png";
+import blueberries from "../../../assets/Tiles/blueberries.png";
+import carrots from "../../../assets/Tiles/carrots.png";
+import pumpkin from "../../../assets/Tiles/pumpkin.png";
+import tomato from "../../../assets/Tiles/tomato.png";
+import grassTile from "../../../assets/Tiles/Grass_Tile_01.png";
+import nullTile from "../../../assets/Tiles/NullTile.png";
 
 // Import all letter and default letter tile images
-import letterA from "../../../assets/tiles/Letter_Tile_01.png";
-import letterB from "../../../assets/tiles/Letter_Tile_02.png";
-import letterC from "../../../assets/tiles/Letter_Tile_03.png";
-import letterD from "../../../assets/tiles/Letter_Tile_04.png";
-import letterE from "../../../assets/tiles/Letter_Tile_05.png";
-import letterF from "../../../assets/tiles/Letter_Tile_06.png";
-import letterG from "../../../assets/tiles/Letter_Tile_07.png";
-import letterH from "../../../assets/tiles/Letter_Tile_08.png";
-import letterI from "../../../assets/tiles/Letter_Tile_09.png";
-import letterJ from "../../../assets/tiles/Letter_Tile_10.png";
-import letterK from "../../../assets/tiles/Letter_Tile_11.png";
-import letterL from "../../../assets/tiles/Letter_Tile_12.png";
-import letterM from "../../../assets/tiles/Letter_Tile_13.png";
-import letterN from "../../../assets/tiles/Letter_Tile_14.png";
-import letterO from "../../../assets/tiles/Letter_Tile_15.png";
-import letterP from "../../../assets/tiles/Letter_Tile_16.png";
-import letterQ from "../../../assets/tiles/Letter_Tile_17.png";
-import letterR from "../../../assets/tiles/Letter_Tile_18.png";
-import letterS from "../../../assets/tiles/Letter_Tile_19.png";
-import letterT from "../../../assets/tiles/Letter_Tile_20.png";
-import letterU from "../../../assets/tiles/Letter_Tile_21.png";
-import letterV from "../../../assets/tiles/Letter_Tile_22.png";
-import letterW from "../../../assets/tiles/Letter_Tile_23.png";
-import letterX from "../../../assets/tiles/Letter_Tile_24.png";
-import letterY from "../../../assets/tiles/Letter_Tile_25.png";
-import letterZ from "../../../assets/tiles/Letter_Tile_26.png";
+import letterA from "../../../assets/Tiles/Letter_Tile_01.png";
+import letterB from "../../../assets/Tiles/Letter_Tile_02.png";
+import letterC from "../../../assets/Tiles/Letter_Tile_03.png";
+import letterD from "../../../assets/Tiles/Letter_Tile_04.png";
+import letterE from "../../../assets/Tiles/Letter_Tile_05.png";
+import letterF from "../../../assets/Tiles/Letter_Tile_06.png";
+import letterG from "../../../assets/Tiles/Letter_Tile_07.png";
+import letterH from "../../../assets/Tiles/Letter_Tile_08.png";
+import letterI from "../../../assets/Tiles/Letter_Tile_09.png";
+import letterJ from "../../../assets/Tiles/Letter_Tile_10.png";
+import letterK from "../../../assets/Tiles/Letter_Tile_11.png";
+import letterL from "../../../assets/Tiles/Letter_Tile_12.png";
+import letterM from "../../../assets/Tiles/Letter_Tile_13.png";
+import letterN from "../../../assets/Tiles/Letter_Tile_14.png";
+import letterO from "../../../assets/Tiles/Letter_Tile_15.png";
+import letterP from "../../../assets/Tiles/Letter_Tile_16.png";
+import letterQ from "../../../assets/Tiles/Letter_Tile_17.png";
+import letterR from "../../../assets/Tiles/Letter_Tile_18.png";
+import letterS from "../../../assets/Tiles/Letter_Tile_19.png";
+import letterT from "../../../assets/Tiles/Letter_Tile_20.png";
+import letterU from "../../../assets/Tiles/Letter_Tile_21.png";
+import letterV from "../../../assets/Tiles/Letter_Tile_22.png";
+import letterW from "../../../assets/Tiles/Letter_Tile_23.png";
+import letterX from "../../../assets/Tiles/Letter_Tile_24.png";
+import letterY from "../../../assets/Tiles/Letter_Tile_25.png";
+import letterZ from "../../../assets/Tiles/Letter_Tile_26.png";
 
-import defaultA from "../../../assets/tiles/Default_Letter_Tile_1.png";
-import defaultB from "../../../assets/tiles/Default_Letter_Tile_2.png";
-import defaultC from "../../../assets/tiles/Default_Letter_Tile_3.png";
-import defaultD from "../../../assets/tiles/Default_Letter_Tile_4.png";
-import defaultE from "../../../assets/tiles/Default_Letter_Tile_5.png";
-import defaultF from "../../../assets/tiles/Default_Letter_Tile_6.png";
-import defaultG from "../../../assets/tiles/Default_Letter_Tile_7.png";
-import defaultH from "../../../assets/tiles/Default_Letter_Tile_8.png";
-import defaultI from "../../../assets/tiles/Default_Letter_Tile_9.png";
-import defaultJ from "../../../assets/tiles/Default_Letter_Tile_10.png";
-import defaultK from "../../../assets/tiles/Default_Letter_Tile_11.png";
-import defaultL from "../../../assets/tiles/Default_Letter_Tile_12.png";
-import defaultM from "../../../assets/tiles/Default_Letter_Tile_13.png";
-import defaultN from "../../../assets/tiles/Default_Letter_Tile_14.png";
-import defaultO from "../../../assets/tiles/Default_Letter_Tile_15.png";
-import defaultP from "../../../assets/tiles/Default_Letter_Tile_16.png";
-import defaultQ from "../../../assets/tiles/Default_Letter_Tile_17.png";
-import defaultR from "../../../assets/tiles/Default_Letter_Tile_18.png";
-import defaultS from "../../../assets/tiles/Default_Letter_Tile_19.png";
-import defaultT from "../../../assets/tiles/Default_Letter_Tile_20.png";
-import defaultU from "../../../assets/tiles/Default_Letter_Tile_21.png";
-import defaultV from "../../../assets/tiles/Default_Letter_Tile_22.png";
-import defaultW from "../../../assets/tiles/Default_Letter_Tile_23.png";
-import defaultX from "../../../assets/tiles/Default_Letter_Tile_24.png";
-import defaultY from "../../../assets/tiles/Default_Letter_Tile_25.png";
-import defaultZ from "../../../assets/tiles/Default_Letter_Tile_26.png";
+import defaultA from "../../../assets/Tiles/Default_Letter_Tile_1.png";
+import defaultB from "../../../assets/Tiles/Default_Letter_Tile_2.png";
+import defaultC from "../../../assets/Tiles/Default_Letter_Tile_3.png";
+import defaultD from "../../../assets/Tiles/Default_Letter_Tile_4.png";
+import defaultE from "../../../assets/Tiles/Default_Letter_Tile_5.png";
+import defaultF from "../../../assets/Tiles/Default_Letter_Tile_6.png";
+import defaultG from "../../../assets/Tiles/Default_Letter_Tile_7.png";
+import defaultH from "../../../assets/Tiles/Default_Letter_Tile_8.png";
+import defaultI from "../../../assets/Tiles/Default_Letter_Tile_9.png";
+import defaultJ from "../../../assets/Tiles/Default_Letter_Tile_10.png";
+import defaultK from "../../../assets/Tiles/Default_Letter_Tile_11.png";
+import defaultL from "../../../assets/Tiles/Default_Letter_Tile_12.png";
+import defaultM from "../../../assets/Tiles/Default_Letter_Tile_13.png";
+import defaultN from "../../../assets/Tiles/Default_Letter_Tile_14.png";
+import defaultO from "../../../assets/Tiles/Default_Letter_Tile_15.png";
+import defaultP from "../../../assets/Tiles/Default_Letter_Tile_16.png";
+import defaultQ from "../../../assets/Tiles/Default_Letter_Tile_17.png";
+import defaultR from "../../../assets/Tiles/Default_Letter_Tile_18.png";
+import defaultS from "../../../assets/Tiles/Default_Letter_Tile_19.png";
+import defaultT from "../../../assets/Tiles/Default_Letter_Tile_20.png";
+import defaultU from "../../../assets/Tiles/Default_Letter_Tile_21.png";
+import defaultV from "../../../assets/Tiles/Default_Letter_Tile_22.png";
+import defaultW from "../../../assets/Tiles/Default_Letter_Tile_23.png";
+import defaultX from "../../../assets/Tiles/Default_Letter_Tile_24.png";
+import defaultY from "../../../assets/Tiles/Default_Letter_Tile_25.png";
+import defaultZ from "../../../assets/Tiles/Default_Letter_Tile_26.png";
 
 /**
  * Maps letters to their corresponding tile images
@@ -158,7 +158,7 @@ const getCropImage = (cropType) => {
     case "tomato":
       return tomato;
     case "blueberry":
-      return blueberrys;
+      return blueberries;
     case "pumpkin":
       return pumpkin;
     default:
