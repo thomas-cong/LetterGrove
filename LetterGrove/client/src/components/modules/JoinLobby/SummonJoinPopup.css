@@ -28,7 +28,7 @@ h2 {
 }
 
 .homepagesigntext {
-  font-size: clamp(20px, 24px - 0.5vw, 24px);
+  font-size: clamp(24px, 24px - 0.5vw, 28px);
   -webkit-text-stroke: 1px hwb(0 0% 100% / 0.36);
   font-family: "Daydream", sans-serif;
   position: absolute;
