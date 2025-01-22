@@ -7,8 +7,8 @@ import AlertBox from "../AlertBox/AlertBox";
 
 const StartLobbyButton = (props) => {
   const navigate = useNavigate();
-  const [showAlert, setShowAlert] = React.useState(false); // Set to true for testing
-  const [alertMessage, setAlertMessage] = React.useState(""); // Test message
+  const [showAlert, setShowAlert] = React.useState(true); // Set to true for testing
+  const [alertMessage, setAlertMessage] = React.useState("Test Message"); // Test message
 
   const handleClick = () => {
     const gameSettings = {
@@ -48,10 +48,12 @@ const StartLobbyButton = (props) => {
   };
 
   return (
-    <div onClick={handleClick} className="start-lobby-container">
-      <img src={shortSign} alt="Start Lobby" style={{ cursor: "pointer" }} />
-      <h2 className="startlobbytext">Start Lobby</h2>
+    <div>
       {showAlert && <AlertBox message={alertMessage} setShowAlert={setShowAlert} />}
+      <div onClick={handleClick} className="start-lobby-container">
+        <img src={shortSign} alt="Start Lobby" style={{ cursor: "pointer" }} />
+        <h2 className="startlobbytext">Start Lobby</h2>
+      </div>
     </div>
   );
 };
