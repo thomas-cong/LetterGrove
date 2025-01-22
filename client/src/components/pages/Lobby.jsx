@@ -10,8 +10,8 @@ import StartGameButton from "../modules/StartGameButton.jsx";
 import GameComponent from "../modules/GameComponent/GameComponent.jsx";
 import GameEndPopup from "../modules/GameComponent/GameEndPopup/GameEndPopup.jsx";
 import CloudAnimation from "../modules/CloudAnimation.jsx";
-import { get, post } from "../../utilities";
-import { socket } from "../../client-socket";
+import { get, post } from "../../utilities.js";
+import { socket } from "../../client-socket.js";
 
 // Import cloud entering images
 import firstBottomLeft from "../../assets/CLOUDENTERING/FIRST_CLOUDENTERING_BOTTOM_LEFT.png";
