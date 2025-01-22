@@ -3,6 +3,7 @@ import { socket } from "../../../client-socket";
 import { post } from "../../../utilities";
 import Board from "./Board";
 import WordInput from "./WordInput";
+import Counter from "./Counter";
 
 const GameComponent = (props) => {
   post("/api/startGame", { lobbyCode: props.lobbyCode });
@@ -131,9 +132,8 @@ const GameComponent = (props) => {
         board={gameState.board}
         suggestions={suggestions}
       />
-
-      {/* <Counter counter={gameState.counter} />
-      <Log log={gameState.log} />
+      <Counter />
+      {/* <Log log={gameState.log} />
       <Rankings rankings={gameState.rankings} /> */}
     </div>
   );

@@ -70,7 +70,7 @@ const initiateGame = (props) => {
     userGameStates: {},
     players: players,
     gameStatus: "waiting",
-    timeRemaining: 0,
+    stepsRemaining: gameInfo.steps,
     rankings: [],
     log: [],
     pointsToWin: 100,
@@ -102,6 +102,10 @@ const initiateGame = (props) => {
   gameLogic.games[lobbyCode] = game;
   gameLogic.games[lobbyCode].gameStatus = "active";
   console.log(players);
+  startRunningGame({
+    lobbyCode: lobbyCode,
+    stepsLeft: game.stepsRemaining,
+  });
   for (const userId in players) {
     console.log(userId);
     sendUserInitialGame(userId, lobbyCode);
@@ -111,19 +115,27 @@ const initiateGame = (props) => {
 const startRunningGame = (props) => {
   const lobbyCode = props.lobbyCode;
   const game = gameLogic.games[lobbyCode];
-  game.timeRemaining = props.time;
+  game.stepsRemaining = props.stepsLeft;
+
+  console.log("Starting game timer for lobby:", lobbyCode);
+  console.log("Initial steps remaining:", game.stepsRemaining);
 
   game.timerInterval = setInterval(() => {
-    game.timeRemaining--;
+    game.stepsRemaining--;
 
-    if (game.timeRemaining === 0) {
+    if (game.stepsRemaining === 0) {
       game.gameStatus = "ended";
       handleEndGame({ lobbyCode: lobbyCode, reason: "Time's up" });
       clearInterval(game.timerInterval);
       return;
     }
 
-    io.in(lobbyCode).emit("time update", { timeRemaining: game.timeRemaining });
+    console.log(`Emitting time update for lobby ${lobbyCode}:`, game.stepsRemaining);
+    // Get sockets in the room
+    const room = io.sockets.adapter.rooms.get(lobbyCode);
+    console.log("Sockets in room:", room ? Array.from(room) : "No room found");
+
+    io.in(lobbyCode).emit("time update", { stepsRemaining: game.stepsRemaining });
   }, 1000);
 };
 
@@ -181,9 +193,15 @@ const handleEndGame = (props) => {
 const joinSocket = (props) => {
   const lobbyCode = props.lobbyCode;
   const user = getUserFromSocketID(props.socketid);
-  console.log(openLobbies);
-  if (user && user._id in Object.values(Object.keys(openLobbies[props.lobbyCode].players))) {
+  console.log("Joining socket for lobby:", lobbyCode);
+  console.log("User:", user);
+  console.log("Open lobbies:", openLobbies);
+
+  if (user && openLobbies[lobbyCode] && openLobbies[lobbyCode].players[user._id]) {
+    console.log("User joined lobby room:", lobbyCode);
     userToSocketMap[user._id].join(lobbyCode);
+  } else {
+    console.log("Failed to join lobby - User not in lobby players list");
   }
 };
 
