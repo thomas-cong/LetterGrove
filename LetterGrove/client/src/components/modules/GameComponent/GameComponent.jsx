@@ -5,6 +5,7 @@ import Board from "./Board";
 import WordInput from "./WordInput";
 import Counter from "./Counter";
 import PointsCounter from "./PointsCounter";
+import "./GameComponent.css";
 
 const GameComponent = (props) => {
   const [word, setWord] = useState("");
@@ -63,7 +64,7 @@ const GameComponent = (props) => {
     // Initial game state
     const handleInitialGame = (game) => {
       setGameState(game);
-      console.log("POOP " +game.board);
+      console.log("POOP " + game.board);
     };
 
     // User-specific updates (letters, points, endpoints)
@@ -108,6 +109,7 @@ const GameComponent = (props) => {
   return (
     <div>
       <Board
+        className="gamecomponentboard"
         board={gameState.board}
         points={gameState.points}
         username={gameState.username}
