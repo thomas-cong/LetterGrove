@@ -41,3 +41,10 @@ h5 {
 h6 {
   font-size: 24px;
 }
+
+/* Global image settings for pixel-perfect rendering */
+img {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  -ms-interpolation-mode: nearest-neighbor;
+}

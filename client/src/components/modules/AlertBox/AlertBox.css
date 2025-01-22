@@ -27,7 +27,7 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
-  z-index: 1;
+  z-index: 2;
 }
 
 .alert-box img.close-button {
@@ -37,10 +37,19 @@
   width: 32px;
   height: 32px;
   cursor: pointer;
-  z-index: 3;
+  z-index: 4;
   transition: transform 0.2s;
 }
 
 .alert-box img.close-button:hover {
   transform: scale(1.1);
+}
+
+.alert-box img.confusion-shiba {
+  position: absolute;
+  top: -25%;
+  right: 5%;
+  width: 64px;
+  height: 64px;
+  z-index: 1;
 }
