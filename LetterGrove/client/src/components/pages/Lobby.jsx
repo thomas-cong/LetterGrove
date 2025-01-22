@@ -8,13 +8,15 @@ import SettingsDisplay from "../modules/SettingsDisplay.jsx";
 import LobbyUserList from "../modules/LobbyUserList.jsx";
 import StartGameButton from "../modules/StartGameButton.jsx";
 import GameComponent from "../modules/GameComponent/GameComponent.jsx";
+import GameEndPopup from "../modules/GameComponent/GameEndPopup/GameEndPopup.jsx";
 import { get } from "../../utilities";
 import { socket } from "../../client-socket";
 
 const Lobby = () => {
   let { lobbyId } = useParams();
+
   const [u_id, setU_id] = useState("");
-  const [showLobby, setShowLobby] = useState(true);
+  const [gameState, setGameState] = useState("lobby");
 
   // Check auth of user
   useEffect(() => {
@@ -49,7 +51,7 @@ const Lobby = () => {
 
   return (
     <>
-      {showLobby ? (
+      {gameState === "lobby" && (
         <div className="lobby-container">
           <div className="lobby-content">
             <div className="lobby-code">Lobby Code: {lobbyId}</div>
@@ -66,15 +68,17 @@ const Lobby = () => {
             <div className="start-button-container">
               <StartGameButton
                 lobbyCode={lobbyId}
-                setShowLobby={setShowLobby}
-                showLobby={showLobby}
+                setGameState={setGameState}
+                gameState={gameState}
               />
             </div>
           </div>
         </div>
-      ) : (
-        <GameComponent lobbyCode={lobbyId} />
       )}
+      {gameState === "game" && (
+        <GameComponent lobbyCode={lobbyId} setGameState={setGameState} gameState={gameState} />
+      )}
+      {gameState === "end" && <GameEndPopup />}
     </>
   );
 };

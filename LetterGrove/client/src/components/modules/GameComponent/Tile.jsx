@@ -245,9 +245,14 @@ const Tile = (props) => {
 
   // Reset animation when letter changes
   useEffect(() => {
-    setIsAnimating(true);
-    const timer = setTimeout(() => setIsAnimating(false), 500);
-    return () => clearTimeout(timer);
+    // If the tile is a suggestion, don't animate
+    if (props.cell.isSuggestion) {
+      setIsAnimating(false);
+    } else {
+      setIsAnimating(true);
+      const timer = setTimeout(() => setIsAnimating(false), 500);
+      return () => clearTimeout(timer);
+    }
   }, [props.cell.letter]);
 
   // Use dynamic class names for styling tiles
@@ -278,7 +283,19 @@ const Tile = (props) => {
       )}
       {/* Crop image overlay shown when a crop is planted (z-index: 4) */}
       {props.cell.crop && (
-        <img src={getCropImage(props.cell.crop)} alt={props.cell.crop} className="crop-image" />
+        <img
+          src={getCropImage(props.cell.crop)}
+          alt={props.cell.crop}
+          className="crop-image"
+          onClick={() =>
+            checkEndpoint({
+              isEndpoint: props.isEndpoint,
+              isSuggestionEnd: props.cell.isSuggestionEnd,
+              tileX: props.tileX,
+              tileY: props.tileY,
+            })
+          }
+        />
       )}
     </div>
   );

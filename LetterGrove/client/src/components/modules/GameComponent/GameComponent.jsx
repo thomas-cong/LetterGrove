@@ -4,9 +4,9 @@ import { post } from "../../../utilities";
 import Board from "./Board";
 import WordInput from "./WordInput";
 import Counter from "./Counter";
+import PointsCounter from "./PointsCounter";
 
 const GameComponent = (props) => {
-  // post("/api/startGame", { lobbyCode: props.lobbyCode });
   const [word, setWord] = useState("");
   const [suggestions, setSuggestions] = useState([]);
 
@@ -133,6 +133,7 @@ const GameComponent = (props) => {
         suggestions={suggestions}
       />
       <Counter />
+      <PointsCounter points={gameState.points} />
       {/* <Log log={gameState.log} />
       <Rankings rankings={gameState.rankings} /> */}
     </div>

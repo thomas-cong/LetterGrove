@@ -59,6 +59,11 @@ const WordInput = (props) => {
         onChange={(e) => props.setWord(e.target.value.toUpperCase())}
         placeholder={placeholder}
         disabled={props.suggestions.length > 0}
+        onKeyPress={(event) => {
+          if (event.key === "Enter") {
+            handleEnter();
+          }
+        }}
       />
       <button
         onClick={handleEnter}

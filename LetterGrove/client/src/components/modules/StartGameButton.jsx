@@ -29,7 +29,7 @@ const StartGameButton = (props) => {
     // Wait for animation to complete before changing view
     setTimeout(() => {
       post("/api/startGame", { lobbyCode: props.lobbyCode });
-      props.setShowLobby(false);
+      props.setGameState("game");
     }, 1500); // Increased duration to account for all layers
   };
 
