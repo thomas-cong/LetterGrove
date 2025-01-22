@@ -58,50 +58,50 @@ const sendUserInitialGame = (userId, lobbyCode) => {
 };
 
 const initiateGame = (props) => {
-      const lobbyCode = props.lobbyCode;
-      const gameInfo = props.gameInfo;
-      const players = gameInfo.players;
-      console.log(gameInfo);
+  const lobbyCode = props.lobbyCode;
+  const gameInfo = props.gameInfo;
+  const players = gameInfo.players;
+  console.log(gameInfo);
 
-      board = gameLogic.randomlyGenerateBoard({
-        difficulty: gameInfo.difficulty,
-      });
-      game = {
-        userGameStates: {},
-        players: players,
-        gameStatus: "waiting",
-        timeRemaining: 0,
-        rankings: [],
-        log: [],
-        pointsToWin: 100,
-      };
-      for (const userId in players) {
-        const username = players[userId];
-        game.userGameStates[userId] = {
-          username: username,
-          board: gameLogic.deepCopyBoard(board),
-          points: 0,
-          powerups: {
-            spade: 0,
-            water: 0,
-            shovel: 0,
-          },
-          endpoints: [[0, 0]],
-          letters_collected: 0,
-          words_formed: 0,
-          powerups_used: 0,
-        };
-      }
-      for (const userId in players) {
-        game.rankings.push({
-          playerId: userId,
-          username: players[userId],
-          score: 0,
-        });
-      }
-      gameLogic.games[lobbyCode] = game;
-      gameLogic.games[lobbyCode].gameStatus = "active";
-      console.log(players);
+  board = gameLogic.randomlyGenerateBoard({
+    difficulty: gameInfo.difficulty,
+  });
+  game = {
+    userGameStates: {},
+    players: players,
+    gameStatus: "waiting",
+    timeRemaining: 0,
+    rankings: [],
+    log: [],
+    pointsToWin: 100,
+  };
+  for (const userId in players) {
+    const username = players[userId];
+    game.userGameStates[userId] = {
+      username: username,
+      board: gameLogic.deepCopyBoard(board),
+      points: 0,
+      powerups: {
+        spade: 0,
+        water: 0,
+        shovel: 0,
+      },
+      endpoints: [[0, 0]],
+      letters_collected: 0,
+      words_formed: 0,
+      powerups_used: 0,
+    };
+  }
+  for (const userId in players) {
+    game.rankings.push({
+      playerId: userId,
+      username: players[userId],
+      score: 0,
+    });
+  }
+  gameLogic.games[lobbyCode] = game;
+  gameLogic.games[lobbyCode].gameStatus = "active";
+  console.log(players);
   for (const userId in players) {
     console.log(userId);
           sendUserInitialGame(userId, lobbyCode);
