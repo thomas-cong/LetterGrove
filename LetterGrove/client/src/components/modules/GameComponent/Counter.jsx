@@ -3,14 +3,14 @@ import { socket } from "../../../client-socket";
 
 /**
  * Counter Component
- * 
+ *
  * A component that displays the remaining steps/time in the game.
  * Listens for socket events to update the counter value in real-time.
- * 
+ *
  * State:
  * - steps: The current number of steps remaining
  * - mode: The type of counter being displayed (e.g., "Time")
- * 
+ *
  * Socket Events:
  * - "time update": Receives updates for the remaining steps/time
  *   - params.stepsRemaining: Number of steps remaining in the game
