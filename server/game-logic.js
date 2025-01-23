@@ -453,7 +453,7 @@ const confirmWord = (userId, props) => {
     currentY += dy;
   }
   let logMessage = userGameState.username + " collected " + pointsGained + " points";
-  for (rankInfo in game.rankings) {
+  for (rankInfo of game.rankings) {
     if (rankInfo.playerId === userId) {
       rankInfo.score = userGameState.points;
       break;
