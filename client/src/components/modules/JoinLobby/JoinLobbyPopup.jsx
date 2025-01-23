@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Closebutton from "../../../assets/Closebutton.png";
 import "./JoinLobbyPopup.css";
 import { post } from "../../../utilities";
@@ -15,45 +15,59 @@ import shortSign from "../../../assets/320signs_0.png";
  * @param {setLobbyCode} setter for lobby code
  * @param {hideJoin} function to hide the join lobby popup
  */
+import AlertBox from "../AlertBox/AlertBox";
 
 const JoinLobbyPopup = (props) => {
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
   const navigate = useNavigate();
 
   return (
-    <div className="mainboard">
-      <img src={Closebutton} onClick={() => props.hideJoin()} className="closeButton" />
-      <input
-        type="text"
-        placeholder="Lobby Code"
-        value={props.lobbyCode}
-        onChange={(e) => props.setLobbyCode(e.target.value)}
-        className="username-input"
-      />
-      <input
-        type="text"
-        placeholder="Username"
-        value={props.username}
-        onChange={(e) => props.setUsername(e.target.value)}
-        className="username-input"
-      />
-      <div
-        className="join-lobby-container"
-        onClick={() => {
-          post("/api/joinLobby", {
-            lobbyCode: props.lobbyCode,
-            username: props.username,
-          })
-            .then((result) => {
-              console.log("Joining lobby:", props.lobbyCode, "as", props.username);
+    <div>
+      {showAlert && <AlertBox message={alertMessage} setShowAlert={setShowAlert} />}
+
+      <div className="mainboard">
+        <img src={Closebutton} onClick={() => props.hideJoin()} className="closeButton" />
+        <input
+          type="text"
+          placeholder="Lobby Code"
+          value={props.lobbyCode}
+          onChange={(e) => props.setLobbyCode(e.target.value)}
+          className="username-input"
+        />
+        <input
+          type="text"
+          placeholder="Username"
+          value={props.username}
+          onChange={(e) => props.setUsername(e.target.value)}
+          className="username-input"
+        />
+        <div
+          className="join-lobby-container"
+          onClick={() => {
+            if (props.username === "") {
+              setAlertMessage("A username is required to join a lobby!");
+              setShowAlert(true);
+              return;
+            }
+            post("/api/joinLobby", {
+              lobbyCode: props.lobbyCode,
+              username: props.username,
             })
-            .catch((error) => {
-              console.log("Error joining lobby:", error);
-            });
-          navigate(`/${props.lobbyCode}`);
-        }}
-      >
-        <img src={shortSign} alt="Start Lobby" style={{ cursor: "pointer" }} />
-        <h2 className="joinlobbytext">Join Lobby</h2>
+              .then((result) => {
+                setShowAlert(false);
+                console.log("Joining lobby:", props.lobbyCode, "as", props.username);
+                navigate(`/${props.lobbyCode}`);
+              })
+              .catch((error) => {
+                setAlertMessage("An error has occurred while joining the lobby!");
+                setShowAlert(true);
+              });
+          }}
+        >
+          <img src={shortSign} alt="Start Lobby" style={{ cursor: "pointer" }} />
+          <h2 className="joinlobbytext">Join Lobby</h2>
+        </div>
       </div>
     </div>
   );

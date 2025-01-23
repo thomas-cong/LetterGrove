@@ -29,7 +29,7 @@ const Lobby = () => {
   const [u_id, setU_id] = useState("");
   const [lobbyState, setLobbyState] = useState("lobby");
   const [showAnimation, setShowAnimation] = useState(false);
-  const [showCloudAnimation, setShowCloudAnimation] = useState(false);
+  const [reverseAnimation, setReverseAnimation] = useState(false);
 
   const cloudImages = [
     { bottom: firstBottomLeft, top: firstTopRight },
@@ -54,16 +54,16 @@ const Lobby = () => {
   useEffect(() => {
     const handleLobbyToGame = () => {
       console.log("received lobby to game transition");
-      setShowCloudAnimation(true);
       setShowAnimation(true);
+      setReverseAnimation(false);
+
       setTimeout(() => {
         setLobbyState("game");
-      }, 1000);
-      setTimeout(() => {
         post("/api/startGame", { lobbyCode: lobbyId });
       }, 1300);
+
       setTimeout(() => {
-        setShowCloudAnimation(false);
+        setReverseAnimation(true);
       }, 1500);
     };
     socket.on("lobby to game transition", handleLobbyToGame);
@@ -74,29 +74,32 @@ const Lobby = () => {
   }, []);
 
   const startGameRequest = () => {
-    setShowCloudAnimation(true);
     setShowAnimation(true);
+    setReverseAnimation(false);
+
     setTimeout(() => {
       setLobbyState("game");
-    }, 1000);
-    setTimeout(() => {
       post("/api/startGame", { lobbyCode: lobbyId });
     }, 1300);
+
     setTimeout(() => {
-      setShowCloudAnimation(false);
+      setReverseAnimation(true);
     }, 1500);
-  }
+  };
 
   // useEffect(() => {
   //   socket.on("initial game", () => {
   //     console.log("initial game received, playing animation");
   //     setShowCloudAnimation(true);
   //     setShowAnimation(true);
+  //     setShowReverseAnimation(false);
   //     setTimeout(() => {
   //       setLobbyState("game");
   //     }, 1000);
   //     setTimeout(() => {
   //       setShowCloudAnimation(false);
+  //       setShowAnimation(false);
+  //       setShowReverseAnimation(true);
   //     }, 1500);
 
   //     // Wait for animation to complete before changing view
@@ -155,10 +158,20 @@ const Lobby = () => {
           </div>
         </div>
       )}
-      {showCloudAnimation && <CloudAnimation isActive={showAnimation} cloudImages={cloudImages} />}
-      {lobbyState === "game" && (<div>
-        <GameComponent lobbyCode={lobbyId} setLobbyState={setLobbyState} lobbyState={lobbyState} />
-      </div>)}
+      <CloudAnimation
+        isActive={showAnimation}
+        cloudImages={cloudImages}
+        reverse={reverseAnimation}
+      />
+      {lobbyState === "game" && (
+        <div>
+          <GameComponent
+            lobbyCode={lobbyId}
+            setLobbyState={setLobbyState}
+            lobbyState={lobbyState}
+          />
+        </div>
+      )}
       {lobbyState === "end" && <GameEndPopup />}
     </>
   );

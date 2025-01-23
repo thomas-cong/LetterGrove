@@ -1,3 +1,8 @@
+/* The .cloud-animation-container class is used to create a full-screen, centered container for cloud animations.
+   It is initially hidden (display: none) and becomes visible when the "active" class is added.
+   The container is fixed at the top-left corner and covers the entire viewport.
+   It uses flexbox to center its content both vertically and horizontally.
+   The z-index ensures it appears above other elements, while pointer-events are disabled to allow interactions with elements behind it. */
 .cloud-animation-container {
   position: fixed;
   top: 0;
@@ -9,7 +14,6 @@
   align-items: center;
   z-index: 1000;
   pointer-events: none;
-
 }
 
 .cloud-animation-container.active {
@@ -75,5 +79,86 @@
   100% {
     opacity: 1;
     transform: translate(0, 0) scale(1);
+  }
+}
+
+/* Reverse cloud animation classes */
+.cloud-animation-reverse-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.cloud-animation-reverse-container.active {
+  display: flex;
+}
+
+.cloud-layer-reverse {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+  object-fit: cover;
+  transform: translate(0, 0) scale(1);
+}
+
+.cloud-layer-reverse.bottom-left {
+  left: 0;
+  bottom: 0;
+  transform-origin: bottom left;
+}
+
+.cloud-layer-reverse.top-right {
+  right: 0;
+  top: 0;
+  transform-origin: top right;
+}
+
+.cloud-layer-reverse.bottom-left.animate {
+  animation: cloudExitBottomLeft 0.8s forwards;
+}
+
+.cloud-layer-reverse.top-right.animate {
+  animation: cloudExitTopRight 0.8s forwards;
+}
+
+.cloud-layer-reverse:nth-child(2).animate {
+  animation-delay: 0.2s;
+}
+
+.cloud-layer-reverse:nth-child(3).animate {
+  animation-delay: 0.4s;
+}
+
+.cloud-layer-reverse:nth-child(4).animate {
+  animation-delay: 0.6s;
+}
+
+@keyframes cloudExitBottomLeft {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-100%, 100%) scale(0.8);
+  }
+}
+
+@keyframes cloudExitTopRight {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(100%, -100%) scale(0.8);
   }
 }
