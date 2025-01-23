@@ -102,3 +102,64 @@
     padding: 0.75rem;
   }
 }
+.waiting-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}
+
+.waiting-sign-container {
+  position: relative;
+  display: inline-block;
+}
+
+.waiting-sign {
+  transition: all 0.3s ease;
+}
+
+.waiting-sign-text {
+  font-size: 30px;
+  position: absolute;
+  width: 255px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  padding: 0;
+  color: rgb(255, 255, 255);
+  transition: color 0.3s ease;
+  white-space: nowrap;
+}
+
+.waiting-sign-text .dot-1,
+.waiting-sign-text .dot-2,
+.waiting-sign-text .dot-3 {
+  opacity: 0;
+  animation: dotFade 2.5s infinite ease-in-out;
+  color: rgb(255, 255, 255);
+  font-size: 30px;
+}
+
+.waiting-sign-text .dot-2 {
+  animation-delay: 0.8s;
+}
+
+.waiting-sign-text .dot-3 {
+  animation-delay: 1.6s;
+}
+
+@keyframes dotFade {
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}

@@ -149,21 +149,36 @@ router.post("/joinLobby", (req, res) => {
   }
 });
 
+router.get("/isLobbyOwner", (req, res) => {
+  const lobbyCode = req.query.lobbyCode;
+  if (!lobbyCode || !openLobbies[lobbyCode]) {
+    return res.status(404).send(false);
+  }
+  if (!req.user) {
+    return res.status(401).send(false);
+  }
+  if (openLobbies[lobbyCode].lobbyOwner == req.user._id) {
+    res.send(true);
+  } else {
+    res.send(false);
+  }
+});
+
 router.post("/lobbyToGameTransition", (req, res) => {
   const gameInfo = openLobbies[req.body.lobbyCode];
-  if (!gameInfo) {
-    return res.status(404).send({ error: "Lobby not found" });
-  }
   console.log(req.body.lobbyCode);
   console.log(openLobbies);
   if (gameInfo.lobbyOwner != req.user._id) {
     return res.status(401).send({ error: "Not authorized" });
   }
+  if (!gameInfo) {
+    return res.status(404).send({ error: "Lobby not found" });
+  }
   console.log("MADE IT HERE!");
   socketManager.lobbyToGameTransition({
     lobbyCode: req.body.lobbyCode,
   });
-})
+});
 
 router.post("/startGame", (req, res) => {
   const gameInfo = openLobbies[req.body.lobbyCode];

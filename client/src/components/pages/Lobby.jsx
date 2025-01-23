@@ -4,6 +4,7 @@ import { Navigate } from "react-router-dom";
 import "../../utilities.css";
 import "../../assets/font.css";
 import "./Lobby.css";
+import waitingSign from "../../assets/320signs_2.png";
 import SettingsDisplay from "../modules/SettingsDisplay.jsx";
 import LobbyUserList from "../modules/LobbyUserList.jsx";
 import StartGameButton from "../modules/StartGameButton.jsx";
@@ -30,6 +31,7 @@ const Lobby = () => {
   const [lobbyState, setLobbyState] = useState("lobby");
   const [showAnimation, setShowAnimation] = useState(false);
   const [reverseAnimation, setReverseAnimation] = useState(false);
+  const [showButton, setShowButton] = useState(false);
 
   const cloudImages = [
     { bottom: firstBottomLeft, top: firstTopRight },
@@ -48,6 +50,10 @@ const Lobby = () => {
       setU_id(String(user._id));
       // Join the socket room for this lobby
       socket.emit("join socket", { lobbyCode: lobbyId });
+    });
+    get("/api/isLobbyOwner", { lobbyCode: lobbyId }).then((res) => {
+      console.log(res);
+      setShowButton(res);
     });
   }, []);
 
@@ -147,14 +153,29 @@ const Lobby = () => {
                 <SettingsDisplay lobbyCode={lobbyId} />
               </div>
             </div>
-            <div className="start-button-container">
-              <StartGameButton
-                lobbyCode={lobbyId}
-                setLobbyState={setLobbyState}
-                lobbyState={lobbyState}
-                startGameRequest={startGameRequest}
-              />
-            </div>
+            {showButton && (
+              <div className="start-button-container">
+                <StartGameButton
+                  lobbyCode={lobbyId}
+                  setLobbyState={setLobbyState}
+                  lobbyState={lobbyState}
+                  startGameRequest={startGameRequest}
+                />
+              </div>
+            )}
+            {!showButton && (
+              <div className="waiting-button">
+                <div className="waiting-sign-container">
+                  <img src={waitingSign} className="waiting-sign" alt="Wooden Sign" />
+                  <h2 className="waiting-sign-text">
+                    Waiting
+                    <span className="dot-1">.</span>
+                    <span className="dot-2">.</span>
+                    <span className="dot-3">.</span>
+                  </h2>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
