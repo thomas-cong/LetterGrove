@@ -6,6 +6,7 @@ import WordInput from "./WordInput";
 import Counter from "./Counter";
 import PointsCounter from "./PointsCounter";
 import Rankings from "./Rankings";
+import Log from "./Log";
 import "./GameComponent.css";
 
 const GameComponent = (props) => {
@@ -88,7 +89,7 @@ const GameComponent = (props) => {
       setGameState((prevState) => ({
         ...prevState,
         rankings: info.updatedRankings,
-        log: [...prevState.log, info.logMessage],
+        log: [...prevState.log, ...info.logMessages],
       }));
     };
 
@@ -140,8 +141,7 @@ const GameComponent = (props) => {
       <Counter />
       <PointsCounter points={gameState.points} />
       <Rankings rankings={gameState.rankings} currentUserId={props.userId} />
-      {/* <Log log={gameState.log} />
-       */}
+      <Log log={gameState.log} />
     </div>
   );
 };

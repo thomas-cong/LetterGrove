@@ -1,0 +1,52 @@
+.log-container {
+  width: 30%;
+  padding: 16px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 16px 0;
+}
+
+.log-container h3 {
+  margin: 0 0 16px 0;
+  color: #333;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.log-messages {
+  height: 200px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+/* Custom scrollbar styling */
+.log-messages::-webkit-scrollbar {
+  width: 8px;
+}
+
+.log-messages::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.log-messages::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.log-messages::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.log-message {
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+  color: #666;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.log-message:last-child {
+  border-bottom: none;
+}
