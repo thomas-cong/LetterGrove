@@ -2,6 +2,8 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { get, post } from "../../utilities";
 import { socket } from "../../client-socket";
+import PlayerDisplay from "../modules/PlayerDisplay.jsx";
+import testProfilePicture from "../../assets/TestingPFP.png";
 /**
  *  LobbyPlayerList is a component that represents a list of players in a lobby
  *
@@ -25,20 +27,11 @@ const LobbyUserList = (props) => {
     };
   }, []);
 
-  // useEffect(() => {
-  //   console.log("User list created:");
-  //   get("/api/usernames", { lobbyCode: props.lobbyCode }).then((players) => {
-  //     console.log("Players in lobby:", players);
-  //     setUsernameList(players);
-  //   });
-  // }, []);
   return (
     <div>
-      <ul>
-        {usernameList.map((username, index) => (
-          <li key={index}>{username}</li>
-        ))}
-      </ul>
+      {usernameList.map((username, index) => (
+        <PlayerDisplay key={index} name={username} profilePicture={testProfilePicture} />
+      ))}
     </div>
   );
 };
