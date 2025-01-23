@@ -1,13 +1,13 @@
 @font-face {
   font-family: "04B_03__";
-  src: url("./04B_03__.ttf") format("truetype");
+  src: url("04B_03__.TTF") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: "Daydream";
-  src: url("./Daydream.ttf") format("truetype");
+  src: url("Daydream.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
@@ -23,9 +23,28 @@
 }
 
 /* Proportionally scale headings */
-h1 { font-size: 48px; }
-h2 { font-size: 42px; }
-h3 { font-size: 36px; }
-h4 { font-size: 32px; }
-h5 { font-size: 28px; }
-h6 { font-size: 24px; }
+h1 {
+  font-size: 48px;
+}
+h2 {
+  font-size: 42px;
+}
+h3 {
+  font-size: 36px;
+}
+h4 {
+  font-size: 32px;
+}
+h5 {
+  font-size: 28px;
+}
+h6 {
+  font-size: 24px;
+}
+
+/* Global image settings for pixel-perfect rendering */
+img {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  -ms-interpolation-mode: nearest-neighbor;
+}
