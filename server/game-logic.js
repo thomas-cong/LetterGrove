@@ -179,6 +179,8 @@ const randomlyGenerateBoard = (props) => {
   let CROP_COUNTS;
   let POWERUP_COUNTS;
   const ARRAY_SIZE = 15;
+  const sameBoard = props.sameBoard;
+  const playerCount = props.playerCount;
 
   if (DIFFICULTY === "easy") {
     LETTER_COUNT = 25;
@@ -238,7 +240,16 @@ const randomlyGenerateBoard = (props) => {
     );
 
   // Place first letter in top-left corner
-  const firstLetter = generateRandomLetter();
+  const generateStartingLetter = () => {
+    while (true) {
+      const letter = generateRandomLetter();
+      if (letter !== "J" && letter !== "Q" && letter !== "X" && letter !== "Y" && letter !== "Z") {
+        return letter;
+      }
+    }
+  };
+
+  const firstLetter = generateStartingLetter();
   board[0][0] = {
     letter: firstLetter,
     powerup: null,
@@ -248,8 +259,49 @@ const randomlyGenerateBoard = (props) => {
     visited: true,
   };
 
+  if (playerCount > 1 && sameBoard) {
+    const secondLetter = generateStartingLetter();
+    board[14][14] = {
+      letter: secondLetter,
+      powerup: null,
+      crop: null,
+      default: true,
+      value: letterValues[secondLetter],
+      visited: true,
+    };
+  }
+
+  if (playerCount > 2 && sameBoard) {
+    const thirdLetter = generateStartingLetter();
+    board[14][0] = {
+      letter: thirdLetter,
+      powerup: null,
+      crop: null,
+      default: true,
+      value: letterValues[thirdLetter],
+      visited: true,
+    };
+  }
+
+  if (playerCount > 3 && sameBoard) {
+    const fourthLetter = generateStartingLetter();
+    board[0][14] = {
+      letter: fourthLetter,
+      powerup: null,
+      crop: null,
+      default: true,
+      value: letterValues[fourthLetter],
+      visited: true,
+    };
+  }
+
   // Place remaining letters
-  let remainingLetters = LETTER_COUNT - 1;
+  let remainingLetters;
+  if (!sameBoard) {
+    remainingLetters = LETTER_COUNT - 1;
+  } else {
+    remainingLetters = LETTER_COUNT - playerCount;
+  }
   const generatePosition = createRandomPositionGenerator(ARRAY_SIZE);
   let attempts = 0;
   const MAX_ATTEMPTS = 1000;

@@ -52,9 +52,9 @@ const sendUserInitialGame = (userId, lobbyCode) => {
     powerups: gameLogic.games[lobbyCode].userGameStates[userId].powerups,
     counter: gameLogic.games[lobbyCode].counter,
     rankings: gameLogic.games[lobbyCode].rankings,
-    log: gameLogic.games[lobbyCode].log,
+    turn: gameLogic.games[lobbyCode].turn,
+    turnOrder: gameLogic.games[lobbyCode].turnOrder,
   };
-  console.log("POOP " + game.board);
   socket.emit("initial game", game);
 };
 
@@ -62,36 +62,93 @@ const initiateGame = (props) => {
   const lobbyCode = props.lobbyCode;
   const gameInfo = props.gameInfo;
   const players = gameInfo.players;
+  const sameBoard = gameInfo.sameBoard;
   console.log(gameInfo);
 
   board = gameLogic.randomlyGenerateBoard({
     difficulty: gameInfo.difficulty,
+    sameBoard: sameBoard,
+    playerCount: players.length,
   });
-  game = {
-    userGameStates: {},
-    players: players,
-    gameStatus: "waiting",
-    stepsRemaining: gameInfo.steps,
-    rankings: [],
-    log: [],
-    pointsToWin: 100,
-  };
+  let turnOrder;
+  let turn;
+  if (sameBoard) {
+    turnOrder = [];
+    for (const userId in players) {
+      turnOrder.push(userId);
+    }
+    turn = turnOrder[0];
+  }
+  if (sameBoard) {
+    game = {
+      sameBoard: sameBoard,
+      userGameStates: {},
+      players: players,
+      gameStatus: "waiting",
+      stepsRemaining: gameInfo.steps,
+      rankings: [],
+      pointsToWin: 100,
+      turnOrder: turnOrder,
+      turn: turn,
+    };
+  } else {
+    game = {
+      sameBoard: sameBoard,
+      userGameStates: {},
+      players: players,
+      gameStatus: "waiting",
+      stepsRemaining: gameInfo.steps,
+      rankings: [],
+      pointsToWin: 100,
+    }
+  }
+
+  let startingEndpoints;
+  if (sameBoard) {
+    if (players.length === 1) {
+      startingEndpoints = [[0, 0]];
+    } else if (players.length === 2) {
+      startingEndpoints = [[0, 0], [14, 14]];
+    } else if (players.length === 3) {
+      startingEndpoints = [[0, 0], [0, 14], [14, 14]];
+    } else if (players.length === 4) {
+      startingEndpoints = [[0, 0], [0, 14], [14, 14], [14, 0]];
+    }
+  }
+
   for (const userId in players) {
     const username = players[userId];
-    game.userGameStates[userId] = {
-      username: username,
-      board: gameLogic.deepCopyBoard(board),
-      points: 0,
-      powerups: {
-        spade: 0,
-        water: 0,
-        shovel: 0,
-      },
-      endpoints: [[0, 0]],
-      letters_collected: 0,
-      words_formed: 0,
-      powerups_used: 0,
-    };
+    if (sameBoard) {
+      game.userGameStates[userId] = {
+        username: username,
+        board: board,
+        points: 0,
+        powerups: {
+          spade: 0,
+          water: 0,
+          shovel: 0,
+        },
+        endpoints: startingEndpoints.pop(),
+        letters_collected: 0,
+        words_formed: 0,
+        powerups_used: 0,
+      };
+    } else {
+      game.userGameStates[userId] = {
+        username: username,
+        board: gameLogic.deepCopyBoard(board),
+        points: 0,
+        powerups: {
+          spade: 0,
+          water: 0,
+          shovel: 0,
+        },
+        endpoints: [[0, 0]],
+        letters_collected: 0,
+        words_formed: 0,
+        powerups_used: 0,
+      };
+    }
   }
   for (const userId in players) {
     game.rankings.push({
@@ -111,6 +168,7 @@ const initiateGame = (props) => {
     console.log(userId);
     sendUserInitialGame(userId, lobbyCode);
   }
+  io.in(lobbyCode).emit("turn update", { turn: game.turn });
 };
 
 const startRunningGame = (props) => {
@@ -212,6 +270,18 @@ const updateLobbyUserList = (props) => {
   console.log("update lobby user list emitted");
 };
 
+const sendBoardState = (userId, lobbyCode) => {
+  const socket = getSocketFromUserID(userId);
+  if (!socket) return;
+  socket.emit("board update", openLobbies[lobbyCode].board);
+}
+
+const passTurn = (lobbyCode) => {
+  const game = gameLogic.games[lobbyCode];
+  game.turn = game.turnOrder[(game.turnOrder.indexOf(game.turn) + 1) % game.turnOrder.length];
+  io.in(lobbyCode).emit("turn update", { turn: game.turn });
+}
+
 module.exports = {
   init: (http) => {
     io = require("socket.io")(http);
@@ -261,6 +331,7 @@ module.exports = {
         console.log("confirm word");
         const user = getUserFromSocketID(socket.id);
         const game = gameLogic.games[props.lobbyCode];
+        
 
         // check that game is still going on
         if (!game || game.gameStatus !== "active") return;
@@ -279,6 +350,11 @@ module.exports = {
            * @param {Array} localUpdate.endpoints - Updated valid endpoints for next word
            */
           socket.emit("user update", output.localUpdate);
+          if (game.sameBoard) {
+            for (const userId in game.players) {
+              sendBoardState(userId, props.lobbyCode);
+            }
+          }
           /**
            * Emits updates that affect all players in the game
            * @param {Object} globalUpdate
@@ -286,6 +362,9 @@ module.exports = {
            * @param {Array<{playerId: string, username: string, score: number}>} globalUpdate.updatedRankings - Current rankings sorted by score
            */
           io.to(props.lobbyCode).emit("global update", output.globalUpdate);
+          if (game.sameBoard) {
+            passTurn(props.lobbyCode);
+          }
           // check if game is over
           if (gameLogic.games[props.lobbyCode].gameStatus === "ended") {
             let winnerMessage = output.globalUpdate.updatedRankings[0].username + " wins!";
