@@ -6,6 +6,7 @@ import WordInput from "./WordInput";
 import Counter from "./Counter";
 import PointsCounter from "./PointsCounter";
 import Rankings from "./Rankings";
+import Log from "./Log";
 import "./GameComponent.css";
 
 const GameComponent = (props) => {
@@ -65,7 +66,6 @@ const GameComponent = (props) => {
     // Initial game state
     const handleInitialGame = (game) => {
       setGameState(game);
-      console.log("POOP " + game.board);
     };
 
     // User-specific updates (letters, points, endpoints)
@@ -88,7 +88,7 @@ const GameComponent = (props) => {
       setGameState((prevState) => ({
         ...prevState,
         rankings: info.updatedRankings,
-        log: [...prevState.log, info.logMessage],
+        log: [...prevState.log, ...info.logMessages],
       }));
     };
 
@@ -153,6 +153,9 @@ const GameComponent = (props) => {
       <div className="gamecomprightcontainer">
         <div className="gamecomprankings">
           <Rankings rankings={gameState.rankings} currentUserId={props.userId} />
+        </div>
+        <div className="gamecomplog">
+          <Log log={gameState.log} />
         </div>
       </div>
     </div>

@@ -452,7 +452,10 @@ const confirmWord = (userId, props) => {
     currentX += dx;
     currentY += dy;
   }
-  let logMessage = userGameState.username + " collected " + pointsGained + " points";
+  let logMessages = []
+  if (pointsGained > 0) {
+    logMessages.push(userGameState.username + " collected " + pointsGained + " points");
+  };
   for (const rankInfo of game.rankings) {
     if (rankInfo.playerId === userId) {
       rankInfo.score = userGameState.points;
@@ -475,7 +478,7 @@ const confirmWord = (userId, props) => {
       endpoints: userGameState.endpoints,
     },
     globalUpdate: {
-      logMessage: logMessage,
+      logMessages: logMessages,
       updatedRankings: game.rankings,
     },
   };

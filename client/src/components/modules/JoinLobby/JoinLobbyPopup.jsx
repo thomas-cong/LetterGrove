@@ -24,7 +24,7 @@ const JoinLobbyPopup = (props) => {
 
   return (
     <div>
-      {showAlert && <AlertBox message={alertMessage} setShowAlert={setShowAlert} />}
+      {showAlert && <AlertBox message={alertMessage} setShowAlert={setShowAlert} timeout={1500} />}
 
       <div className="mainboard">
         <img src={Closebutton} onClick={() => props.hideJoin()} className="closeButton" />

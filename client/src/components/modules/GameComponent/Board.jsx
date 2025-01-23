@@ -23,6 +23,7 @@ import "./Board.css";
  * @param {Function} params.setSelectedX - Updates selected X coordinate
  * @param {Function} params.setSelectedY - Updates selected Y coordinate
  * @param {String} params.suggestedWord - Currently inputted word
+ * @param {Function} params.setSuggestions - Function to update suggestions state
  * @returns {Array<JSX.Element>} Array of row elements containing tiles
  */
 const renderBoard = (params) => {
@@ -49,6 +50,7 @@ const renderBoard = (params) => {
           setSelectedX={params.setSelectedX}
           setSelectedY={params.setSelectedY}
           suggestedWord={params.suggestedWord}
+          setSuggestions={params.setSuggestions}
         />
       );
     }
@@ -102,6 +104,7 @@ const Board = (props) => {
       setSelectedX: props.setSelectedX,
       setSelectedY: props.setSelectedY,
       suggestedWord: "",
+      setSuggestions: props.setSuggestions,
     })
   );
 
@@ -136,6 +139,7 @@ const Board = (props) => {
         setSelectedX: props.setSelectedX,
         setSelectedY: props.setSelectedY,
         suggestedWord: "",
+        setSuggestions: props.setSuggestions,
       })
     );
   }, [props.board]);
@@ -154,8 +158,11 @@ const Board = (props) => {
       // Update board with suggested letters
       props.suggestions.forEach((suggestion) => {
         suggestion.forEach(([x, y, letter], index) => {
-          if (boardCopy[y][x].letter === "") {
-            boardCopy[y][x].letter = letter;
+          // If it's an empty tile or matches the suggested letter
+          if (boardCopy[y][x].letter === "" || boardCopy[y][x].letter === letter) {
+            if (boardCopy[y][x].letter === "") {
+              boardCopy[y][x].letter = letter;
+            }
             boardCopy[y][x].isSuggestion = true;
             boardCopy[y][x].isSuggestionEnd = index === suggestion.length - 1;
           }
@@ -174,6 +181,7 @@ const Board = (props) => {
           setSelectedX: props.setSelectedX,
           setSelectedY: props.setSelectedY,
           suggestedWord: suggestedWord,
+          setSuggestions: props.setSuggestions,
         })
       );
     } else {
@@ -189,6 +197,7 @@ const Board = (props) => {
           setSelectedX: props.setSelectedX,
           setSelectedY: props.setSelectedY,
           suggestedWord: "",
+          setSuggestions: props.setSuggestions,
         })
       );
     }
