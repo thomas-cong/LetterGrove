@@ -109,49 +109,53 @@ const GameComponent = (props) => {
     updateLetters({ lettersUpdated: lettersUpdated, board: gameState.board });
   }, [lettersUpdated]);
   return (
-    <>
-      <div className="gamecompboard">
-        <Board
-          board={gameState.board}
-          points={gameState.points}
-          username={gameState.username}
-          endpoints={endpoints}
-          endPointSelected={endPointSelected}
-          setEndPointSelected={setEndPointSelected}
-          selectedX={selectedX}
-          selectedY={selectedY}
-          setSelectedX={setSelectedX}
-          setSelectedY={setSelectedY}
-          lettersUpdated={lettersUpdated}
-          setLettersUpdated={setLettersUpdated}
-          setSuggestions={setSuggestions}
-          suggestions={suggestions}
-        />
+    <div className="gamecompcontainer">
+      <div className="gamecompleftcontainer">
+        <div className="gamecompboardcontainer">
+          <div className="gamecompboard">
+            <Board
+              board={gameState.board}
+              points={gameState.points}
+              username={gameState.username}
+              endpoints={endpoints}
+              endPointSelected={endPointSelected}
+              setEndPointSelected={setEndPointSelected}
+              selectedX={selectedX}
+              selectedY={selectedY}
+              setSelectedX={setSelectedX}
+              setSelectedY={setSelectedY}
+              lettersUpdated={lettersUpdated}
+              setLettersUpdated={setLettersUpdated}
+              setSuggestions={setSuggestions}
+              suggestions={suggestions}
+            />
+          </div>
+          <div className="gamecompwordinput">
+            <WordInput
+              word={word}
+              setWord={setWord}
+              selectedX={selectedX}
+              selectedY={selectedY}
+              endpointSelected={endPointSelected}
+              lobbyCode={props.lobbyCode}
+              board={gameState.board}
+              suggestions={suggestions}
+            />
+          </div>
+        </div>
+        <div className="gamecompcounter">
+          <Counter />
+        </div>
+        <div className="gamecomppoints">
+          <PointsCounter points={gameState.points} />
+        </div>
       </div>
-      <div className="gamecompwordinput">
-        <WordInput
-          word={word}
-          setWord={setWord}
-          selectedX={selectedX}
-          selectedY={selectedY}
-          endpointSelected={endPointSelected}
-          lobbyCode={props.lobbyCode}
-          board={gameState.board}
-          suggestions={suggestions}
-        />
+      <div className="gamecomprightcontainer">
+        <div className="gamecomprankings">
+          <Rankings rankings={gameState.rankings} currentUserId={props.userId} />
+        </div>
       </div>
-      <div className="gamecompcounter">
-        <Counter />
-      </div>
-      <div className="gamecomppoints">
-        <PointsCounter points={gameState.points} />
-        {/* <Log log={gameState.log} />
-        <Rankings rankings={gameState.rankings} /> */}
-      </div>
-      <div>
-        <Rankings rankings={gameState.rankings} currentUserId={props.userId} />
-      </div>
-    </>
+    </div>
   );
 };
 
