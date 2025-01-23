@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { socket } from "../../../client-socket.js";
 import ConfirmImage from "../../../assets/Confirm.png";
+import AlertBox from "../AlertBox/AlertBox";
 
 /**
  * WordInput Component - Handles word input and submission for the game
@@ -16,6 +17,8 @@ import ConfirmImage from "../../../assets/Confirm.png";
  */
 const WordInput = (props) => {
   const [placeholder, setPlaceholder] = useState("Enter a word");
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
 
   /**
    * Handles word submission when Enter Button is pressed
@@ -25,7 +28,8 @@ const WordInput = (props) => {
   const handleEnter = () => {
     console.log(props.endpointSelected);
     if (!props.endpointSelected) {
-      alert("Select an endpoint first...");
+      setAlertMessage("Select an endpoint first...");
+      setShowAlert(true);
       return;
     }
 
@@ -52,25 +56,28 @@ const WordInput = (props) => {
   }, [props.endpointSelected]);
 
   return (
-    <div className="word-input-container">
-      <input
-        type="text"
-        value={props.word}
-        onChange={(e) => props.setWord(e.target.value.toUpperCase())}
-        placeholder={placeholder}
-        disabled={props.suggestions.length > 0}
-        onKeyPress={(event) => {
-          if (event.key === "Enter") {
-            handleEnter();
-          }
-        }}
-      />
-      <button
-        onClick={handleEnter}
-        disabled={!props.endpointSelected || props.suggestions.length > 0}
-      >
-        <img src={ConfirmImage} alt="Confirm" />
-      </button>
+    <div>
+      <div>
+        {showAlert && (
+          <AlertBox message={alertMessage} setShowAlert={setShowAlert} timeout={1500} />
+        )}
+      </div>
+      <div className="word-input-container">
+        <input
+          type="text"
+          value={props.word}
+          onChange={(e) => props.setWord(e.target.value.toUpperCase())}
+          placeholder={placeholder}
+          onKeyPress={(event) => {
+            if (event.key === "Enter") {
+              handleEnter();
+            }
+          }}
+        />
+        <button onClick={handleEnter}>
+          <img src={ConfirmImage} alt="Confirm" />
+        </button>
+      </div>
     </div>
   );
 };

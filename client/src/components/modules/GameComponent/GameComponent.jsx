@@ -66,7 +66,6 @@ const GameComponent = (props) => {
     // Initial game state
     const handleInitialGame = (game) => {
       setGameState(game);
-      console.log("POOP " + game.board);
     };
 
     // User-specific updates (letters, points, endpoints)

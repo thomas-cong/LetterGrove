@@ -198,22 +198,53 @@ const getCropImage = (cropType) => {
  * @param {Function} props.setEndPointSelected - Updates endpoint selection state
  * @param {Function} props.setSelectedX - Updates selected X coordinate
  * @param {Function} props.setSelectedY - Updates selected Y coordinate
- * @param {string} props.suggestedWord - Currently inputted word
+ * @param {string} props.suggestedWord - Currently inputted words
+ * @param {Function} props.setSuggestions - Function to update suggestions state
  */
 const Tile = (props) => {
+  const isSelected =
+    props.tileX === props.selectedX && props.tileY === props.selectedY && props.isEndpoint;
   let { lobbyId } = useParams();
   // Animation state for letter appearance
   const [isAnimating, setIsAnimating] = useState(true);
+
+  // Add keyboard event listener for selected tile
+  useEffect(() => {
+    const handleEscape = (event) => {
+      if (event.key === "Escape" && isSelected && props.suggestedWord.length > 0) {
+        props.setSuggestions([]);
+        props.setEndPointSelected(false);
+      }
+    };
+
+    if (isSelected) {
+      window.addEventListener("keydown", handleEscape);
+      return () => window.removeEventListener("keydown", handleEscape);
+    }
+  }, [isSelected, props.suggestedWord, props.setSuggestions, props.setEndPointSelected]);
+
+  const cancelSuggestions = () => {
+    if (!isSelected || props.suggestedWord.length === 0) {
+      return;
+    } else {
+      props.setSuggestions([]);
+      props.setEndPointSelected(false);
+    }
+  };
 
   /**
    * Handles tile clicks to check if it's a valid endpoint
    * Updates game state with selected coordinates if valid
    * @param {Object} params Parameters for endpoint checking
    * @param {boolean} params.isEndpoint Whether this tile is a valid endpoint
-   * @param {number} params.x X coordinate of clicked tile
-   * @param {number} params.y Y coordinate of clicked tile
+   * @param {number} params.tileX X coordinate of clicked tile
+   * @param {number} params.tileY Y coordinate of clicked tile
+   * @param {boolean} params.isSuggestionEnd Whether this tile is the end of a suggestion
    */
+
   const checkEndpoint = (params) => {
+    cancelSuggestions();
+    console.log("tile info:", params);
     if (params.isEndpoint) {
       console.log("Endpoint found at:", params.tileX, params.tileY);
       props.setEndPointSelected(true);
