@@ -139,10 +139,8 @@ router.post("/joinLobby", (req, res) => {
     username: req.body.username,
   });
 
-  if (openLobbies[lobbyCode]) {
+  if (lobbyCode in openLobbies) {
     openLobbies[lobbyCode].players[req.user._id] = username;
-    console.log("Lobby with ID " + lobbyCode + " joined");
-    console.log("Current lobbies:", openLobbies);
     socketManager.joinSocket({ lobbyCode: lobbyCode });
     res.send({ message: "Lobby Joined" });
   } else {
