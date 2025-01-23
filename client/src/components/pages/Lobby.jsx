@@ -146,7 +146,7 @@ const Lobby = () => {
             <div className="lobby-sections">
               <div className="lobby-section">
                 <div style={{ color: "rgb(94, 129, 255)", fontSize: "40px" }}>Players</div>
-                <LobbyUserList lobbyCode={lobbyId} />
+                <LobbyUserList lobbyCode={lobbyId} userId={u_id} />
               </div>
               <div className="lobby-section">
                 <div style={{ color: "rgb(94, 129, 255)", fontSize: "40px" }}>Game Settings</div>
@@ -190,6 +190,7 @@ const Lobby = () => {
             lobbyCode={lobbyId}
             setLobbyState={setLobbyState}
             lobbyState={lobbyState}
+            userId={u_id}
           />
         </div>
       )}

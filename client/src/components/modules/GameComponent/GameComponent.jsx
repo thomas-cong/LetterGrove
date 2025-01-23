@@ -5,6 +5,7 @@ import Board from "./Board";
 import WordInput from "./WordInput";
 import Counter from "./Counter";
 import PointsCounter from "./PointsCounter";
+import Rankings from "./Rankings";
 import "./GameComponent.css";
 
 const GameComponent = (props) => {
@@ -83,6 +84,7 @@ const GameComponent = (props) => {
 
     // Global game updates (rankings, log messages)
     const handleGlobalUpdate = (info) => {
+      console.log("Global update:", info);
       setGameState((prevState) => ({
         ...prevState,
         rankings: info.updatedRankings,
@@ -145,6 +147,9 @@ const GameComponent = (props) => {
         <PointsCounter points={gameState.points} />
         {/* <Log log={gameState.log} />
         <Rankings rankings={gameState.rankings} /> */}
+      </div>
+      <div>
+        <Rankings rankings={gameState.rankings} currentUserId={props.userId} />
       </div>
     </>
   );
