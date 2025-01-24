@@ -12,7 +12,7 @@ import "./GameComponent.css";
 const GameComponent = (props) => {
   const [word, setWord] = useState("");
   const [suggestions, setSuggestions] = useState([]);
-
+  const [isTurn, setIsTurn] = useState(false);
   // Game state management
   const [endPointSelected, setEndPointSelected] = useState(true);
   const [selectedX, setSelectedX] = useState(0);
@@ -92,16 +92,24 @@ const GameComponent = (props) => {
       }));
     };
 
+    const handleTurnUpdate = (info) => {};
+
+    const handleBoardUpdate = (info) => {};
+
     // Set up listeners
     socket.on("initial game", handleInitialGame);
     socket.on("user update", handleUserUpdate);
     socket.on("global update", handleGlobalUpdate);
+    socket.on("turn update", handleTurnUpdate);
+    socket.on("board update", handleBoardUpdate);
+    // Clean up listeners on unmount
 
     // Cleanup listeners on unmount
     return () => {
       socket.off("initial game", handleInitialGame);
       socket.off("user update", handleUserUpdate);
       socket.off("global update", handleGlobalUpdate);
+      socket.off("turn update", handleTurnUpdate);
     };
   }, []); // Empty dependency array since we want to set up listeners only once
 
