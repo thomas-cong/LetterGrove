@@ -35,7 +35,7 @@ const Counter = () => {
 
   return (
     <div className="counter">
-      <span className="counter-label">{mode} Remaining:</span>
+      <span className="counter-label">{mode} Left: </span>
       <span className="counter-value">{steps}</span>
     </div>
   );
