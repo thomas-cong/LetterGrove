@@ -35,19 +35,40 @@
 .tile-background {
   z-index: 2;
   border-radius: 3px;
+  transition: opacity 0.3s ease-out;
+}
+
+.tile-background.fading {
+  opacity: 0;
 }
 
 .letter-tile {
   z-index: 3;
-  transition: transform 0.2s;
+  transition: all 0.3s ease-out;
 }
 
 .letter-tile.falling {
   animation: fallIn 0.5s ease-in;
 }
 
+.crop-tile {
+  z-index: 3;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.3));
+  animation: smoothPulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
 .crop-image {
   z-index: 3;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.3));
+  animation: smoothPulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.crop-image.falling {
+  animation: fallIn 0.5s ease-in;
+}
+
+.crop-image:not(.falling) {
+  animation: smoothPulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 @keyframes fallIn {
@@ -64,6 +85,21 @@
   100% {
     transform: translateY(0) scale(1);
     opacity: 1;
+  }
+}
+
+@keyframes smoothPulse {
+  0% {
+    transform: scale(1) translateY(0);
+    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.3));
+  }
+  50% {
+    transform: scale(1.18) translateY(-6px);
+    filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.4));
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.3));
   }
 }
 

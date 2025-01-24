@@ -78,10 +78,10 @@ const letterValues = {
 
 // Point values for crop items
 const cropValues = {
-  carrot: 2,
-  tomato: 5,
-  blueberry: 10,
-  pumpkin: 20,
+  cherry: 2,
+  grape: 5,
+  orange: 10,
+  crate: 20,
 };
 
 /*
@@ -174,7 +174,7 @@ const hasAdjacentLetter = (row, col, board, ARRAY_SIZE) => {
 const randomlyGenerateBoard = (props) => {
   const DIFFICULTY = props.difficulty;
   let LETTER_COUNT;
-  const CROPS = ["carrot", "tomato", "blueberry", "pumpkin"];
+  const CROPS = ["cherry", "grape", "orange", "crate"];
   const POWERUPS = ["spade", "water", "shovel"];
   let CROP_COUNTS;
   let POWERUP_COUNTS;
@@ -185,10 +185,10 @@ const randomlyGenerateBoard = (props) => {
   if (DIFFICULTY === "easy") {
     LETTER_COUNT = 25;
     CROP_COUNTS = {
-      carrot: 2,
-      tomato: 2,
-      blueberry: 2,
-      pumpkin: 2,
+      cherry: 2,
+      grape: 2,
+      orange: 2,
+      crate: 2,
     };
     POWERUP_COUNTS = {
       spade: 1,
@@ -198,10 +198,10 @@ const randomlyGenerateBoard = (props) => {
   } else if (DIFFICULTY === "medium") {
     LETTER_COUNT = 25;
     CROP_COUNTS = {
-      carrot: 1,
-      tomato: 1,
-      blueberry: 1,
-      pumpkin: 1,
+      cherry: 1,
+      grape: 1,
+      orange: 1,
+      crate: 1,
     };
     POWERUP_COUNTS = {
       spade: 1,
@@ -211,10 +211,10 @@ const randomlyGenerateBoard = (props) => {
   } else if (DIFFICULTY === "hard") {
     LETTER_COUNT = 35;
     CROP_COUNTS = {
-      carrot: 1,
-      tomato: 1,
-      blueberry: 1,
-      pumpkin: 1,
+      cherry: 1,
+      grape: 1,
+      orange: 1,
+      crate: 1,
     };
     POWERUP_COUNTS = {
       spade: 1,
@@ -451,10 +451,10 @@ const confirmWord = (userId, props) => {
   let currentX = x;
   let currentY = y;
   let cropsCollected = {
-    carrot: 0,
-    tomato: 0,
-    blueberry: 0,
-    pumpkin: 0,
+    cherry: 0,
+    grape: 0,
+    orange: 0,
+    crate: 0,
   };
   let powerupsCollected = {
     spade: 0,
