@@ -198,7 +198,7 @@ const initiateGame = (props) => {
     console.log(userId);
     sendUserInitialGame(userId, lobbyCode);
   }
-  io.in(lobbyCode).emit("turn update", { turn: game.turn, username: game.players[game.turn].username });
+  io.in(lobbyCode).emit("turn update", { userId: game.turn, username: players[game.turn].username });
 };
 
 /**
