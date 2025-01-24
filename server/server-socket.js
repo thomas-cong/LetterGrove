@@ -198,7 +198,7 @@ const initiateGame = (props) => {
     console.log(userId);
     sendUserInitialGame(userId, lobbyCode);
   }
-  io.in(lobbyCode).emit("turn update", { turn: game.turn });
+  io.in(lobbyCode).emit("turn update", { turn: game.turn, username: game.players[game.turn].username });
 };
 
 /**
@@ -341,7 +341,7 @@ const sendBoardState = (userId, lobbyCode) => {
 const passTurn = (lobbyCode) => {
   const game = gameLogic.games[lobbyCode];
   game.turn = game.turnOrder[(game.turnOrder.indexOf(game.turn) + 1) % game.turnOrder.length];
-  io.in(lobbyCode).emit("turn update", { turn: game.turn });
+  io.in(lobbyCode).emit("turn update", { userId: game.turn, username: game.players[game.turn].username });
 }
 
 module.exports = {
