@@ -108,6 +108,34 @@ const GameComponent = (props) => {
   useEffect(() => {
     updateLetters({ lettersUpdated: lettersUpdated, board: gameState.board });
   }, [lettersUpdated]);
+
+  // Add resize handler for board scaling
+  useEffect(() => {
+    const updateBoardScale = () => {
+      const container = document.querySelector(".gamecompleftcontainer");
+      const board = document.querySelector(".gamecompboard");
+      if (!container || !board) return;
+
+      const containerWidth = container.clientWidth * 0.9; // Leave some padding
+      const containerHeight = container.clientHeight * 0.6; // Leave space for other elements
+      const boardWidth = board.scrollWidth;
+      const boardHeight = board.scrollHeight;
+
+      const widthScale = containerWidth / boardWidth;
+      const heightScale = containerHeight / boardHeight;
+      const scale = Math.min(widthScale, heightScale, 1); // Never scale up
+
+      board.style.setProperty("--board-scale", scale);
+    };
+
+    // Initial calculation
+    updateBoardScale();
+
+    // Update on window resize
+    window.addEventListener("resize", updateBoardScale);
+    return () => window.removeEventListener("resize", updateBoardScale);
+  }, [gameState.board]); // Recalculate when board changes
+
   return (
     <div className="gamecompcontainer">
       <div className="gamecompleftcontainer">
