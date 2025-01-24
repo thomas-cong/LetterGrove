@@ -5,12 +5,15 @@
 }
 
 .word-input-container {
-  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  flex-wrap: nowrap;
 }
 
 .word-input-container input {
-  width: max(24vh, 24vw);
-  max-width: 200px;
   padding: clamp(6px, 0.8vw, 8px);
   border-radius: 4px;
   border: 1px solid #ccc;
@@ -19,12 +22,12 @@
 
 .confirm-button {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  /* align-items: center;
+  justify-content: center; */
   cursor: pointer;
   padding: clamp(3px, 0.4vw, 4px);
   border-radius: 4px;
-  transition: background-color 0.2s ease;
+  /* transition: background-color 0.2s ease; */
   width: clamp(24px, 3vw, 32px);
   height: clamp(24px, 3vw, 32px);
   flex-shrink: 0; /* Prevent button from shrinking */

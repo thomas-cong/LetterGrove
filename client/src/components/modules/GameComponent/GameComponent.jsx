@@ -168,8 +168,9 @@ const GameComponent = (props) => {
               setSuggestions={setSuggestions}
               suggestions={suggestions}
             />
-          </div>
-          <div className="gamecompwordinput">
+            </div>
+          {/* <div className="gamecompbottominfo"> */}
+            <div className="gamecompwordinput">
             <WordInput
               word={word}
               setWord={setWord}
@@ -181,21 +182,22 @@ const GameComponent = (props) => {
               suggestions={suggestions}
             />
           </div>
-        </div>
-        <div className="gamecompcounter">
-          <Counter />
-        </div>
-        <div className="gamecomppoints">
-          <PointsCounter points={gameState.points} />
-        </div>
+          <div className="gamecompcounter">
+              <Counter />
+            </div>
+      {/* </div> */}
+      <div className="gamecomppoints">
+        <PointsCounter points={gameState.points} />
       </div>
-      <div className="gamecomprightcontainer">
-        <div className="gamecomprankings">
-          <Rankings rankings={gameState.rankings} currentUserId={props.userId} />
-        </div>
-        <div className="gamecomplog">
-          <Log log={gameState.log} />
-        </div>
+      </div>
+    </div>
+    <div className="gamecomprightcontainer">
+      <div className="gamecomprankings">
+        <Rankings rankings={gameState.rankings} currentUserId={props.userId} />
+      </div>
+      <div className="gamecomplog">
+        <Log log={gameState.log} />
+      </div>
       </div>
     </div>
   );
