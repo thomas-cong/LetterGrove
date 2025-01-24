@@ -6,10 +6,10 @@ import { socket } from "../../../client-socket";
 import "./Tile.css";
 
 // Import crop tile images
-import blueberries from "../../../assets/Tiles/blueberries.png";
-import carrots from "../../../assets/Tiles/carrots.png";
-import pumpkin from "../../../assets/Tiles/pumpkin.png";
-import tomato from "../../../assets/Tiles/tomato.png";
+import cherry from "../../../assets/Tiles/cherry.png";
+import crate from "../../../assets/Tiles/fruitcrate.png";
+import orange from "../../../assets/Tiles/orange.png";
+import grape from "../../../assets/Tiles/grape.png";
 import grassTile from "../../../assets/Tiles/Grass_Tile_01.png";
 import nullTile from "../../../assets/Tiles/NullTile.png";
 
@@ -153,14 +153,14 @@ const getLetterTile = (letter, isDefault) => {
  */
 const getCropImage = (cropType) => {
   switch (cropType.toLowerCase()) {
-    case "carrot":
-      return carrots;
-    case "tomato":
-      return tomato;
-    case "blueberry":
-      return blueberries;
-    case "pumpkin":
-      return pumpkin;
+    case "cherry":
+      return cherry;
+    case "grape":
+      return grape;
+    case "orange":
+      return orange;
+    case "crate":
+      return crate;
     default:
       return null;
   }
@@ -244,6 +244,7 @@ const Tile = (props) => {
 
   const checkEndpoint = (params) => {
     cancelSuggestions();
+    console.log(!props.cell.letter || (props.cell.letter && props.cell.default));
     console.log("tile info:", params);
     if (params.isEndpoint) {
       console.log("Endpoint found at:", params.tileX, params.tileY);
@@ -277,6 +278,7 @@ const Tile = (props) => {
   // Reset animation when letter changes
   useEffect(() => {
     // If the tile is a suggestion, don't animate
+
     if (props.cell.isSuggestion) {
       setIsAnimating(false);
     } else {
@@ -294,7 +296,9 @@ const Tile = (props) => {
       } ${props.cell.isSuggestionEnd ? "suggestion-end" : ""}`}
     >
       <img src={grassTile} alt="grass" className="grass-background" />
-      {!props.cell.letter && <img src={nullTile} alt="null" className="tile-background" />}
+      {(!props.cell.letter || (props.cell.letter && props.cell.default)) && (
+        <img src={nullTile} alt="null" className="tile-background" />
+      )}
       {props.cell.letter && (
         <img
           src={getLetterTile(props.cell.letter, !props.cell.isSuggestion && props.cell.default)}
@@ -317,7 +321,9 @@ const Tile = (props) => {
         <img
           src={getCropImage(props.cell.crop)}
           alt={props.cell.crop}
-          className="crop-image"
+          className={`crop-tile ${props.cell.isSuggestion ? "suggestion-letter" : ""} ${
+            props.cell.isSuggestionEnd ? "suggestion-end-letter" : ""
+          }`}
           onClick={() =>
             checkEndpoint({
               isEndpoint: props.isEndpoint,
