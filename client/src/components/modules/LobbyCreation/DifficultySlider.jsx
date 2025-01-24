@@ -9,9 +9,10 @@ const DifficultySlider = (props) => {
   const [value, setValue] = React.useState(0);
   const difficultyLabels = ["easy", "medium", "hard"];
   const difficultyIcons = [easyShiba, mediumShiba, hardShiba];
-  
+  let newValue = 0;
+
   const handleSliderChange = (event) => {
-    const newValue = parseInt(event.target.value);
+    newValue = parseInt(event.target.value);
     setValue(newValue);
     console.log(difficultyLabels[newValue]);
     props.setGameSettings({
