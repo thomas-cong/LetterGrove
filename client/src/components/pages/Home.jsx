@@ -48,7 +48,7 @@ const Home = () => {
         </div>
       )}
       <div>
-        {userId ? (
+        {userId && !popupShowing ? (
           <div
             className="home-logoutbutton-container"
             onClick={() => {
@@ -60,11 +60,11 @@ const Home = () => {
               <div className="logouttext">Logout</div>
             </div>
           </div>
-        ) : (
+        ) : !userId ? (
           <div className="google-login-container">
             <GoogleLogin onSuccess={handleLogin} />
           </div>
-        )}
+        ) : null}
       </div>
     </div>
   );

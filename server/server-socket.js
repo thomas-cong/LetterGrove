@@ -1,18 +1,32 @@
+/**
+ * Server-side socket handling for the Letter Grove game
+ * Manages real-time game state, player connections, and game events
+ */
+
 const gameLogic = require("./game-logic");
 const { openLobbies } = require("./shared-state");
 const CompletedGame = require("./models/completed-game");
 const User = require("./models/user");
 
+// Socket.io instance
 let io;
 
+// Bidirectional mappings for user-socket relationships
 const userToSocketMap = {}; // maps user ID to socket object
 const socketToUserMap = {}; // maps socket ID to user object
 
+// Helper functions for user-socket management
 const getAllConnectedUsers = () => Object.values(socketToUserMap);
 const getSocketFromUserID = (userid) => userToSocketMap[userid];
 const getUserFromSocketID = (socketid) => socketToUserMap[socketid];
 const getSocketFromSocketID = (socketid) => io.sockets.sockets.get(socketid);
 
+/**
+ * Associates a user with their socket connection
+ * Handles cases where a user has multiple tabs open by forcing older connections to disconnect
+ * @param {Object} user - User object containing _id and other user data
+ * @param {Object} socket - Socket.io socket instance
+ */
 const addUser = (user, socket) => {
   const oldSocket = userToSocketMap[user._id];
   if (oldSocket && oldSocket.id !== socket.id) {
@@ -26,17 +40,21 @@ const addUser = (user, socket) => {
   socketToUserMap[socket.id] = user;
 };
 
+/**
+ * Removes user-socket associations when a user disconnects
+ * @param {Object} user - User object to remove
+ * @param {Object} socket - Socket.io socket instance to remove
+ */
 const removeUser = (user, socket) => {
   if (user) delete userToSocketMap[user._id];
   delete socketToUserMap[socket.id];
 };
 
 /**
- * Sends initial game state to a specific user in a lobby
+ * Sends the initial game state to a specific user when they join a game
+ * Includes board state, points, powerups, and other game-specific information
  * @param {string} userId - ID of the user to send game state to
- * @param {string} lobbyCode - Code of the lobby to get game state from
- * @returns {void}
- *
+ * @param {string} lobbyCode - Code of the lobby/game to get state from
  */
 const sendUserInitialGame = (userId, lobbyCode) => {
   const socket = userToSocketMap[userId];
@@ -58,6 +76,14 @@ const sendUserInitialGame = (userId, lobbyCode) => {
   socket.emit("initial game", game);
 };
 
+/**
+ * Initializes a new game instance with the specified settings
+ * Handles both single-board and multi-board game modes
+ * Sets up initial game state, player positions, and turn order
+ * @param {Object} props - Contains lobbyCode and gameInfo
+ * @param {string} props.lobbyCode - Unique identifier for the game
+ * @param {Object} props.gameInfo - Game configuration including players, difficulty, and board settings
+ */
 const initiateGame = (props) => {
   const lobbyCode = props.lobbyCode;
   const gameInfo = props.gameInfo;
@@ -171,6 +197,11 @@ const initiateGame = (props) => {
   io.in(lobbyCode).emit("turn update", { turn: game.turn });
 };
 
+/**
+ * Starts the game timer and handles game progression
+ * Decrements steps remaining and checks for game end conditions
+ * @param {Object} props - Contains lobbyCode and initial steps
+ */
 const startRunningGame = (props) => {
   const lobbyCode = props.lobbyCode;
   const game = gameLogic.games[lobbyCode];
@@ -198,6 +229,13 @@ const startRunningGame = (props) => {
   }, 1000);
 };
 
+/**
+ * Handles game end logic including:
+ * - Saving game results to database
+ * - Updating player statistics
+ * - Notifying all players of game end
+ * @param {Object} props - Contains lobbyCode and reason for game end
+ */
 const handleEndGame = (props) => {
   const lobbyCode = props.lobbyCode;
   const game = gameLogic.games[lobbyCode];
@@ -249,6 +287,11 @@ const handleEndGame = (props) => {
   });
 };
 
+/**
+ * Adds a user to a game room (socket.io room)
+ * Verifies user is authorized to join the specified lobby
+ * @param {Object} props - Contains lobbyCode and socketid
+ */
 const joinSocket = (props) => {
   const lobbyCode = props.lobbyCode;
   const user = getUserFromSocketID(props.socketid);
@@ -260,22 +303,42 @@ const joinSocket = (props) => {
   updateLobbyUserList({ lobbyCode: props.lobbyCode });
 };
 
+/**
+ * Notifies all players in a lobby that the game is transitioning from lobby to active state
+ * @param {Object} props - Contains lobbyCode
+ */
 const lobbyToGameTransition = (props) => {
   io.to(props.lobbyCode).emit("lobby to game transition");
   console.log("lobby game transition emitted");
 };
 
+/**
+ * Updates all players in a lobby with the current list of players
+ * Used when players join or leave the lobby
+ * @param {Object} props - Contains lobbyCode
+ */
 const updateLobbyUserList = (props) => {
   io.to(props.lobbyCode).emit("update lobby user list", openLobbies[props.lobbyCode].players);
   console.log("update lobby user list emitted");
 };
 
+/**
+ * Sends updated board state to a specific player
+ * Used in same-board mode when any player makes a move
+ * @param {string} userId - ID of user to update
+ * @param {string} lobbyCode - Code of the game
+ */
 const sendBoardState = (userId, lobbyCode) => {
   const socket = getSocketFromUserID(userId);
   if (!socket) return;
   socket.emit("board update", openLobbies[lobbyCode].board);
 }
 
+/**
+ * Advances the turn to the next player in turn order
+ * Used in same-board mode after a player completes their move
+ * @param {string} lobbyCode - Code of the game
+ */
 const passTurn = (lobbyCode) => {
   const game = gameLogic.games[lobbyCode];
   game.turn = game.turnOrder[(game.turnOrder.indexOf(game.turn) + 1) % game.turnOrder.length];
@@ -283,6 +346,11 @@ const passTurn = (lobbyCode) => {
 }
 
 module.exports = {
+  /**
+   * Initializes socket.io server and sets up event handlers
+   * Handles connection, disconnection, and game-specific events
+   * @param {Object} http - HTTP server instance
+   */
   init: (http) => {
     io = require("socket.io")(http);
     io.on("connection", (socket) => {
@@ -331,13 +399,12 @@ module.exports = {
         console.log("confirm word");
         const user = getUserFromSocketID(socket.id);
         const game = gameLogic.games[props.lobbyCode];
-        
 
         // check that game is still going on
         if (!game || game.gameStatus !== "active") return;
 
         let output;
-        if (user && game.players[user._id]) {
+        if (user && game.players[user._id] && game.turn === user._id) {
           output = gameLogic.confirmWord(user._id, props);
           /**
            * Emits updates specific to the current user

@@ -12,8 +12,8 @@ const StartLobbyButton = (props) => {
 
   const handleClick = () => {
     if (props.username === "") {
-      setAlertMessage("A username is required to create a lobby!");
-      setShowAlert(true);
+      props.setAlertMessage("A username is required to create a lobby!");
+      props.setShowAlert(true);
       return;
     }
     const gameSettings = {
@@ -55,7 +55,6 @@ const StartLobbyButton = (props) => {
 
   return (
     <div>
-      {showAlert && <AlertBox message={alertMessage} setShowAlert={setShowAlert} />}
       <div onClick={handleClick} className="start-lobby-container">
         <img src={shortSign} alt="Start Lobby" style={{ cursor: "pointer" }} />
         <h2 className="startlobbytext">Start Lobby</h2>
