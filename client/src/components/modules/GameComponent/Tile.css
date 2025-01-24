@@ -1,11 +1,18 @@
 .tile {
   position: relative;
-  width: 32px;
-  height: 32px;
+  width: calc(min(4vw, 5vh));
+  height: calc(min(4vw, 5vh));
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .tile {
+    width: calc(min(9vw, 5vh));
+    height: calc(min(9vw, 5vh));
+  }
 }
 
 .tile img {

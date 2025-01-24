@@ -1,7 +1,90 @@
-.gamecomponentboard {
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 80%;
-  height: auto;
+.gamecompcontainer {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100vh;
+}
+
+@media (max-width: 768px) {
+  .gamecompcontainer {
+    flex-direction: column;
+    height: auto;
+  }
+}
+
+.gamecompleftcontainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: red;
+  width: 50%;
+  height: 100vh;
+  padding: 2%;
+}
+
+@media (max-width: 768px) {
+  .gamecompleftcontainer {
+    width: 100%;
+    height: auto;
+    padding: 2%;
+  }
+}
+
+.gamecompboardcontainer {
+  position: relative;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.gamecompboard {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  height: fit-content;
+  transform-origin: center;
+  transform: scale(1);
+  transition: transform 0.2s ease;
+}
+
+@media (max-width: 768px) {
+  .gamecompboard {
+    transform: scale(0.9);
+  }
+}
+
+.gamecompwordinput {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  transform: translateY(calc(100% + 10px));
+}
+
+.gamecompcounter {
+  margin-top: 80px;
+}
+
+.gamecomppoints {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.gamecomprightcontainer {
+  display: flex;
+  flex-direction: column;
+  background-color: blue;
+  width: 50%;
+  height: 100vh;
+  padding: 2%;
+}
+
+@media (max-width: 768px) {
+  .gamecomprightcontainer {
+    width: 100%;
+    height: auto;
+    padding: 2%;
+  }
+}
+
+.gamecomprankings {
 }

@@ -31,18 +31,18 @@
   height: 100px;
   left: 50%;
   bottom: -20px;
-  transform: translateX(-50%) rotate(180deg) translateY(-100%);
+  transform: translateX(-50%) rotate(180deg) translateY(-40%);
   z-index: 2;
-  opacity: 0;
+  opacity: 1;
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.alert-box:hover img.confusion-shiba {
+/* .alert-box:hover img.confusion-shiba {
   transform: translateX(-50%) rotate(180deg) translateY(0);
   opacity: 1;
-}
+} */
 
-.alert-box img.close-button {
+/* .alert-box img.close-button {
   position: absolute;
   width: 40px;
   height: 40px;
@@ -51,15 +51,15 @@
   cursor: pointer;
   z-index: 2;
   transition: transform 0.2s;
-}
-
+} */
+/*
 .alert-box img.close-button:hover {
   transform: scale(1.1);
-}
+} */
 
 .alert-box p {
   position: relative;
-  color: white;
+  color: rgb(255, 185, 138);
   text-align: center;
   margin: 0;
   padding: 20px 40px;
@@ -77,14 +77,14 @@
     opacity: 0;
   }
   100% {
-    top: 20px;
+    top: -3%;
     opacity: 1;
   }
 }
 
 @keyframes slideUp {
   0% {
-    top: 20px;
+    top: -3%;
     opacity: 1;
   }
   100% {

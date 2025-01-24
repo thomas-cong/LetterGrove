@@ -12,7 +12,7 @@ const LobbyCreationPopup = (props) => {
 
   return (
     <>
-      {showAlert && <AlertBox message={alertMessage} setShowAlert={setShowAlert} timeout={1500} />}
+      {showAlert && <AlertBox message={alertMessage} setShowAlert={setShowAlert} timeout={2500} />}
 
       <div className="createdmainboard">
         <div className="content-wrapper">
