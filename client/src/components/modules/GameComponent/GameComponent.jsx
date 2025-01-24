@@ -114,26 +114,46 @@ const GameComponent = (props) => {
     const updateBoardScale = () => {
       const container = document.querySelector(".gamecompleftcontainer");
       const board = document.querySelector(".gamecompboard");
-      if (!container || !board) return;
+      const wordInput = document.querySelector(".gamecompwordinput");
+      const counter = document.querySelector(".gamecompcounter");
+      if (!container || !board || !wordInput || !counter) return;
 
-      const containerWidth = container.clientWidth * 0.9; // Leave some padding
-      const containerHeight = container.clientHeight * 0.6; // Leave space for other elements
+      const containerWidth = container.clientWidth * 0.9; // 90% of container width for padding
       const boardWidth = board.scrollWidth;
-      const boardHeight = board.scrollHeight;
 
-      const widthScale = containerWidth / boardWidth;
-      const heightScale = containerHeight / boardHeight;
-      const scale = Math.min(widthScale, heightScale, 1); // Never scale up
-
+      // Only scale down if board is wider than container
+      const scale = boardWidth > containerWidth ? containerWidth / boardWidth : 1;
       board.style.setProperty("--board-scale", scale);
+
+      // Position word input and counter relative to scaled board
+      const scaledBoardWidth = boardWidth * scale;
+      const boardRect = board.getBoundingClientRect();
+      const containerRect = container.getBoundingClientRect();
+      const leftOffset = (containerRect.width - scaledBoardWidth) / 2;
+
+      // Set word input position first
+      wordInput.style.left = `${leftOffset}px`;
+      wordInput.style.top = `${boardRect.bottom + 2 * scale}px`;
+
+      // Get word input's height after positioning
+      const wordInputRect = wordInput.getBoundingClientRect();
+
+      // Align counter with word input's top edge
+      counter.style.position = "absolute";
+      counter.style.left = `${boardRect.right - counter.offsetWidth}px`;
+      counter.style.top = `${wordInputRect.top}px`;
     };
 
-    // Initial calculation
-    updateBoardScale();
+    // Initial calculation after a short delay to ensure proper measurements
+    const timeoutId = setTimeout(updateBoardScale, 0);
 
     // Update on window resize
     window.addEventListener("resize", updateBoardScale);
-    return () => window.removeEventListener("resize", updateBoardScale);
+
+    return () => {
+      clearTimeout(timeoutId);
+      window.removeEventListener("resize", updateBoardScale);
+    };
   }, [gameState.board]); // Recalculate when board changes
 
   return (

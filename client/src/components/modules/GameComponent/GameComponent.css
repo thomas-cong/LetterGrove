@@ -45,29 +45,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: fit-content;
-  height: fit-content;
   transform-origin: center;
-  /* transform: scale(var(--board-scale, 1)); */
-  /* transition: transform 0.2s ease; */
+  transform: scale(var(--board-scale, 1));
 }
-
-/* @media (max-width: 768px) {
-  .gamecompboard {
-    --board-scale: 0.9;
-  }
-} */
 
 .gamecompwordinput {
   position: absolute;
-  left: 0;
-  bottom: 0;
-  transform: translateY(calc(100% + 10px));
-  width: 200px;
 }
 
 .gamecompcounter {
-  margin-top: 80px;
+  position: absolute;
 }
 
 .gamecomppoints {

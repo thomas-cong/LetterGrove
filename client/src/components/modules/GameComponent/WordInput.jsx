@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { socket } from "../../../client-socket.js";
 import ConfirmImage from "../../../assets/Confirm.png";
 import AlertBox from "../AlertBox/AlertBox";
+import "./WordInput.css";
 
 /**
  * WordInput Component - Handles word input and submission for the game
@@ -56,27 +57,27 @@ const WordInput = (props) => {
   }, [props.endpointSelected]);
 
   return (
-    <div>
-      <div>
-        {showAlert && (
-          <AlertBox message={alertMessage} setShowAlert={setShowAlert} timeout={1500} />
-        )}
-      </div>
-      <div className="word-input-container">
-        <input
-          type="text"
-          value={props.word}
-          onChange={(e) => props.setWord(e.target.value.toUpperCase())}
-          placeholder={placeholder}
-          onKeyPress={(event) => {
-            if (event.key === "Enter") {
-              handleEnter();
-            }
-          }}
-        />
-        <button onClick={handleEnter}>
+    <div className="gamecompwordinput">
+      {showAlert && (
+        <AlertBox message={alertMessage} setShowAlert={setShowAlert} timeout={2500} />
+      )}
+      <div className="input-group">
+        <div className="word-input-container">
+          <input
+            type="text"
+            value={props.word}
+            onChange={(e) => props.setWord(e.target.value.toUpperCase())}
+            placeholder={placeholder}
+            onKeyPress={(event) => {
+              if (event.key === "Enter") {
+                handleEnter();
+              }
+            }}
+          />
+        </div>
+        <div className="confirm-button" onClick={handleEnter}>
           <img src={ConfirmImage} alt="Confirm" />
-        </button>
+        </div>
       </div>
     </div>
   );
