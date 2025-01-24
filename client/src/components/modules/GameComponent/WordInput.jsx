@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { socket } from "../../../client-socket.js";
 import ConfirmImage from "../../../assets/Confirm.png";
+import LockImage from "../../../assets/LockImage.png";
 import AlertBox from "../AlertBox/AlertBox";
 import "./WordInput.css";
 
@@ -15,6 +16,7 @@ import "./WordInput.css";
  * @param {string} props.lobbyCode - Current game lobby identifier
  * @param {boolean} props.endpointSelected - Whether a valid endpoint tile is selected
  * @param {Array} props.suggestions - Array of word suggestions currently on the board
+ * @param {boolean} props.isTurn - Whether it's the player's turn
  */
 const WordInput = (props) => {
   const [placeholder, setPlaceholder] = useState("Enter a word");
@@ -57,26 +59,35 @@ const WordInput = (props) => {
   }, [props.endpointSelected]);
 
   return (
-    <div className="gamecompwordinput">
-      {showAlert && (
-        <AlertBox message={alertMessage} setShowAlert={setShowAlert} timeout={2500} />
-      )}
-      <div className="input-group">
-        <div className="word-input-container">
-          <input
-            type="text"
-            value={props.word}
-            onChange={(e) => props.setWord(e.target.value.toUpperCase())}
-            placeholder={placeholder}
-            onKeyPress={(event) => {
-              if (event.key === "Enter") {
-                handleEnter();
-              }
-            }}
+    <div>
+      <div>
+        {showAlert && (
+          <AlertBox message={alertMessage} setShowAlert={setShowAlert} timeout={1500} />
+        )}
+      </div>
+      <div className="word-input-container">
+        <input
+          type="text"
+          value={props.word}
+          onChange={(e) => props.setWord(e.target.value.toUpperCase())}
+          placeholder={placeholder}
+          onKeyPress={(event) => {
+            if (event.key === "Enter") {
+              handleEnter();
+            }
+          }}
+        />
+        <div
+          onClick={props.isTurn ? handleEnter : undefined}
+          style={{
+            cursor: props.isTurn ? "pointer" : "not-allowed",
+            opacity: props.isTurn ? 1 : 0.5,
+          }}
+        >
+          <img
+            src={props.isTurn ? ConfirmImage : LockImage}
+            alt={props.isTurn ? "Confirm" : "Lock"}
           />
-        </div>
-        <div className="confirm-button" onClick={handleEnter}>
-          <img src={ConfirmImage} alt="Confirm" />
         </div>
       </div>
     </div>
