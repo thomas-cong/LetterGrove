@@ -101,7 +101,6 @@ router.post("/openLobby", (req, res) => {
     pointsModifier: gameSettings.pointsModifier,
     mode: gameSettings.mode,
     steps: gameSettings.steps,
-    defaultLetters: gameSettings.defaultLetters,
     powerups: gameSettings.powerups,
     players: {
       [req.user._id]: username,
@@ -231,8 +230,9 @@ router.get("/gameSettings", (req, res) => {
     pointsModifier: lobby.pointsModifier,
     mode: lobby.mode,
     steps: lobby.steps,
-    defaultLetters: lobby.defaultLetters,
     powerups: lobby.powerups,
+    sameBoard: lobby.sameBoard,
+    difficulty: lobby.difficulty,
   };
   console.log(gameSettings);
   res.send(gameSettings);

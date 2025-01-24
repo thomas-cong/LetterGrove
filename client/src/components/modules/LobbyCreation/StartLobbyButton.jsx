@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import shortSign from "../../../assets/320signs_1.png";
 import { post } from "../../../utilities";
 import "./StartLobbyButton.css";
-import AlertBox from "../AlertBox/AlertBox";
 
 const StartLobbyButton = (props) => {
   const navigate = useNavigate();
@@ -16,13 +15,6 @@ const StartLobbyButton = (props) => {
       props.setShowAlert(true);
       return;
     }
-    const gameSettings = {
-      minWordLength: props.gameSettings.minWordLength,
-      pointsModifier: props.gameSettings.pointsModifier,
-      mode: props.gameSettings.mode,
-      steps: props.gameSettings.steps,
-      defaultLetters: props.gameSettings.defaultLetters,
-    };
 
     console.log("Attempting to create lobby with settings:", props.gameSettings);
     post("/api/openLobby", {

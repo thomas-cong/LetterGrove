@@ -20,11 +20,10 @@ const SummonLobbyPopup = (props) => {
 
   const [gameSettings, setGameSettings] = useState({
     minWordLength: 3, // int
-    pointsModifier: 1, // int
     mode: "Time", // string
     steps: 180, // int
-    defaultLetters: true, // checkbox
-    powerups: [], // array
+    difficulty: "Easy", // dropdown
+    sameBoard: false, // boolean
   });
 
   // handles showing the lobby by state update

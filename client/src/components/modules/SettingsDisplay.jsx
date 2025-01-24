@@ -22,9 +22,8 @@ const SettingsDisplay = (props) => {
       <p>Mode: {settings.mode}</p>
       <p>Steps: {settings.steps}</p>
       <p>Min Word Length: {settings.minWordLength}</p>
-      <p>Points Modifier: {settings.pointsModifier}</p>
-      <p>Default Letters: {settings.defaultLetters ? "Yes" : "No"}</p>
-      <p>Power-ups: {settings.powerups.join(", ") || "None"}</p>
+      <p>Difficulty: {settings.difficulty}</p>
+      <p>Same Board: {settings.sameBoard ? "Yes" : "No"}</p>
     </div>
   );
 };
