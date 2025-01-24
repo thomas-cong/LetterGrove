@@ -1,10 +1,15 @@
 import React from "react";
 import "./DifficultySlider.css";
-import sliderImage from "../../../assets/slider.png";
+
+import easyShiba from "../../../assets/difficultyicons/difficulty_easy.png";
+import mediumShiba from "../../../assets/difficultyicons/difficulty_medium.png";
+import hardShiba from "../../../assets/difficultyicons/difficulty_hard.png";
 
 const DifficultySlider = (props) => {
   const [value, setValue] = React.useState(0);
   const difficultyLabels = ["easy", "medium", "hard"];
+  const difficultyIcons = [easyShiba, mediumShiba, hardShiba];
+  
   const handleSliderChange = (event) => {
     const newValue = parseInt(event.target.value);
     setValue(newValue);
@@ -17,6 +22,16 @@ const DifficultySlider = (props) => {
 
   return (
     <div className="slider-container">
+      <div className="shiba-icons">
+        {difficultyIcons.map((icon, index) => (
+          <img
+            key={index}
+            src={icon}
+            alt={difficultyLabels[index]}
+            className={parseInt(value) === index ? "active" : ""}
+          />
+        ))}
+      </div>
       <input
         type="range"
         min="0"
