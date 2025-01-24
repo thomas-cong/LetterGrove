@@ -198,7 +198,7 @@ const initiateGame = (props) => {
     console.log(userId);
     sendUserInitialGame(userId, lobbyCode);
   }
-  io.in(lobbyCode).emit("turn update", { turn: game.turn, username: game.players[game.turn].username });
+  io.in(lobbyCode).emit("turn update", { userId: game.turn, username: players[game.turn].username });
 };
 
 /**
@@ -424,7 +424,9 @@ module.exports = {
           socket.emit("user update", output.localUpdate);
           if (game.sameBoard) {
             for (const userId in game.players) {
-              sendBoardState(userId, props.lobbyCode);
+              if (userId !== user._id) {
+                sendBoardState(userId, props.lobbyCode);
+              }
             }
           }
           /**
