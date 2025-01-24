@@ -424,7 +424,9 @@ module.exports = {
           socket.emit("user update", output.localUpdate);
           if (game.sameBoard) {
             for (const userId in game.players) {
-              sendBoardState(userId, props.lobbyCode);
+              if (userId !== user._id) {
+                sendBoardState(userId, props.lobbyCode);
+              }
             }
           }
           /**
