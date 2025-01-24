@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./LobbySettings.css";
+import DifficultySlider from "./DifficultySlider";
 
 // Creating text input for settings
 const IntInput = (props) => {
@@ -48,6 +49,7 @@ const ModeSelector = (props) => {
 const LobbySettings = (props) => {
   return (
     <div className="settings-container">
+      <DifficultySlider setGameSettings={props.setGameSettings} gameSettings={props.gameSettings} />
       <ModeSelector gameSettings={props.gameSettings} setGameSettings={props.setGameSettings} />
       <IntInput
         text={props.gameSettings.mode}

@@ -172,7 +172,7 @@ const hasAdjacentLetter = (row, col, board, ARRAY_SIZE) => {
  * @returns {Array} Generated game board
  */
 const randomlyGenerateBoard = (props) => {
-  const DIFFICULTY = "easy";
+  const DIFFICULTY = props.difficulty;
   let LETTER_COUNT;
   const CROPS = ["carrot", "tomato", "blueberry", "pumpkin"];
   const POWERUPS = ["spade", "water", "shovel"];
@@ -371,7 +371,7 @@ const randomlyGenerateBoard = (props) => {
   }
 
   console.log("Current Board State:");
-  console.log(board.map(row => row.map(cell => cell.letter || "_").join(" ")).join("\n"));
+  console.log(board.map((row) => row.map((cell) => cell.letter || "_").join(" ")).join("\n"));
 
   return board;
 };
@@ -465,7 +465,9 @@ const confirmWord = (userId, props) => {
   let letterUpdates = [];
   console.log();
   for (let i = 0; i < word.length; i++) {
-    console.log("x: " + currentX + " y: " + currentY + " board: " + board[currentY][currentX].letter);
+    console.log(
+      "x: " + currentX + " y: " + currentY + " board: " + board[currentY][currentX].letter
+    );
     if (i === 0) {
       currentX += dx;
       currentY += dy;
@@ -504,10 +506,10 @@ const confirmWord = (userId, props) => {
     currentX += dx;
     currentY += dy;
   }
-  let logMessages = []
+  let logMessages = [];
   if (pointsGained > 0) {
     logMessages.push(userGameState.username + " collected " + pointsGained + " points");
-  };
+  }
   for (const rankInfo of game.rankings) {
     if (rankInfo.playerId === userId) {
       rankInfo.score = userGameState.points;
