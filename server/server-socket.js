@@ -68,6 +68,7 @@ const sendUserInitialGame = (userId, lobbyCode) => {
     board: gameLogic.games[lobbyCode].userGameStates[userId].board,
     points: gameLogic.games[lobbyCode].userGameStates[userId].points,
     powerups: gameLogic.games[lobbyCode].userGameStates[userId].powerups,
+    endpoints: gameLogic.games[lobbyCode].userGameStates[userId].endpoints,
     counter: gameLogic.games[lobbyCode].counter,
     rankings: gameLogic.games[lobbyCode].rankings,
     turn: gameLogic.games[lobbyCode].turn,
@@ -91,11 +92,12 @@ const initiateGame = (props) => {
   const players = gameInfo.players;
   const sameBoard = gameInfo.sameBoard;
   console.log(gameInfo);
+  const numPlayers = Object.keys(players).length;
 
   board = gameLogic.randomlyGenerateBoard({
     difficulty: gameInfo.difficulty,
     sameBoard: sameBoard,
-    playerCount: players.length,
+    playerCount: numPlayers,
   });
   let turnOrder;
   let turn;
@@ -129,20 +131,42 @@ const initiateGame = (props) => {
       rankings: [],
       pointsToWin: 100,
       log: [],
-    }
+    };
   }
 
   let startingEndpoints;
-  
+  console.log("players length");
+  console.log(numPlayers);
+
   if (sameBoard) {
-    if (players.length === 1) {
+    if (numPlayers === 1) {
+      console.log("starting endpoints");
       startingEndpoints = [[0, 0]];
-    } else if (players.length === 2) {
-      startingEndpoints = [[0, 0], [14, 14]];
-    } else if (players.length === 3) {
-      startingEndpoints = [[0, 0], [0, 14], [14, 14]];
-    } else if (players.length === 4) {
-      startingEndpoints = [[0, 0], [0, 14], [14, 14], [14, 0]];
+      console.log(startingEndpoints);
+    } else if (numPlayers === 2) {
+      console.log("starting endpoints");
+      startingEndpoints = [
+        [0, 0],
+        [14, 14],
+      ];
+      console.log(startingEndpoints);
+    } else if (numPlayers === 3) {
+      console.log("starting endpoints");
+      startingEndpoints = [
+        [0, 0],
+        [0, 14],
+        [14, 14],
+      ];
+      console.log(startingEndpoints);
+    } else if (numPlayers === 4) {
+      console.log("starting endpoints");
+      startingEndpoints = [
+        [0, 0],
+        [0, 14],
+        [14, 14],
+        [14, 0],
+      ];
+      console.log(startingEndpoints);
     }
   }
 
@@ -198,7 +222,10 @@ const initiateGame = (props) => {
     console.log(userId);
     sendUserInitialGame(userId, lobbyCode);
   }
-  io.in(lobbyCode).emit("turn update", { userId: game.turn, username: players[game.turn].username });
+  io.in(lobbyCode).emit("turn update", {
+    userId: game.turn,
+    username: players[game.turn].username,
+  });
 };
 
 /**
@@ -327,11 +354,11 @@ const updateLobbyUserList = (props) => {
  * @param {string} userId - ID of user to update
  * @param {string} lobbyCode - Code of the game
  */
-const sendBoardState = (userId, lobbyCode) => {
+const sendBoardState = (userId, letterUpdates) => {
   const socket = getSocketFromUserID(userId);
   if (!socket) return;
-  socket.emit("board update", openLobbies[lobbyCode].board);
-}
+  socket.emit("board update", letterUpdates);
+};
 
 /**
  * Advances the turn to the next player in turn order
@@ -341,8 +368,11 @@ const sendBoardState = (userId, lobbyCode) => {
 const passTurn = (lobbyCode) => {
   const game = gameLogic.games[lobbyCode];
   game.turn = game.turnOrder[(game.turnOrder.indexOf(game.turn) + 1) % game.turnOrder.length];
-  io.in(lobbyCode).emit("turn update", { userId: game.turn, username: game.players[game.turn].username });
-}
+  io.in(lobbyCode).emit("turn update", {
+    userId: game.turn,
+    username: game.players[game.turn].username,
+  });
+};
 
 module.exports = {
   /**
@@ -425,7 +455,7 @@ module.exports = {
           if (game.sameBoard) {
             for (const userId in game.players) {
               if (userId !== user._id) {
-                sendBoardState(userId, props.lobbyCode);
+                sendBoardState(userId, output.localUpdate.letterUpdates);
               }
             }
           }

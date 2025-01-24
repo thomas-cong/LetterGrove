@@ -12,12 +12,12 @@ import "./GameComponent.css";
 const GameComponent = (props) => {
   const [word, setWord] = useState("");
   const [suggestions, setSuggestions] = useState([]);
-  const [isTurn, setIsTurn] = useState(false);
+  const [isTurn, setIsTurn] = useState("");
   // Game state management
   const [endPointSelected, setEndPointSelected] = useState(true);
   const [selectedX, setSelectedX] = useState(0);
   const [selectedY, setSelectedY] = useState(0);
-  const [endpoints, setEndpoints] = useState([[0, 0]]);
+  const [endpoints, setEndpoints] = useState([]);
   const [lettersUpdated, setLettersUpdated] = useState([]);
   const [gameState, setGameState] = useState({
     lobbyCode: "",
@@ -66,6 +66,7 @@ const GameComponent = (props) => {
     // Initial game state
     const handleInitialGame = (game) => {
       setGameState(game);
+      setEndpoints(game.endpoints);
     };
 
     // User-specific updates (letters, points, endpoints)
@@ -99,12 +100,11 @@ const GameComponent = (props) => {
         setIsTurn(false);
       }
     };
+    // Letter updates
 
     const handleBoardUpdate = (info) => {
-      setGameState((prevState) => ({
-        ...prevState,
-        board: info.board,
-      }));
+      console.log("Board update:", info);
+      setLettersUpdated(info);
     };
 
     // Set up listeners
@@ -159,6 +159,7 @@ const GameComponent = (props) => {
               lobbyCode={props.lobbyCode}
               board={gameState.board}
               suggestions={suggestions}
+              isTurn={isTurn}
             />
           </div>
         </div>

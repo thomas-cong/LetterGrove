@@ -23,7 +23,7 @@ const SummonLobbyPopup = (props) => {
     mode: "Time", // string
     steps: 180, // int
     difficulty: "Easy", // dropdown
-    sameBoard: false, // boolean
+    sameBoard: true, // boolean
   });
 
   // handles showing the lobby by state update
