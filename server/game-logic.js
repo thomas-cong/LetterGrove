@@ -520,6 +520,9 @@ const confirmWord = (userId, props) => {
   }
   userGameState.letters_collected += letterUpdates.length;
   userGameState.words_formed += 1;
+
+  game.log.push(...logMessages);
+
   return {
     localUpdate: {
       cropsCollected: cropsCollected,

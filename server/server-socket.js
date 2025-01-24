@@ -72,6 +72,7 @@ const sendUserInitialGame = (userId, lobbyCode) => {
     rankings: gameLogic.games[lobbyCode].rankings,
     turn: gameLogic.games[lobbyCode].turn,
     turnOrder: gameLogic.games[lobbyCode].turnOrder,
+    log: gameLogic.games[lobbyCode].log,
   };
   socket.emit("initial game", game);
 };
@@ -114,6 +115,7 @@ const initiateGame = (props) => {
       stepsRemaining: gameInfo.steps,
       rankings: [],
       pointsToWin: 100,
+      log: [],
       turnOrder: turnOrder,
       turn: turn,
     };
@@ -126,10 +128,12 @@ const initiateGame = (props) => {
       stepsRemaining: gameInfo.steps,
       rankings: [],
       pointsToWin: 100,
+      log: [],
     }
   }
 
   let startingEndpoints;
+  
   if (sameBoard) {
     if (players.length === 1) {
       startingEndpoints = [[0, 0]];
@@ -154,7 +158,7 @@ const initiateGame = (props) => {
           water: 0,
           shovel: 0,
         },
-        endpoints: startingEndpoints.pop(),
+        endpoints: [startingEndpoints.pop()],
         letters_collected: 0,
         words_formed: 0,
         powerups_used: 0,
@@ -219,11 +223,6 @@ const startRunningGame = (props) => {
       clearInterval(game.timerInterval);
       return;
     }
-
-    console.log(`Emitting time update for lobby ${lobbyCode}:`, game.stepsRemaining);
-    // Get sockets in the room
-    const room = io.sockets.adapter.rooms.get(lobbyCode);
-    console.log("Sockets in room:", room ? Array.from(room) : "No room found");
 
     io.in(lobbyCode).emit("time update", { stepsRemaining: game.stepsRemaining });
   }, 1000);
@@ -404,7 +403,13 @@ module.exports = {
         if (!game || game.gameStatus !== "active") return;
 
         let output;
-        if (user && game.players[user._id] && game.turn === user._id) {
+        if (game.sameBoard) {
+          if (game.turn !== user._id) {
+            console.log("Wrong turn");
+            return;
+          }
+        }
+        if (user && game.players[user._id]) {
           output = gameLogic.confirmWord(user._id, props);
           /**
            * Emits updates specific to the current user
