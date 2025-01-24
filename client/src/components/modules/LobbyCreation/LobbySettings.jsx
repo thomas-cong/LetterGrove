@@ -1,22 +1,5 @@
 import React, { useState, useEffect } from "react";
-import checkedBox from "../../../assets/checkbox/checkbox1.png";
-import uncheckedBox from "../../../assets/checkbox/checkbox0.png";
 import "./LobbySettings.css";
-
-// Creating checkbox for settings toggle
-const Checkbox = (props) => {
-  const [checked, setChecked] = useState(true);
-  const handleClick = () => {
-    setChecked(!checked);
-    props.setGameSettings({ ...props.gameSettings, [props.id]: !checked });
-  };
-  return (
-    <div className="settings-row">
-      <span className="settings-label">{props.text}</span>
-      <img src={checked ? checkedBox : uncheckedBox} onClick={handleClick} />
-    </div>
-  );
-};
 
 // Creating text input for settings
 const IntInput = (props) => {
@@ -73,19 +56,6 @@ const LobbySettings = (props) => {
         gameSettings={props.gameSettings}
         setGameSettings={props.setGameSettings}
         placeholder={props.gameSettings.steps}
-      />
-      <Checkbox
-        text="Default Letters"
-        id="defaultLetters"
-        gameSettings={props.gameSettings}
-        setGameSettings={props.setGameSettings}
-      />
-      <IntInput
-        text="Points Modifier"
-        id="pointsModifier"
-        gameSettings={props.gameSettings}
-        setGameSettings={props.setGameSettings}
-        placeholder={props.gameSettings.pointsModifier}
       />
       <IntInput
         text="Min Word Length"
