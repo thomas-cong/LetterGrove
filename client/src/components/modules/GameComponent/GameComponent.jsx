@@ -92,9 +92,20 @@ const GameComponent = (props) => {
       }));
     };
 
-    const handleTurnUpdate = (info) => {};
+    const handleTurnUpdate = (info) => {
+      if (info.userId === props.userId) {
+        setIsTurn(true);
+      } else {
+        setIsTurn(false);
+      }
+    };
 
-    const handleBoardUpdate = (info) => {};
+    const handleBoardUpdate = (info) => {
+      setGameState((prevState) => ({
+        ...prevState,
+        board: info.board,
+      }));
+    };
 
     // Set up listeners
     socket.on("initial game", handleInitialGame);
