@@ -5,11 +5,9 @@ import { socket } from "../../client-socket";
 import "./StartGameButton.css";
 
 const StartGameButton = (props) => {
-
   const handleClick = () => {
     // Only send the start game request, don't set animation here
     post("/api/lobbyToGameTransition", { lobbyCode: props.lobbyCode });
-    // post("/api/startGame", { lobbyCode: props.lobbyCode });
   };
 
   return (
