@@ -2,6 +2,11 @@
 |--------------------------------------------------------------------------
 | Constants and Game Configuration
 |--------------------------------------------------------------------------
+|
+| These constants define the core game mechanics and scoring system:
+| - Letter frequencies and values based on Scrabble-like distribution
+| - Crop and powerup spawn rates
+| - Board dimensions and difficulty settings
 */
 
 // Game state storage
@@ -160,6 +165,18 @@ const hasAdjacentLetter = (row, col, board, ARRAY_SIZE) => {
   return false;
 };
 
+/**
+ * Checks if a tile is empty (no letter, crop, or powerup)
+ * @param {number} row - Row index
+ * @param {number} col - Column index
+ * @param {Array} board - Game board
+ * @param {number} ARRAY_SIZE - Board dimensions
+ * @returns {boolean} True if tile is empty
+ */
+const isEmptyTile = (row, col, board, ARRAY_SIZE) => {
+  return board[row][col].letter === "" && board[row][col].crop === null && board[row][col].powerup === null;
+};
+
 /*
 |--------------------------------------------------------------------------
 | Main Game Logic
@@ -167,9 +184,12 @@ const hasAdjacentLetter = (row, col, board, ARRAY_SIZE) => {
 */
 
 /**
- * Generates a random game board with letters and other game elements
- * @param {Object} props - Game configuration properties
- * @returns {Array} Generated game board
+ * Generates a random game board based on difficulty settings
+ * @param {Object} props - Game configuration including:
+ *   - difficulty: Easy/Medium/Hard affects letter count and item spawns
+ *   - playerCount: Number of players affects resource distribution
+ *   - sameBoard: If true, all players see identical board
+ * @returns {Object} Generated board and starting positions
  */
 const randomlyGenerateBoard = (props) => {
   const DIFFICULTY = props.difficulty;
@@ -177,7 +197,7 @@ const randomlyGenerateBoard = (props) => {
   const playerCount = props.playerCount;
   let LETTER_COUNT;
   const CROPS = ["cherry", "grape", "orange", "crate"];
-  const POWERUPS = ["spade", "water", "shovel"];
+  const POWERUPS = ["wateringCan", "twoTimes"];
   let CROP_COUNTS;
   let POWERUP_COUNTS;
   const ARRAY_SIZE = 15;
@@ -191,9 +211,8 @@ const randomlyGenerateBoard = (props) => {
       crate: 2,
     };
     POWERUP_COUNTS = {
-      spade: 1,
-      water: 1,
-      shovel: 1,
+      wateringCan: 1,
+      twoTimes: 1,
     };
   } else if (DIFFICULTY === "Medium") {
     LETTER_COUNT = 25;
@@ -204,9 +223,8 @@ const randomlyGenerateBoard = (props) => {
       crate: 1,
     };
     POWERUP_COUNTS = {
-      spade: 1,
-      water: 1,
-      shovel: 1,
+      wateringCan: 1,
+      twoTimes: 1,
     };
   } else if (DIFFICULTY === "Hard") {
     LETTER_COUNT = 35;
@@ -217,9 +235,8 @@ const randomlyGenerateBoard = (props) => {
       crate: 1,
     };
     POWERUP_COUNTS = {
-      spade: 1,
-      water: 1,
-      shovel: 1,
+      wateringCan: 1,
+      twoTimes: 1,
     };
   }
 
@@ -381,10 +398,15 @@ const deepCopyBoard = (board) => {
   return JSON.parse(JSON.stringify(board));
 };
 
+/**
+ * Finds all possible word suggestions from a given position
+ * @param {string} word - Current word being formed
+ * @param {number} x - Starting x coordinate
+ * @param {number} y - Starting y coordinate
+ * @param {Array} board - Game board
+ * @returns {Array} List of valid word suggestions and their paths
+ */
 const enterWord = (userId, props) => {
-  /*
-    Returns list of potential word positions
-    */
   const x = props.x;
   const y = props.y;
   const word = props.word;
@@ -455,9 +477,20 @@ const validWord = (word, minWordLength) => {
   return isValidWord(word);
 };
 
+/**
+ * Processes a completed word and updates game state
+ * @param {string} userId - ID of player completing the word
+ * @param {Object} props - Contains:
+ *   - word: Completed word
+ *   - letterUpdates: Path of letters used
+ *   - game: Current game state
+ * @returns {Object} Updated game state including:
+ *   - Points gained
+ *   - Crops/powerups collected
+ *   - Board updates
+ *   - New rankings
+ */
 const confirmWord = (userId, props) => {
-  /*
-    Finalize selected word on board*/
   const lobbyCode = props.lobbyCode;
   const x = props.x;
   const y = props.y;
@@ -488,9 +521,8 @@ const confirmWord = (userId, props) => {
     crate: 0,
   };
   let powerupsCollected = {
-    spade: 0,
-    water: 0,
-    shovel: 0,
+    wateringCan: 0,
+    twoTimes: 0,
   };
   let pointsGained = 0;
   let letterUpdates = [];
@@ -528,17 +560,76 @@ const confirmWord = (userId, props) => {
       cropsCollected[crop] += 1;
     }
     if (board[currentY][currentX].value > 0) {
-      userGameState.points += board[currentY][currentX].value;
       pointsGained += board[currentY][currentX].value;
       board[currentY][currentX].value = 0;
     }
     currentX += dx;
     currentY += dy;
   }
+
+  /*
+    |--------------------------------------------------------------------------
+    | Powerup Effects
+    |--------------------------------------------------------------------------
+    |
+    | Two Times (⭐):
+    | - Doubles the points gained from the current word
+    | - Multiple Two Times powerups stack multiplicatively
+    |
+    | Watering Can (🌧):
+    | - Plants 3 new crops randomly on empty tiles
+    | - One of each crop type: cherry, grape, and orange
+    | - Only places on tiles without letters, crops, or powerups
+    */
+
+  // Apply Two Times powerup effect
+  for (i = 0; i < powerupsCollected.twoTimes; i++) {
+    pointsGained *= 2;
+  }
+  userGameState.points += pointsGained;
+
+  // Apply Watering Can powerup effect
+  let cropUpdates = [];
+  for (i = 0; i < powerupsCollected.wateringCan; i++) {
+    let randomPositionGenerator = createRandomPositionGenerator(ARRAY_SIZE);
+    
+    // Place each crop type once
+    const cropTypes = ["cherry", "grape", "orange"];
+    for (const cropType of cropTypes) {
+      while (true) {
+        let [randomX, randomY] = randomPositionGenerator();
+        if (isEmptyTile(randomY, randomX, board, ARRAY_SIZE)) {
+          cropUpdates.push({
+            x: randomX,
+            y: randomY,
+            crop: cropType,
+          });
+          break;
+        }
+      }
+    }
+  }
+
+  /*
+    |--------------------------------------------------------------------------
+    | Game State Updates
+    |--------------------------------------------------------------------------
+    |
+    | After processing word and powerups:
+    | 1. Update log with points and items collected
+    | 2. Recalculate player rankings
+    | 3. Update game mode specific counters (words/time remaining)
+    */
+
   let logMessages = [];
   if (pointsGained > 0) {
     logMessages.push(userGameState.username + " collected " + pointsGained + " points");
   }
+
+  /*
+    Remake rankings
+  */
+
   for (const rankInfo of game.rankings) {
     if (rankInfo.playerId === userId) {
       rankInfo.score = userGameState.points;
@@ -563,6 +654,7 @@ const confirmWord = (userId, props) => {
       powerupsCollected: powerupsCollected,
       pointsGained: pointsGained,
       letterUpdates: letterUpdates,
+      cropUpdates: cropUpdates,
       totalPoints: userGameState.points,
       endpoints: userGameState.endpoints,
       wordsRemaining: userGameState.wordsRemaining,

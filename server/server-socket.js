@@ -180,9 +180,8 @@ const initiateGame = (props) => {
         board: board,
         points: 0,
         powerups: {
-          spade: 0,
-          water: 0,
-          shovel: 0,
+          wateringCan: 0,
+          twoTimes: 0,
         },
         endpoints: [startingEndpoints.pop()],
         letters_collected: 0,
@@ -197,9 +196,8 @@ const initiateGame = (props) => {
         board: gameLogic.deepCopyBoard(board),
         points: 0,
         powerups: {
-          spade: 0,
-          water: 0,
-          shovel: 0,
+          wateringCan: 0,
+          twoTimes: 0,
         },
         endpoints: [[0, 0]],
         letters_collected: 0,
