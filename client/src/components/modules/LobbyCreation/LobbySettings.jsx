@@ -40,7 +40,7 @@ const ModeSelector = (props) => {
       >
         <option value="Time">Time (s)</option>
         <option value="Words">Words</option>
-        <option value="Letters">Letters</option>
+        <option value="Points">Points</option>
       </select>
     </div>
   );
@@ -57,14 +57,18 @@ const LobbySettings = (props) => {
         className="steps-input"
         gameSettings={props.gameSettings}
         setGameSettings={props.setGameSettings}
-        placeholder={props.gameSettings.steps}
+        placeholder={
+          props.gameSettings.mode === "Time" ? 180 :
+          props.gameSettings.mode === "Words" ? 15 :
+          props.gameSettings.mode === "Points" ? 100 : ""
+        }
       />
       <IntInput
         text="Min Word Length"
         id="minWordLength"
         gameSettings={props.gameSettings}
         setGameSettings={props.setGameSettings}
-        placeholder={props.gameSettings.minWordLength}
+        placeholder={3}
       />
     </div>
   );
