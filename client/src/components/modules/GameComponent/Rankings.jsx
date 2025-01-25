@@ -13,7 +13,6 @@ import "./Rankings.css";
 const Rankings = ({ rankings = [], currentUserId }) => {
   return (
     <div className="rankings-container">
-      <h3>Rankings</h3>
       {rankings &&
         rankings.map((player, index) => (
           <PlayerDisplay
@@ -22,6 +21,7 @@ const Rankings = ({ rankings = [], currentUserId }) => {
             profilePicture={testProfilePicture}
             playerId={player.playerId}
             currentUserId={currentUserId}
+            isRankingSlip={true}
           />
         ))}
     </div>

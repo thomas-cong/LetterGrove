@@ -3,12 +3,20 @@
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
+  width: calc(530px * 0.8);
+  aspect-ratio: 640/300;
+  padding: calc(40px * 0.8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(12px * 0.8);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  
+  transform: scale(0.8);
+  transform-origin: top center;
 }
 
 .rankings-container h3 {
   color: #333;
-  font-size: 20px;
+  font-size: calc(20px * 0.8);
   font-weight: 600;
 }
