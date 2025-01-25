@@ -49,7 +49,6 @@ const ModeSelector = (props) => {
 const LobbySettings = (props) => {
   return (
     <div className="settings-container">
-      <DifficultySlider setGameSettings={props.setGameSettings} gameSettings={props.gameSettings} />
       <ModeSelector gameSettings={props.gameSettings} setGameSettings={props.setGameSettings} />
       <IntInput
         text={props.gameSettings.mode}
@@ -70,6 +69,7 @@ const LobbySettings = (props) => {
         setGameSettings={props.setGameSettings}
         placeholder={3}
       />
+      <DifficultySlider setGameSettings={props.setGameSettings} gameSettings={props.gameSettings} />
     </div>
   );
 };
