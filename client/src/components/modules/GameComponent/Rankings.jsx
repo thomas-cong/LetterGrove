@@ -13,18 +13,22 @@ import "./Rankings.css";
 const Rankings = ({ rankings = [], currentUserId }) => {
   return (
     <div className="rankings-container">
-      <div className="rankings-title">Rankings</div>
-      {rankings &&
-        rankings.map((player, index) => (
-          <PlayerDisplay
-            key={index}
-            name={`${player.username} - ${player.score} pts`}
-            profilePicture={testProfilePicture}
-            playerId={player.playerId}
-            currentUserId={currentUserId}
-            isRankingSlip={true}
-          />
-        ))}
+      <div className="rankings-box">
+        <div className="rankings-title">Rankings</div>
+        <div>
+          {rankings &&
+            rankings.map((player, index) => (
+              <PlayerDisplay
+                key={index}
+                name={`${player.username} - ${player.score} pts`}
+                profilePicture={testProfilePicture}
+                playerId={player.playerId}
+                currentUserId={currentUserId}
+                isRankingSlip={true}
+              />
+            ))}
+        </div>
+      </div>
     </div>
   );
 };
