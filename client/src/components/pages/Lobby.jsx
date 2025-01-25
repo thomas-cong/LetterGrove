@@ -51,13 +51,39 @@ const Lobby = () => {
       // Join the socket room for this lobby
       socket.emit("join socket", { lobbyCode: lobbyId });
     });
+    if (u_id) {
+      get("/api/players", { lobbyCode: lobbyId }).then((players) => {
+        let found = false;
+        for (const value of players) {
+          if (value == u_id) {
+            console.log("found it");
+            found = true;
+          }
+        }
+        if (!found) {
+          window.location.href = "/";
+        }
+      });
+    }
+    get("/api/isGameStarted", { lobbyCode: lobbyId }).then((res) => {
+      console.log(res.gameStarted);
+      if (res.gameStarted) {
+        setLobbyState("game");
+      }
+    });
     get("/api/isLobbyOwner", { lobbyCode: lobbyId }).then((res) => {
       console.log(res);
       setShowButton(res);
     });
+
   }, []);
 
   useEffect(() => {
+
+    get("/api/lobbyCheck", { lobbyCode: lobbyId }).catch((err) => {
+      window.location.href = "/LobbyNotFound";
+    });
+  
     const handleLobbyToGame = () => {
       console.log("received lobby to game transition");
       setShowAnimation(true);
@@ -119,24 +145,7 @@ const Lobby = () => {
   //   };
   // }, []);
 
-  if (u_id) {
-    get("/api/players", { lobbyCode: lobbyId }).then((players) => {
-      let found = false;
-      for (const value of players) {
-        if (value == u_id) {
-          console.log("found it");
-          found = true;
-        }
-      }
-      if (!found) {
-        window.location.href = "/";
-      }
-    });
-  }
-  get("/api/lobbyCheck", { lobbyCode: lobbyId }).catch((err) => {
-    window.location.href = "/LobbyNotFound";
-  });
-
+ 
   return (
     <>
       {lobbyState === "lobby" && (

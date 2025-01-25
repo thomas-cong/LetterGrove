@@ -246,7 +246,7 @@ const initiateGame = (props) => {
     secondsRemaining: game.secondsRemaining,
   });
   for (const userId in players) {
-    sendUserInitialGame(userId, lobbyCode);
+    // sendUserInitialGame(userId, lobbyCode);
   }
   io.in(lobbyCode).emit("turn update", {
     userId: game.turn,

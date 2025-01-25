@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { socket } from "../../../client-socket";
-import { post } from "../../../utilities";
+import { post, get } from "../../../utilities";
 import Board from "./Board";
 import WordInput from "./WordInput";
 import Counter from "./Counter";
@@ -28,6 +28,7 @@ const GameComponent = (props) => {
     counter: 0,
     rankings: [],
     log: [],
+    endpoints: [],
   });
 
   //@{params} letters updated
@@ -70,9 +71,12 @@ const GameComponent = (props) => {
 
   // Set up socket listeners
   useEffect(() => {
+    get("/api/currentGame", { lobbyCode: props.lobbyCode, userId: props.userId });
     // Initial game state
     const handleInitialGame = (game) => {
       setGameState(game);
+      setEndpoints(game.endpoints);
+      console.log("GAME ENDPOINTS" + game.endpoints);
     };
 
     // User-specific updates (letters, points, endpoints)
