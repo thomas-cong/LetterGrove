@@ -64,6 +64,20 @@ const WordInput = (props) => {
     }
   }, [props.selectedX, props.selectedY]);
 
+  useEffect(() => {
+    const handleGlobalKeyPress = (event) => {
+      if (inputRef.current && document.activeElement !== inputRef.current) {
+        inputRef.current.focus();
+      }
+    };
+
+    document.addEventListener('keydown', handleGlobalKeyPress);
+    
+    return () => {
+      document.removeEventListener('keydown', handleGlobalKeyPress);
+    };
+  }, []);
+
   return (
     <div className="gamecompwordinput">
       {showAlert && <AlertBox message={alertMessage} setShowAlert={setShowAlert} timeout={2500} />}
