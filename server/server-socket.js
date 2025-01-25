@@ -121,6 +121,7 @@ const initiateGame = (props) => {
       log: [],
       turnOrder: turnOrder,
       turn: turn,
+      secondsElapsed: 0,
     };
   } else {
     game = {
@@ -266,8 +267,14 @@ const startTimer = (props) => {
   console.log("Initial steps remaining:", game.secondsRemaining);
 
   game.timerInterval = setInterval(() => {
+    game.secondsElapsed++;
     game.secondsRemaining--;
 
+    if (game.mode === "Time") {
+      console.log("Time remaining:", game.secondsRemaining);
+      io.in(lobbyCode).emit("time update", { secondsRemaining: game.secondsRemaining });
+    }  
+    
     if (game.secondsRemaining === 0) {
       game.gameStatus = "ended";
       handleEndGame({ lobbyCode: lobbyCode, reason: "Time's up! " + game.rankings[0].username + " wins with " + game.rankings[0].score + " points!" });
@@ -275,10 +282,6 @@ const startTimer = (props) => {
       return;
     }
 
-    if (game.mode === "Time") {
-      console.log("Time remaining:", game.secondsRemaining);
-      io.in(lobbyCode).emit("time update", { secondsRemaining: game.secondsRemaining });
-    }  
   }, 1000);
 };
 
@@ -307,6 +310,11 @@ const handleEndGame = (props) => {
     boards: boards,
     players: game.players,
     finalRankings: game.rankings,
+    mode: game.mode,
+    sameBoard: game.sameBoard,
+    difficulty: game.difficulty,
+    secondsElapsed: game.secondsElapsed,
+    date: new Date(),
   });
   for (const userId in game.players) {
     const userGameState = game.userGameStates[userId];
@@ -320,6 +328,7 @@ const handleEndGame = (props) => {
           powerups: userGameState.powerups_used || 0,
           words: userGameState.words_formed || 0,
           points: userGameState.points || 0,
+          timePlayed: game.secondsElapsed || 0,
         },
       },
       { new: true }

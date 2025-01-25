@@ -5,6 +5,7 @@ import lettergrovelogo from "../../assets/lettergrovelogo.gif";
 import cloudanimation from "../../assets/cloudanimation000.png";
 import SummonJoinPopup from "../modules/JoinLobby/SummonJoinPopup";
 import SummonCreditsPopup from "../modules/Credits/SummonCreditsPopup";
+import ProfileButton from "../modules/Profile/ProfileButton.jsx";
 
 import "../../utilities.css";
 import "./Home.css";
@@ -42,6 +43,10 @@ const Home = () => {
           <SummonCreditsPopup
             onShowCredits={() => setShowLogo(false)}
             onHideCredits={() => setShowLogo(true)}
+            popupShowing={popupShowing}
+            setPopupShowing={setPopupShowing}
+          />
+          <ProfileButton
             popupShowing={popupShowing}
             setPopupShowing={setPopupShowing}
           />

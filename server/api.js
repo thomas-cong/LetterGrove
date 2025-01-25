@@ -228,7 +228,7 @@ router.get("/players", (req, res) => {
 
 router.get("/currentGame", (req, res) => {
   socketManager.sendUserInitialGame(req.user._id, req.query.lobbyCode);
-  res.send({});
+  res.send({})
 })
 
 // @params: lobbyCode- lobby code of the game
@@ -307,6 +307,57 @@ router.get("/completedGames", (req, res) => {
       console.log(`Failed to get completed games: ${err}`);
       res.status(500).send({ error: "Failed to get completed games" });
     });
+});
+
+/**
+ * Get user data
+ */
+router.get("/user", (req, res) => {
+  User.findById(req.query.userId)
+    .then((user) => {
+      if (!user) {
+        res.status(404).send({ error: "User not found" });
+        return;
+      }
+      res.send({
+        name: user.name,
+        games_played: user.games_played || 0,
+        wins: user.wins || 0,
+        letters: user.letters || 0,
+        powerups: user.powerups || 0,
+        words: user.words || 0,
+        points: user.points || 0,
+        timePlayed: user.timePlayed || 0,
+      });
+    })
+    .catch((err) => {
+      console.log(`Error getting user data: ${err}`);
+      res.status(500).send({ error: "Error getting user data" });
+    });
+});
+
+/**
+ * Get user match history
+ */
+router.get("/matches", (req, res) => {
+  // For now, return mock data. You'll need to implement the actual match history storage
+  const mockMatches = [
+    {
+      date: new Date(),
+      won: true,
+      score: 150,
+      words: 12,
+      duration: 180, // 3 minutes
+    },
+    {
+      date: new Date(Date.now() - 86400000), // yesterday
+      won: false,
+      score: 120,
+      words: 8,
+      duration: 240,
+    },
+  ];
+  res.send(mockMatches);
 });
 
 // anything else falls to this "not found" case
