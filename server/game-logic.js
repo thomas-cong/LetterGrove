@@ -475,15 +475,13 @@ const confirmWord = (userId, props) => {
       currentY += dy;
       continue;
     }
-    if (board[currentY][currentX].letter === "") {
-      letterUpdates.push({
-        x: currentX,
-        y: currentY,
-        letter: word[i],
-        default: board[currentY][currentX].default,
-        visited: board[currentY][currentX].visited,
-      });
-    }
+    letterUpdates.push({
+      x: currentX,
+      y: currentY,
+      letter: word[i],
+      default: board[currentY][currentX].default,
+      visited: board[currentY][currentX].visited,
+    });
     board[currentY][currentX].visited = true;
     board[currentY][currentX].letter = word[i];
     if (i === word.length - 1) {

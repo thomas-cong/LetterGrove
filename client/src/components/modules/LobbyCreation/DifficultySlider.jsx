@@ -7,7 +7,7 @@ import hardShiba from "../../../assets/difficultyicons/difficulty_hard.png";
 
 const DifficultySlider = (props) => {
   const [value, setValue] = React.useState(0);
-  const difficultyLabels = ["easy", "medium", "hard"];
+  const difficultyLabels = ["Easy", "Medium", "Hard"];
   const difficultyIcons = [easyShiba, mediumShiba, hardShiba];
   let newValue = 0;
 

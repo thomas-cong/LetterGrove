@@ -262,13 +262,13 @@ const initiateGame = (props) => {
 const startTimer = (props) => {
   const lobbyCode = props.lobbyCode;
   const game = gameLogic.games[lobbyCode];
-  game.stepsRemaining = props.stepsLeft;
+  game.secondsRemaining = props.secondsRemaining;
 
   console.log("Starting game timer for lobby:", lobbyCode);
-  console.log("Initial steps remaining:", game.stepsRemaining);
+  console.log("Initial steps remaining:", game.secondsRemaining);
 
   game.timerInterval = setInterval(() => {
-    game.stepsRemaining--;
+    game.secondsRemaining--;
 
     if (game.secondsRemaining === 0) {
       game.gameStatus = "ended";
