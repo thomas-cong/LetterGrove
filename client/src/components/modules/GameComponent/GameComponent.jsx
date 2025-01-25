@@ -210,12 +210,14 @@ const GameComponent = (props) => {
               isTurn={isTurn}
             />
           </div>
-          <div className="gamecompcounter">
-            <Counter />
-          </div>
           {/* </div> */}
-          <div className="gamecomppoints">
-            <PointsCounter points={gameState.points} />
+          <div className="topinfo">
+            <div className="gamecomppoints">
+              <PointsCounter points={gameState.points} />
+            </div>
+            <div className="gamecompcounter">
+              <Counter />
+            </div>
           </div>
         </div>
       </div>

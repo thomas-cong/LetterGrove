@@ -1,0 +1,35 @@
+.counter-container {
+
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(-12%);
+  width: 330px;
+
+}
+
+.counter-container img {
+
+  position: absolute;
+  width: 340px;
+  height: 340px;
+  object-fit: contain;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.counter-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.counter-label {
+  text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4);
+  color: white;
+}

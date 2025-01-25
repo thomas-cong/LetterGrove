@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { socket } from "../../../client-socket";
+import ScoreBox from "../../../assets/640signs_4.png";
+import "./Counter.css";
 
 /**
  * Counter Component
@@ -23,14 +25,14 @@ const Counter = () => {
   useEffect(() => {
     console.log("Counter mounted");
     const handleTimeUpdate = (params) => {
-      setLeftMessage("Time remaining: ");
+      setLeftMessage("Time left: ");
       setValue(params.secondsRemaining);
     };
 
     const handleWordsUpdate = (params) => {
-      setLeftMessage("Words remaining: ");
+      setLeftMessage("Words left: ");
       setValue(params.wordsRemaining);
-      setRightMessage(" of " + params.wordLimit);
+      setRightMessage("/" + params.wordLimit);
     }
 
     const handlePointsUpdate = (params) => {
@@ -50,10 +52,13 @@ const Counter = () => {
   }, []);
 
   return (
-    <div className="counter">
-      <span className="counter-label">{leftMessage}</span>
-      <span className="counter-label">{value}</span>
-      <span className="counter-label">{rightMessage}</span>
+    <div className="counter-container">
+      <img src={ScoreBox} alt="Score Box" />
+      <span className="counter-content">
+        <span className="counter-label">{leftMessage}</span>
+        <span className="counter-label">{value}</span>
+        <span className="counter-label">{rightMessage}</span>
+      </span>
     </div>
   );
 };
