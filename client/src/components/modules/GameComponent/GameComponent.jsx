@@ -51,7 +51,6 @@ const GameComponent = (props) => {
         crop: "",
         powerup: "",
         visited: true,
-        default: false,
         isSuggestion: false,
         isSuggestionEnd: false,
       };

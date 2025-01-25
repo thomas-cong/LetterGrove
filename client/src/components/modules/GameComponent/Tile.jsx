@@ -295,12 +295,10 @@ const Tile = (props) => {
       } ${props.cell.isSuggestionEnd ? "suggestion-end" : ""}`}
     >
       <img src={grassTile} alt="grass" className="grass-background" />
-      {(!props.cell.letter || (props.cell.letter && props.cell.default)) && (
-        <img src={nullTile} alt="null" className="tile-background" />
-      )}
+      {!props.cell.visited && <img src={nullTile} alt="null" className="tile-background" />}
       {props.cell.letter && (
         <img
-          src={getLetterTile(props.cell.letter, !props.cell.isSuggestion && props.cell.default)}
+          src={getLetterTile(props.cell.letter, props.cell.default)}
           alt={props.cell.letter}
           className={`letter-tile ${isAnimating ? "falling" : ""} ${
             props.cell.isSuggestion ? "suggestion-letter" : ""
