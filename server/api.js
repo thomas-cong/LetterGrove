@@ -104,6 +104,7 @@ router.post("/openLobby", (req, res) => {
     powerups: gameSettings.powerups,
     sameBoard: gameSettings.sameBoard,
     difficulty: gameSettings.difficulty,
+    gameStarted: false,
     players: {
       [req.user._id]: username,
     },
@@ -115,6 +116,13 @@ router.post("/openLobby", (req, res) => {
   socketManager.joinSocket({ lobbyCode: lobbyCode, socketid: req.user._id });
   res.send({ message: "Lobby Created" });
 });
+
+router.get("/isGameStarted", (req, res) => {
+  if (!openLobbies[req.query.lobbyCode]) {
+    res.status(404).send({ error: "Lobby not found" });
+  }
+  res.send({ gameStarted: openLobbies[req.query.lobbyCode].gameStarted });
+})
 
 router.post("/joinLobby", (req, res) => {
   const lobbyCode = req.body.lobbyCode;
@@ -191,6 +199,7 @@ router.post("/startGame", (req, res) => {
   if (gameInfo.lobbyOwner != req.user._id) {
     return res.status(401).send({ error: "Not authorized" });
   }
+  openLobbies[req.body.lobbyCode].gameStarted = true;
   socketManager.initiateGame({
     gameInfo: gameInfo,
     lobbyCode: req.body.lobbyCode,
@@ -209,9 +218,18 @@ router.post("/deleteLobby", (req, res) => {
 // returns an array of the player ids
 router.get("/players", (req, res) => {
   const lobbyCode = req.query.lobbyCode;
+  if (!openLobbies[lobbyCode]) {
+    res.status(404);
+    res.send({ error: "Lobby not found" });
+  }
   console.log(openLobbies[lobbyCode].players);
   res.send(Object.values(Object.keys(openLobbies[lobbyCode].players)));
 });
+
+router.get("/currentGame", (req, res) => {
+  socketManager.sendUserInitialGame(req.user._id, req.query.lobbyCode);
+  res.send({});
+})
 
 // @params: lobbyCode- lobby code of the game
 // returns true if the lobby exists, false otherwise

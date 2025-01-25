@@ -7,45 +7,52 @@ import hardShiba from "../../../assets/difficultyicons/difficulty_hard.png";
 
 const DifficultySlider = (props) => {
   const [value, setValue] = React.useState(0);
-  const difficultyLabels = ["easy", "medium", "hard"];
-  const difficultyIcons = [easyShiba, mediumShiba, hardShiba];
-  let newValue = 0;
+  const difficulties = [
+    {
+      label: "Easy",
+      icon: easyShiba,
+      description: "More common letters, longer time limits, and simpler word requirements. Perfect for casual play!"
+    },
+    {
+      label: "Medium",
+      icon: mediumShiba,
+      description: "Balanced letter distribution with moderate challenges. The standard LetterGrove experience!"
+    },
+    {
+      label: "Hard",
+      icon: hardShiba,
+      description: "Rare letters appear more often, shorter time limits, and stricter word requirements. For word wizards!"
+    }
+  ];
 
-  const handleSliderChange = (event) => {
-    newValue = parseInt(event.target.value);
-    setValue(newValue);
-    console.log(difficultyLabels[newValue]);
+  const handleDifficultyClick = (index) => {
+    setValue(index);
     props.setGameSettings({
       ...props.gameSettings,
-      ["difficulty"]: difficultyLabels[newValue],
+      difficulty: difficulties[index].label,
     });
   };
 
   return (
     <div className="slider-container">
       <div className="shiba-icons">
-        {difficultyIcons.map((icon, index) => (
-          <img
+        {difficulties.map((difficulty, index) => (
+          <div
             key={index}
-            src={icon}
-            alt={difficultyLabels[index]}
-            className={parseInt(value) === index ? "active" : ""}
-          />
+            className={`difficulty-option ${parseInt(value) === index ? "active" : ""}`}
+            onClick={() => handleDifficultyClick(index)}
+          >
+            <img
+              src={difficulty.icon}
+              alt={difficulty.label}
+              className={parseInt(value) === index ? "active" : ""}
+            />
+            <span className={parseInt(value) === index ? "active" : ""}>
+              {difficulty.label}
+            </span>
+            <div className="tooltip">{difficulty.description}</div>
+          </div>
         ))}
-      </div>
-      <input
-        type="range"
-        min="0"
-        max="2"
-        step="1"
-        value={value}
-        onChange={handleSliderChange}
-        className="slider"
-      />
-      <div className="labels">
-        <span className={parseInt(value) === 0 ? "active" : ""}>Easy</span>
-        <span className={parseInt(value) === 1 ? "active" : ""}>Medium</span>
-        <span className={parseInt(value) === 2 ? "active" : ""}>Hard</span>
       </div>
     </div>
   );

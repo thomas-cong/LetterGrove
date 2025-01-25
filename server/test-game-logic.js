@@ -3,7 +3,7 @@ const gameLogic = require("./game-logic");
 // Test 1: Board Generation
 console.log("\n=== Test 1: Board Generation ===");
 const testBoard = gameLogic.randomlyGenerateBoard({
-  difficulty: "easy",
+  difficulty: "Easy",
 });
 
 // Verify board dimensions

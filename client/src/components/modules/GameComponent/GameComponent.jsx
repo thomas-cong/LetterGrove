@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { socket } from "../../../client-socket";
-import { post } from "../../../utilities";
+import { post, get } from "../../../utilities";
 import Board from "./Board";
 import WordInput from "./WordInput";
 import Counter from "./Counter";
@@ -28,6 +28,7 @@ const GameComponent = (props) => {
     counter: 0,
     rankings: [],
     log: [],
+    endpoints: [],
   });
 
   //@{params} letters updated
@@ -50,10 +51,15 @@ const GameComponent = (props) => {
         crop: "",
         powerup: "",
         visited: true,
-        default: false,
         isSuggestion: false,
         isSuggestionEnd: false,
       };
+      if (i === updatedLetters.length - 1) {
+        setEndPointSelected(true);
+        setSelectedX(x);
+        setSelectedY(y);
+        setWord("");
+      }
     }
 
     setGameState((prevState) => ({
@@ -61,11 +67,15 @@ const GameComponent = (props) => {
       board: newBoard,
     }));
   };
+
   // Set up socket listeners
   useEffect(() => {
+    get("/api/currentGame", { lobbyCode: props.lobbyCode, userId: props.userId });
     // Initial game state
     const handleInitialGame = (game) => {
       setGameState(game);
+      setEndpoints(game.endpoints);
+      console.log("GAME ENDPOINTS" + game.endpoints);
     };
 
     // User-specific updates (letters, points, endpoints)
@@ -132,7 +142,7 @@ const GameComponent = (props) => {
 
       // Set the left offset and adjust gap based on scale
       wordInput.style.left = `${leftOffset}px`;
-      wordInput.style.top = `${boardRect.bottom + (2 * scale)}px`; // 10px gap scaled
+      wordInput.style.top = `${boardRect.bottom + 2 * scale}px`; // 10px gap scaled
     };
 
     // Initial calculation after a short delay to ensure proper measurements
@@ -168,9 +178,9 @@ const GameComponent = (props) => {
               setSuggestions={setSuggestions}
               suggestions={suggestions}
             />
-            </div>
+          </div>
           {/* <div className="gamecompbottominfo"> */}
-            <div className="gamecompwordinput">
+          <div className="gamecompwordinput">
             <WordInput
               word={word}
               setWord={setWord}
@@ -183,21 +193,21 @@ const GameComponent = (props) => {
             />
           </div>
           <div className="gamecompcounter">
-              <Counter />
-            </div>
-      {/* </div> */}
-      <div className="gamecomppoints">
-        <PointsCounter points={gameState.points} />
+            <Counter />
+          </div>
+          {/* </div> */}
+          <div className="gamecomppoints">
+            <PointsCounter points={gameState.points} />
+          </div>
+        </div>
       </div>
-      </div>
-    </div>
-    <div className="gamecomprightcontainer">
-      <div className="gamecomprankings">
-        <Rankings rankings={gameState.rankings} currentUserId={props.userId} />
-      </div>
-      <div className="gamecomplog">
-        <Log log={gameState.log} />
-      </div>
+      <div className="gamecomprightcontainer">
+        <div className="gamecomprankings">
+          <Rankings rankings={gameState.rankings} currentUserId={props.userId} />
+        </div>
+        <div className="gamecomplog">
+          <Log log={gameState.log} />
+        </div>
       </div>
     </div>
   );

@@ -3,17 +3,23 @@
   align-items: center;
   justify-content: space-between;
   width: 300px;
-  margin: 0;
+  margin: 0 auto;
+  padding: 5px 0;
 }
 
 .settings-container {
   display: flex;
   flex-direction: column;
-  gap: 1vw;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  margin-top: .8rem;
 }
 
 .settings-label {
   text-align: left;
+  font-size: 0.9rem;
+  color: #666;
 }
 
 select,
@@ -21,11 +27,14 @@ input[type="number"] {
   width: 120px;
   padding: 5px;
   text-align: center;
+  border-radius: 4px;
+  border: 1px solid #ddd;
 }
 
 select {
   cursor: pointer;
   color: rgb(94, 129, 255);
+  background-color: white;
 }
 
 select option {
@@ -33,7 +42,8 @@ select option {
 }
 
 input[type="number"] {
-  width: 30px;
+  width: 60px;
+  color: rgb(94, 129, 255);
 }
 
 .steps-input {

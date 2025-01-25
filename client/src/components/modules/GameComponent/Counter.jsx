@@ -16,27 +16,44 @@ import { socket } from "../../../client-socket";
  *   - params.stepsRemaining: Number of steps remaining in the game
  */
 const Counter = () => {
-  const [steps, setSteps] = useState("");
-  const [mode, setMode] = useState("");
+  const [leftMessage, setLeftMessage] = useState("");
+  const [rightMessage, setRightMessage] = useState("");
+  const [value, setValue] = useState("");
 
   useEffect(() => {
     console.log("Counter mounted");
     const handleTimeUpdate = (params) => {
-      setSteps(params.stepsRemaining);
-      setMode("Time");
+      setLeftMessage("Time remaining: ");
+      setValue(params.secondsRemaining);
     };
 
+    const handleWordsUpdate = (params) => {
+      setLeftMessage("Words remaining: ");
+      setValue(params.wordsRemaining);
+      setRightMessage(" of " + params.wordLimit);
+    }
+
+    const handlePointsUpdate = (params) => {
+      setLeftMessage("Points to win: ");
+      setValue(params.pointsToWin);
+    }
+
     socket.on("time update", handleTimeUpdate);
+    socket.on("words update", handleWordsUpdate);
+    socket.on("points update", handlePointsUpdate);
 
     return () => {
       socket.off("time update", handleTimeUpdate);
+      socket.off("words update", handleWordsUpdate);
+      socket.off("points update", handlePointsUpdate);
     };
   }, []);
 
   return (
     <div className="counter">
-      <span className="counter-label">{mode} Left: </span>
-      <span className="counter-value">{steps}</span>
+      <span className="counter-label">{leftMessage}</span>
+      <span className="counter-label">{value}</span>
+      <span className="counter-label">{rightMessage}</span>
     </div>
   );
 };

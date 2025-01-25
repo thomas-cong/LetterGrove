@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { socket } from "../../../client-socket.js";
 import ConfirmImage from "../../../assets/Confirm.png";
 import AlertBox from "../AlertBox/AlertBox";
@@ -20,29 +20,30 @@ const WordInput = (props) => {
   const [placeholder, setPlaceholder] = useState("Enter a word");
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
+  const inputRef = useRef(null);
 
   /**
    * Handles word submission when Enter Button is pressed
    * Only submits if an endpoint is selected
    * Emits the word and coordinates to the server and clears the input
    */
-  const handleEnter = () => {
-    console.log(props.endpointSelected);
-    if (!props.endpointSelected) {
-      setAlertMessage("Select an endpoint first...");
-      setShowAlert(true);
-      return;
-    }
+  // const handleKeyPress = () => {
+  //   console.log(props.endpointSelected);
+  //   if (!props.endpointSelected) {
+  //     setAlertMessage("Select an endpoint first...");
+  //     setShowAlert(true);
+  //     return;
+  //   }
 
-    console.log("Submitting word:", props.word);
-    socket.emit("enter word", {
-      lobbyCode: props.lobbyCode,
-      x: props.selectedX,
-      y: props.selectedY,
-      word: props.word,
-      board: props.board,
-    });
-  };
+  //   console.log("Submitting word:", props.word);
+  //   socket.emit("enter word", {
+  //     lobbyCode: props.lobbyCode,
+  //     x: props.selectedX,
+  //     y: props.selectedY,
+  //     word: props.word,
+  //     board: props.board,
+  //   });
+  // };
 
   /**
    * Updates placeholder text based on endpoint selection status
@@ -56,28 +57,63 @@ const WordInput = (props) => {
     }
   }, [props.endpointSelected]);
 
+  // Focus input when endpoint is selected
+  useEffect(() => {
+    if (props.endpointSelected && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [props.selectedX, props.selectedY]);
+
+  useEffect(() => {
+    const handleGlobalKeyPress = (event) => {
+      if (inputRef.current && document.activeElement !== inputRef.current) {
+        inputRef.current.focus();
+      }
+    };
+
+    document.addEventListener('keydown', handleGlobalKeyPress);
+    
+    return () => {
+      document.removeEventListener('keydown', handleGlobalKeyPress);
+    };
+  }, []);
+
   return (
     <div className="gamecompwordinput">
-      {showAlert && (
-        <AlertBox message={alertMessage} setShowAlert={setShowAlert} timeout={2500} />
-      )}
+      {showAlert && <AlertBox message={alertMessage} setShowAlert={setShowAlert} timeout={2500} />}
       <div className="input-group">
         <div className="word-input-container">
           <input
+            ref={inputRef}
             type="text"
             value={props.word}
-            onChange={(e) => props.setWord(e.target.value.toUpperCase())}
-            placeholder={placeholder}
-            onKeyPress={(event) => {
-              if (event.key === "Enter") {
-                handleEnter();
+            onChange={(e) => {
+              props.setWord(e.target.value.toUpperCase());
+              console.log(props.endpointSelected);
+              if (!props.endpointSelected) {
+                setAlertMessage("Select an endpoint first...");
+                setShowAlert(true);
+                return;
               }
+              socket.emit("enter word", {
+                lobbyCode: props.lobbyCode,
+                x: props.selectedX,
+                y: props.selectedY,
+                word: e.target.value.toUpperCase(),
+                board: props.board,
+              });
             }}
+            placeholder={placeholder}
+            // onKeyPress={(event) => {
+            //   if (event.key === "Enter") {
+            //     handleEnter();
+            //   }
+            // }}
           />
         </div>
-        <div className="confirm-button" onClick={handleEnter}>
+        {/* <div className="confirm-button" onClick={handleEnter}>
           <img src={ConfirmImage} alt="Confirm" />
-        </div>
+        </div> */}
       </div>
     </div>
   );
