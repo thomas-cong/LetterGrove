@@ -1,11 +1,11 @@
 .playerDisplay {
   display: flex;
   align-items: center;
-  gap: calc(12px * 0.8);
-  padding: calc(10px * 0.8) calc(20px * 0.8);
-  margin: calc(8px * 0.8) 0;
+  gap: 12px;
+  padding: 10px 20px;
+  margin: 8px 0;
   position: relative;
-  min-height: calc(60px * 0.8);
+  min-height: 60px;
 }
 
 .playerDisplay.ranking-slip {
@@ -18,8 +18,12 @@
   align-items: center;
 }
 
-.playerName {
+.playerDisplay.ranking-slip .playerName {
   font-size: calc(24px * 0.8);
+}
+
+.playerName {
+  font-size: 24px;
   font-weight: 500;
   color: #333333;
   margin: 0;
@@ -27,11 +31,15 @@
   z-index: 1;
 }
 
+.playerDisplay.ranking-slip .profilePicture {
+  width: calc(36px * 0.8);
+  height: calc(36px * 0.8);
+}
+
 .profilePicture {
-  width: calc(40px * 0.8);
-  height: calc(40px * 0.8);
+  width: 40px;
+  height: 40px;
   object-fit: cover;
-  border-radius: 50%;
   position: relative;
   z-index: 1;
 }
@@ -41,5 +49,5 @@
 }
 
 .rankings-container .playerDisplay {
-  margin: calc(12px * 0.8) 0;
+  margin: 12px 0;
 }
