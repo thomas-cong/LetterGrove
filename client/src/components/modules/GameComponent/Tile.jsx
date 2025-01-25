@@ -213,7 +213,6 @@ const Tile = (props) => {
     const handleEscape = (event) => {
       if (event.key === "Escape" && isSelected && props.suggestedWord.length > 0) {
         props.setSuggestions([]);
-        props.setEndPointSelected(false);
       }
     };
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { socket } from "../../../client-socket.js";
 import ConfirmImage from "../../../assets/Confirm.png";
 import AlertBox from "../AlertBox/AlertBox";
@@ -20,6 +20,7 @@ const WordInput = (props) => {
   const [placeholder, setPlaceholder] = useState("Enter a word");
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
+  const inputRef = useRef(null);
 
   /**
    * Handles word submission when Enter Button is pressed
@@ -56,14 +57,20 @@ const WordInput = (props) => {
     }
   }, [props.endpointSelected]);
 
+  // Focus input when endpoint is selected
+  useEffect(() => {
+    if (props.endpointSelected && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [props.selectedX, props.selectedY]);
+
   return (
     <div className="gamecompwordinput">
-      {showAlert && (
-        <AlertBox message={alertMessage} setShowAlert={setShowAlert} timeout={2500} />
-      )}
+      {showAlert && <AlertBox message={alertMessage} setShowAlert={setShowAlert} timeout={2500} />}
       <div className="input-group">
         <div className="word-input-container">
           <input
+            ref={inputRef}
             type="text"
             value={props.word}
             onChange={(e) => props.setWord(e.target.value.toUpperCase())}
