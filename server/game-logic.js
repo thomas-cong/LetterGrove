@@ -168,7 +168,7 @@ const hasAdjacentLetter = (row, col, board, ARRAY_SIZE) => {
 
 /**
  * Generates a random game board with letters and other game elements
- * @param {Object} props -2q Game configuration properties
+ * @param {Object} props - Game configuration properties
  * @returns {Array} Generated game board
  */
 const randomlyGenerateBoard = (props) => {
@@ -433,7 +433,26 @@ const enterWord = (userId, props) => {
       suggestions.push(suggestion);
     }
   }
-  return suggestions;
+  if (validWord(word, games[lobbyCode].minWordLength)) {
+    return {
+      suggestions: suggestions,
+      validWord: true
+    };
+  } else {
+    return {
+      suggestions: suggestions,
+      validWord: false
+    };
+  }
+};
+
+const { isValidWord } = require('./dictionary');
+
+const validWord = (word, minWordLength) => {
+  if (word.length < minWordLength) {
+    return false;
+  }
+  return isValidWord(word);
 };
 
 const confirmWord = (userId, props) => {
@@ -450,6 +469,16 @@ const confirmWord = (userId, props) => {
   const board = userGameState.board;
   const mode = game.mode;
   const [dx, dy] = [x_one_step, y_one_step];
+  if (!validWord(word, game.minWordLength)) {
+    if (word.length < game.minWordLength) {
+      return {
+        error: "Word too short",
+      };
+    }
+    return {
+      error: "Not a valid word",
+    };
+  }
   let currentX = x;
   let currentY = y;
   let cropsCollected = {

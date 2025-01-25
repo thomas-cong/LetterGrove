@@ -475,6 +475,11 @@ module.exports = {
         }
         if (user && game.players[user._id]) {
           output = gameLogic.confirmWord(user._id, props);
+          if (output.error) {
+            console.log(output.error);
+            socket.emit("invalid word", { error: output.error});
+            return;
+          }
           /**
            * Emits updates specific to the current user
            * @param {Object} localUpdate

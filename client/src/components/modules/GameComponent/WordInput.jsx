@@ -87,6 +87,7 @@ const WordInput = (props) => {
             ref={inputRef}
             type="text"
             value={props.word}
+            disabled = {(props.isTurn === false )}
             onChange={(e) => {
               props.setWord(e.target.value.toUpperCase());
               console.log(props.endpointSelected);

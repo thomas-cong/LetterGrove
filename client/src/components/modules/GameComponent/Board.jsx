@@ -107,12 +107,14 @@ const Board = (props) => {
       setSuggestions: props.setSuggestions,
     })
   );
+  const [validWord, setValidWord] = useState(false);
 
   // Set up socket listener for suggestions
   useEffect(() => {
-    const suggestionModifier = (suggestions) => {
-      console.log("Suggestions:", suggestions);
-      props.setSuggestions(suggestions);
+    const suggestionModifier = (info) => {
+      console.log("Suggestions:", info.suggestions);
+      props.setSuggestions(info.suggestions);
+      setValidWord(info.validWord);
     };
 
     socket.on("suggestions", suggestionModifier);
