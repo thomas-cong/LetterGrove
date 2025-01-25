@@ -91,7 +91,7 @@ const initiateGame = (props) => {
   const gameInfo = props.gameInfo;
   const players = gameInfo.players;
   const sameBoard = gameInfo.sameBoard;
-  console.log(gameInfo);
+  const mode = gameInfo.mode; // 'words', 'points', or 'time'
   const numPlayers = Object.keys(players).length;
 
   board = gameLogic.randomlyGenerateBoard({
@@ -110,26 +110,28 @@ const initiateGame = (props) => {
   }
   if (sameBoard) {
     game = {
+      mode: mode,
       sameBoard: sameBoard,
       userGameStates: {},
       players: players,
       gameStatus: "waiting",
-      stepsRemaining: gameInfo.steps,
+      secondsRemaining: mode === "Time" ? gameInfo.steps : 36000, // default to 10 hours if mode isn't time
+      pointsToWin: mode === "Points" ? gameInfo.steps : null,
       rankings: [],
-      pointsToWin: 100,
       log: [],
       turnOrder: turnOrder,
       turn: turn,
     };
   } else {
     game = {
+      mode: mode,
       sameBoard: sameBoard,
       userGameStates: {},
       players: players,
       gameStatus: "waiting",
-      stepsRemaining: gameInfo.steps,
+      secondsRemaining: mode === "Time" ? gameInfo.steps : 36000, // default to 10 hours if mode isn't time
+      pointsToWin: mode === "Points" ? gameInfo.steps : null,
       rankings: [],
-      pointsToWin: 100,
       log: [],
     };
   }
@@ -186,6 +188,8 @@ const initiateGame = (props) => {
         letters_collected: 0,
         words_formed: 0,
         powerups_used: 0,
+        wordsRemaining: mode === "Words" ? gameInfo.steps : null,
+        wordLimit: mode === "Words" ? gameInfo.steps : null,
       };
     } else {
       game.userGameStates[userId] = {
@@ -201,6 +205,8 @@ const initiateGame = (props) => {
         letters_collected: 0,
         words_formed: 0,
         powerups_used: 0,
+        wordsRemaining: mode === "Words" ? gameInfo.steps : null,
+        wordLimit: mode === "Words" ? gameInfo.steps : null,
       };
     }
   }
@@ -213,13 +219,33 @@ const initiateGame = (props) => {
   }
   gameLogic.games[lobbyCode] = game;
   gameLogic.games[lobbyCode].gameStatus = "active";
-  console.log(players);
-  startRunningGame({
+  console.log("Game started:", {
+    lobbyCode,
+    mode,
+    sameBoard,
+    numPlayers,
+  });
+  if (mode === "Time") {
+    io.in(lobbyCode).emit("time update", {
+      secondsRemaining: gameInfo.steps,
+    });
+  }
+  if (mode === "Words") {
+    io.in(lobbyCode).emit("words update", {
+      wordsRemaining: gameInfo.steps,
+      wordLimit: gameInfo.steps,
+    });
+  }
+  if (mode === "Points") {
+    io.in(lobbyCode).emit("points update", {
+      pointsToWin: gameInfo.steps,
+    });
+  }
+  startTimer({
     lobbyCode: lobbyCode,
-    stepsLeft: game.stepsRemaining,
+    secondsRemaining: game.secondsRemaining,
   });
   for (const userId in players) {
-    console.log(userId);
     sendUserInitialGame(userId, lobbyCode);
   }
   io.in(lobbyCode).emit("turn update", {
@@ -233,7 +259,7 @@ const initiateGame = (props) => {
  * Decrements steps remaining and checks for game end conditions
  * @param {Object} props - Contains lobbyCode and initial steps
  */
-const startRunningGame = (props) => {
+const startTimer = (props) => {
   const lobbyCode = props.lobbyCode;
   const game = gameLogic.games[lobbyCode];
   game.stepsRemaining = props.stepsLeft;
@@ -244,14 +270,17 @@ const startRunningGame = (props) => {
   game.timerInterval = setInterval(() => {
     game.stepsRemaining--;
 
-    if (game.stepsRemaining === 0) {
+    if (game.secondsRemaining === 0) {
       game.gameStatus = "ended";
-      handleEndGame({ lobbyCode: lobbyCode, reason: "Time's up" });
+      handleEndGame({ lobbyCode: lobbyCode, reason: "Time's up! " + game.rankings[0].username + " wins with " + game.rankings[0].score + " points!" });
       clearInterval(game.timerInterval);
       return;
     }
 
-    io.in(lobbyCode).emit("time update", { stepsRemaining: game.stepsRemaining });
+    if (game.mode === "Time") {
+      console.log("Time remaining:", game.secondsRemaining);
+      io.in(lobbyCode).emit("time update", { secondsRemaining: game.secondsRemaining });
+    }  
   }, 1000);
 };
 
@@ -428,6 +457,11 @@ module.exports = {
         console.log("confirm word");
         const user = getUserFromSocketID(socket.id);
         const game = gameLogic.games[props.lobbyCode];
+        // check if there are still words remaining
+        if (game.mode === "Words" && game.userGameStates[user._id].wordsRemaining === 0) {
+          console.log("No more words");
+          return;
+        }
 
         // check that game is still going on
         if (!game || game.gameStatus !== "active") return;
@@ -450,8 +484,15 @@ module.exports = {
            * @param {Array} localUpdate.letterUpdates - Array of letter placements on board
            * @param {number} localUpdate.totalPoints - User's updated total score
            * @param {Array} localUpdate.endpoints - Updated valid endpoints for next word
+           * @param {number} localUpdate.wordsRemaining - Updated number of words remaining
            */
           socket.emit("user update", output.localUpdate);
+          if (game.mode === "Words") {
+            socket.emit("words update", { wordsRemaining: output.localUpdate.wordsRemaining, wordLimit: game.userGameStates[user._id].wordLimit });
+          }
+          if (game.mode === "Points") {
+            socket.emit("points update", { pointsToWin: game.pointsToWin });
+          }
           if (game.sameBoard) {
             for (const userId in game.players) {
               if (userId !== user._id) {
@@ -468,6 +509,20 @@ module.exports = {
           io.to(props.lobbyCode).emit("global update", output.globalUpdate);
           if (game.sameBoard) {
             passTurn(props.lobbyCode);
+          }
+          if (game.mode === "Words") {
+            let finished = true;
+            console.log("Checking for finished game");
+            for (const userId of Object.keys(game.players)) {
+              console.log("HERE");
+              if (game.userGameStates[userId].wordsRemaining > 0) {
+                finished = false;
+                break;
+              }
+            }
+            if (finished) {
+              game.gameStatus = "ended";
+            }
           }
           // check if game is over
           if (gameLogic.games[props.lobbyCode].gameStatus === "ended") {
@@ -490,7 +545,7 @@ module.exports = {
   sendUserInitialGame: sendUserInitialGame,
   initiateGame: initiateGame,
   handleEndGame: handleEndGame,
-  startRunningGame: startRunningGame,
+  startTimer: startTimer,
   joinSocket: joinSocket,
   lobbyToGameTransition: lobbyToGameTransition,
   updateLobbyUserList: updateLobbyUserList,

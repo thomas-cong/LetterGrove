@@ -168,21 +168,21 @@ const hasAdjacentLetter = (row, col, board, ARRAY_SIZE) => {
 
 /**
  * Generates a random game board with letters and other game elements
- * @param {Object} props - Game configuration properties
+ * @param {Object} props -2q Game configuration properties
  * @returns {Array} Generated game board
  */
 const randomlyGenerateBoard = (props) => {
   const DIFFICULTY = props.difficulty;
+  const sameBoard = props.sameBoard;
+  const playerCount = props.playerCount;
   let LETTER_COUNT;
   const CROPS = ["cherry", "grape", "orange", "crate"];
   const POWERUPS = ["spade", "water", "shovel"];
   let CROP_COUNTS;
   let POWERUP_COUNTS;
   const ARRAY_SIZE = 15;
-  const sameBoard = props.sameBoard;
-  const playerCount = props.playerCount;
 
-  if (DIFFICULTY === "easy") {
+  if (DIFFICULTY === "Easy") {
     LETTER_COUNT = 25;
     CROP_COUNTS = {
       cherry: 2,
@@ -195,7 +195,7 @@ const randomlyGenerateBoard = (props) => {
       water: 1,
       shovel: 1,
     };
-  } else if (DIFFICULTY === "medium") {
+  } else if (DIFFICULTY === "Medium") {
     LETTER_COUNT = 25;
     CROP_COUNTS = {
       cherry: 1,
@@ -208,7 +208,7 @@ const randomlyGenerateBoard = (props) => {
       water: 1,
       shovel: 1,
     };
-  } else if (DIFFICULTY === "hard") {
+  } else if (DIFFICULTY === "Hard") {
     LETTER_COUNT = 35;
     CROP_COUNTS = {
       cherry: 1,
@@ -305,6 +305,7 @@ const randomlyGenerateBoard = (props) => {
   const generatePosition = createRandomPositionGenerator(ARRAY_SIZE);
   let attempts = 0;
   const MAX_ATTEMPTS = 1000;
+  console.log("remainingLetters: " + remainingLetters);
 
   // Track available positions for crops and powerups
   const availablePositions = new Set();
@@ -447,6 +448,7 @@ const confirmWord = (userId, props) => {
   const game = games[lobbyCode];
   const userGameState = game.userGameStates[userId];
   const board = userGameState.board;
+  const mode = game.mode;
   const [dx, dy] = [x_one_step, y_one_step];
   let currentX = x;
   let currentY = y;
@@ -517,11 +519,14 @@ const confirmWord = (userId, props) => {
     }
   }
   game.rankings.sort((a, b) => b.score - a.score);
-  if (userGameState.points >= game.pointsToWin) {
-    game.gameStatus = "ended";
+  if (game.mode === "Points") {
+    if (userGameState.points >= game.pointsToWin) {
+      game.gameStatus = "ended";
+    }
   }
-  userGameState.letters_collected += letterUpdates.length;
-  userGameState.words_formed += 1;
+  userGameState.lettersCollected += letterUpdates.length;
+  userGameState.wordsFormed += 1;
+  if (mode === "Words") userGameState.wordsRemaining -= 1;
 
   game.log.push(...logMessages);
 
@@ -533,6 +538,7 @@ const confirmWord = (userId, props) => {
       letterUpdates: letterUpdates,
       totalPoints: userGameState.points,
       endpoints: userGameState.endpoints,
+      wordsRemaining: userGameState.wordsRemaining,
     },
     globalUpdate: {
       logMessages: logMessages,

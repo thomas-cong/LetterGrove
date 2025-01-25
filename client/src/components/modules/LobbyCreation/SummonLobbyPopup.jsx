@@ -22,7 +22,7 @@ const SummonLobbyPopup = (props) => {
     minWordLength: 3, // int
     mode: "Time", // string
     steps: 180, // int
-    difficulty: "easy", // slider
+    difficulty: "Easy", // slider
     sameBoard: true, // boolean
   });
 
