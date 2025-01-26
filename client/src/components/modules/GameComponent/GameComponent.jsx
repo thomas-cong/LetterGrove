@@ -71,67 +71,65 @@ const GameComponent = (props) => {
 
   // Set up socket listeners
   useEffect(() => {
-    setTimeout(() => {
-      get("/api/currentGame", { lobbyCode: props.lobbyCode, userId: props.userId });
-      // Initial game state
-      const handleInitialGame = (game) => {
-        setGameState(game);
-        setEndpoints(game.endpoints);
-        console.log("GAME ENDPOINTS" + game.endpoints);
-      };
+    get("/api/currentGame", { lobbyCode: props.lobbyCode, userId: props.userId });
+    // Initial game state
+    const handleInitialGame = (game) => {
+      setGameState(game);
+      setEndpoints(game.endpoints);
+      console.log("GAME ENDPOINTS" + game.endpoints);
+    };
 
-      // User-specific updates (letters, points, endpoints)
-      const handleUserUpdate = (info) => {
-        // Reset the suggestions since this only plays on user update
-        setSuggestions([]);
+    // User-specific updates (letters, points, endpoints)
+    const handleUserUpdate = (info) => {
+      // Reset the suggestions since this only plays on user update
+      setSuggestions([]);
 
-        console.log("User update:", info);
-        setGameState((prevState) => ({
-          ...prevState,
-          points: info.totalPoints,
-        }));
-        setLettersUpdated(info.letterUpdates);
-        setEndpoints(info.endpoints);
-      };
+      console.log("User update:", info);
+      setGameState((prevState) => ({
+        ...prevState,
+        points: info.totalPoints,
+      }));
+      setLettersUpdated(info.letterUpdates);
+      setEndpoints(info.endpoints);
+    };
 
-      // Global game updates (rankings, log messages)
-      const handleGlobalUpdate = (info) => {
-        console.log("Global update:", info);
-        setGameState((prevState) => ({
-          ...prevState,
-          rankings: info.updatedRankings,
-          log: [...prevState.log, ...info.logMessages],
-        }));
-      };
+    // Global game updates (rankings, log messages)
+    const handleGlobalUpdate = (info) => {
+      console.log("Global update:", info);
+      setGameState((prevState) => ({
+        ...prevState,
+        rankings: info.updatedRankings,
+        log: [...prevState.log, ...info.logMessages],
+      }));
+    };
 
-      const handleTurnUpdate = (info) => {
-        if (info.userId === props.userId) {
-          setIsTurn(true);
-        } else {
-          setIsTurn(false);
-        }
-      };
-      // Letter updates
-      const handleBoardUpdate = (info) => {
-        console.log("Board update:", info);
-        setLettersUpdated(info);
-      };
+    const handleTurnUpdate = (info) => {
+      if (info.userId === props.userId) {
+        setIsTurn(true);
+      } else {
+        setIsTurn(false);
+      }
+    };
+    // Letter updates
+    const handleBoardUpdate = (info) => {
+      console.log("Board update:", info);
+      setLettersUpdated(info);
+    };
 
-      // Set up listeners
-      socket.on("initial game", handleInitialGame);
-      socket.on("user update", handleUserUpdate);
-      socket.on("global update", handleGlobalUpdate);
-      socket.on("turn update", handleTurnUpdate);
-      socket.on("board update", handleBoardUpdate);
-      // Cleanup listeners on unmount
-      return () => {
-        socket.off("initial game", handleInitialGame);
-        socket.off("user update", handleUserUpdate);
-        socket.off("global update", handleGlobalUpdate);
-        socket.off("turn update", handleTurnUpdate);
-        socket.off("board update", handleBoardUpdate);
-      };
-    }, 50);
+    // Set up listeners
+    socket.on("initial game", handleInitialGame);
+    socket.on("user update", handleUserUpdate);
+    socket.on("global update", handleGlobalUpdate);
+    socket.on("turn update", handleTurnUpdate);
+    socket.on("board update", handleBoardUpdate);
+    // Cleanup listeners on unmount
+    return () => {
+      socket.off("initial game", handleInitialGame);
+      socket.off("user update", handleUserUpdate);
+      socket.off("global update", handleGlobalUpdate);
+      socket.off("turn update", handleTurnUpdate);
+      socket.off("board update", handleBoardUpdate);
+    };
   }, []); // Empty dependency array since we want to set up listeners only once
 
   useEffect(() => {
