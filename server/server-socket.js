@@ -29,12 +29,12 @@ const getSocketFromSocketID = (socketid) => io.sockets.sockets.get(socketid);
  */
 const addUser = (user, socket) => {
   const oldSocket = userToSocketMap[user._id];
-  // if (oldSocket && oldSocket.id !== socket.id) {
-  //   // there was an old tab open for this user, force it to disconnect
-  //   // FIXME: is this the behavior you want?
-  //   oldSocket.disconnect();
-  //   delete socketToUserMap[oldSocket.id];
-  // }
+  if (oldSocket && oldSocket.id !== socket.id) {
+    // there was an old tab open for this user, force it to disconnect
+    // FIXME: is this the behavior you want?
+    oldSocket.disconnect();
+    delete socketToUserMap[oldSocket.id];
+  }
 
   userToSocketMap[user._id] = socket;
   socketToUserMap[socket.id] = user;
@@ -75,7 +75,7 @@ const sendUserInitialGame = (userId, lobbyCode) => {
     turnOrder: gameLogic.games[lobbyCode].turnOrder,
     log: gameLogic.games[lobbyCode].log,
   };
-  socket.emit("initial game", game);
+  if (socket) socket.emit("initial game", game);
 };
 
 /**
@@ -225,20 +225,36 @@ const initiateGame = (props) => {
     numPlayers,
   });
   if (mode === "Time") {
-    io.in(lobbyCode).emit("time update", {
-      secondsRemaining: gameInfo.steps,
-    });
+    for (const userId of Object.keys(players)) {
+
+      const socket = userToSocketMap[userId];
+      if (socket) {
+        socket.emit("time update", {
+          secondsRemaining: gameInfo.steps,
+        });
+      }
+    }
   }
   if (mode === "Words") {
-    io.in(lobbyCode).emit("words update", {
-      wordsRemaining: gameInfo.steps,
-      wordLimit: gameInfo.steps,
-    });
+    for (const userId of Object.keys(players)) {
+      const socket = userToSocketMap[userId];
+      if (socket) {
+        socket.emit("words update", {
+          wordsRemaining: gameInfo.steps,
+          wordLimit: gameInfo.steps,
+        });
+      }
+    }
   }
   if (mode === "Points") {
-    io.in(lobbyCode).emit("points update", {
-      pointsToWin: gameInfo.steps,
-    });
+    for (const userId of Object.keys(players)) {
+      const socket = userToSocketMap[userId];
+      if (socket) {
+        socket.emit("points update", {
+          pointsToWin: gameInfo.steps,
+        });
+      }
+    }
   }
   startTimer({
     lobbyCode: lobbyCode,
@@ -247,10 +263,15 @@ const initiateGame = (props) => {
   for (const userId in players) {
     // sendUserInitialGame(userId, lobbyCode);
   }
-  io.in(lobbyCode).emit("turn update", {
-    userId: game.turn,
-    username: players[game.turn].username,
-  });
+  for (const userId of Object.keys(players)) {
+    const socket = userToSocketMap[userId];
+    if (socket) {
+      socket.emit("turn update", {
+        userId: game.turn,
+        username: players[game.turn].username,
+      });
+    }
+  }
 };
 
 /**
@@ -272,7 +293,12 @@ const startTimer = (props) => {
 
     if (game.mode === "Time") {
       console.log("Time remaining:", game.secondsRemaining);
-      io.in(lobbyCode).emit("time update", { secondsRemaining: game.secondsRemaining });
+      for (const userId of Object.keys(game.players)) {
+        const socket = userToSocketMap[userId];
+        if (socket) {
+          socket.emit("time update", { secondsRemaining: game.secondsRemaining });
+        }
+      }
     }
 
     if (game.secondsRemaining === 0) {
@@ -355,10 +381,17 @@ const handleEndGame = (props) => {
   completedGame.save().then((game) => {
     console.log("Game saved:", game);
   });
-  io.to(props.lobbyCode).emit("game over", {
-    results: gameResults,
-    reason: props.reason,
-  });
+  for (const userId of Object.keys(game.players)) {
+    const socket = userToSocketMap[userId];
+    if (socket) {
+      socket.emit("game over", {
+        results: gameResults,
+        reason: props.reason,
+      });
+    }
+  }
+  delete gameLogic.games[lobbyCode];
+  delete openLobbies[lobbyCode];
 };
 
 /**
@@ -382,7 +415,12 @@ const joinSocket = (props) => {
  * @param {Object} props - Contains lobbyCode
  */
 const lobbyToGameTransition = (props) => {
-  io.to(props.lobbyCode).emit("lobby to game transition");
+  for (const userId of Object.keys(openLobbies[props.lobbyCode].players)) {
+    const socket = userToSocketMap[userId];
+    if (socket) {
+      socket.emit("lobby to game transition");
+    }
+  }
   console.log("lobby game transition emitted");
 };
 
@@ -392,7 +430,12 @@ const lobbyToGameTransition = (props) => {
  * @param {Object} props - Contains lobbyCode
  */
 const updateLobbyUserList = (props) => {
-  io.to(props.lobbyCode).emit("update lobby user list", openLobbies[props.lobbyCode].players);
+  for (const userId of Object.keys(openLobbies[props.lobbyCode].players)) {
+    const socket = userToSocketMap[userId];
+    if (socket) {
+      socket.emit("update lobby user list", openLobbies[props.lobbyCode].players);
+    }
+  }
   console.log("update lobby user list emitted");
 };
 
@@ -416,10 +459,15 @@ const sendBoardState = (userId, letterUpdates) => {
 const passTurn = (lobbyCode) => {
   const game = gameLogic.games[lobbyCode];
   game.turn = game.turnOrder[(game.turnOrder.indexOf(game.turn) + 1) % game.turnOrder.length];
-  io.in(lobbyCode).emit("turn update", {
-    userId: game.turn,
-    username: game.players[game.turn].username,
-  });
+  for (const userId of Object.keys(game.players)) {
+    const socket = userToSocketMap[userId];
+    if (socket) {
+      socket.emit("turn update", {
+        userId: game.turn,
+        username: game.players[game.turn].username,
+      });
+    }
+  }
 };
 
 module.exports = {
@@ -464,7 +512,9 @@ module.exports = {
         if (user && game.players[user._id]) {
           console.log("User is a valid player, getting suggestions");
           suggestions = gameLogic.enterWord(user._id, props);
-          socket.emit("suggestions", suggestions);
+          if (socket) {
+            socket.emit("suggestions", suggestions);
+          }
           console.log("Emitted suggestions:", suggestions);
         } else {
           console.log(user);
@@ -496,7 +546,9 @@ module.exports = {
           output = gameLogic.confirmWord(user._id, props);
           if (output.error === "Word too short" || output.error === "Not a valid word") {
             console.log(output.error);
-            socket.emit("invalid word", { error: output.error });
+            if (socket) {
+              socket.emit("invalid word", { error: output.error });
+            }
             return;
           }
           /**
@@ -510,15 +562,21 @@ module.exports = {
            * @param {Array} localUpdate.endpoints - Updated valid endpoints for next word
            * @param {number} localUpdate.wordsRemaining - Updated number of words remaining
            */
-          socket.emit("user update", output.localUpdate);
+          if (socket) {
+            socket.emit("user update", output.localUpdate);
+          }
           if (game.mode === "Words") {
-            socket.emit("words update", {
-              wordsRemaining: output.localUpdate.wordsRemaining,
-              wordLimit: game.userGameStates[user._id].wordLimit,
-            });
+            if (socket) {
+              socket.emit("words update", {
+                wordsRemaining: output.localUpdate.wordsRemaining,
+                wordLimit: game.userGameStates[user._id].wordLimit,
+              });
+            }
           }
           if (game.mode === "Points") {
-            socket.emit("points update", { pointsToWin: game.pointsToWin });
+            if (socket) {
+              socket.emit("points update", { pointsToWin: game.pointsToWin });
+            }
           }
           if (game.sameBoard) {
             for (const userId in game.players) {
@@ -533,7 +591,12 @@ module.exports = {
            * @param {string} globalUpdate.logMessage - Message to display in game log
            * @param {Array<{playerId: string, username: string, score: number}>} globalUpdate.updatedRankings - Current rankings sorted by score
            */
-          io.to(props.lobbyCode).emit("global update", output.globalUpdate);
+          for (const userId of Object.keys(game.players)) {
+            const socket = userToSocketMap[userId];
+            if (socket) {
+              socket.emit("global update", output.globalUpdate);
+            }
+          }
           if (game.sameBoard) {
             passTurn(props.lobbyCode);
           }

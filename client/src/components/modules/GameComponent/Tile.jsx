@@ -264,14 +264,16 @@ const Tile = (props) => {
       console.log(x_diff, y_diff);
 
       // Emit console signal to confirm word.
-      socket.emit("confirm word", {
-        lobbyCode: lobbyId,
-        x: props.selectedX,
-        y: props.selectedY,
-        x_one_step: x_diff,
-        y_one_step: y_diff,
-        word: props.suggestedWord,
-      });
+      if (socket) {
+        socket.emit("confirm word", {
+          lobbyCode: lobbyId,
+          x: props.selectedX,
+          y: props.selectedY,
+          x_one_step: x_diff,
+          y_one_step: y_diff,
+          word: props.suggestedWord,
+        });
+      }
     }
   };
 

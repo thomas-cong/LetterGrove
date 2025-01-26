@@ -44,6 +44,19 @@ router.post("/initsocket", (req, res) => {
 // |------------------------------|
 // | write your API methods below!|
 // |------------------------------|
+
+router.get("/userInMatch", (req, res) => {
+  if (!req.user) {
+    return res.send({ isInMatch: false });
+  }
+  for (const lobbyCode of Object.keys(openLobbies)) {
+    if (openLobbies[lobbyCode].players[req.user._id]) {
+      return res.send({ isInMatch: true, lobbyCode: lobbyCode });
+    }
+  }
+  res.send({ isInMatch: false, lobbyCode: null });
+})
+
 router.get("/generateLobbyCode", async (req, res) => {
   //Generate an initial code and find similar
   let lobbyCodeGenerated = Array.from({ length: 5 }, () =>
@@ -205,6 +218,7 @@ router.post("/startGame", (req, res) => {
     lobbyCode: req.body.lobbyCode,
   });
 });
+
 router.post("/deleteLobby", (req, res) => {
   const lobbyCode = req.body.lobbyCode;
   if (openLobbies[lobbyCode].lobbyOwner != req.user._id) {

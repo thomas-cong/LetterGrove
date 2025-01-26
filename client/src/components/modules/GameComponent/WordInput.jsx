@@ -36,13 +36,15 @@ const WordInput = (props) => {
     }
 
     console.log("Submitting word:", props.word);
-    socket.emit("enter word", {
-      lobbyCode: props.lobbyCode,
-      x: props.selectedX,
-      y: props.selectedY,
-      word: props.word,
-      board: props.board,
-    });
+    if (socket) {
+      socket.emit("enter word", {
+        lobbyCode: props.lobbyCode,
+        x: props.selectedX,
+        y: props.selectedY,
+        word: props.word,
+        board: props.board,
+      });
+    };
   };
 
   /**
