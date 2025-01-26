@@ -4,6 +4,7 @@ import buttonImage from "../../../assets/640signs_1.png";
 import "./SummonLobbyPopup.css";
 import LobbyCreationPopup from "./LobbyCreationPopup";
 import "../../../assets/font.css";
+import AlertBox from "../AlertBox/AlertBox";
 
 /**
  * SummonLobbyPopup is a component for briningup the lobby creation popup
@@ -14,6 +15,8 @@ import "../../../assets/font.css";
  */
 
 const SummonLobbyPopup = (props) => {
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
   const [LobbyShowing, setLobbyShowing] = useState(false);
   const [lobbyCode, setLobbyCode] = useState("");
   const [username, setUsername] = useState("");
@@ -35,9 +38,17 @@ const SummonLobbyPopup = (props) => {
         console.log(code);
       })
       .catch(setLobbyCode("ERROR"));
-    setLobbyShowing(true);
-    props.onShowLobby && props.onShowLobby();
-    props.setPopupShowing(true);
+
+    get("/api/userInMatch").then((data) => {
+      if (data.isInMatch) {
+        setAlertMessage("You are already in lobby: " + data.lobbyCode);
+        setShowAlert(true);
+      } else {
+        setLobbyShowing(true);
+        props.onShowLobby && props.onShowLobby();
+        props.setPopupShowing(true);
+      } // Check if the user is already in a match
+    });
   };
   // handles hiding the button by state update
   const hideLobby = () => {
@@ -50,24 +61,27 @@ const SummonLobbyPopup = (props) => {
 
   // Conditionally render either the create game button or the damn lobby creation popup
   return (
-    <div>
-      {!LobbyShowing && !props.popupShowing && (
-        <div onClick={showLobby} className="button-container">
-          <img src={buttonImage} className="homepagesign" alt="Wooden Sign" />
-          <h2 className="homepagesigntext">Create Lobby</h2>
-        </div>
-      )}
-      {LobbyShowing && props.popupShowing && (
-        <LobbyCreationPopup
-          lobbyCode={lobbyCode}
-          hideLobby={hideLobby}
-          setUsername={setUsername}
-          setGameSettings={setGameSettings}
-          gameSettings={gameSettings}
-          username={username}
-        />
-      )}
-    </div>
+    <>
+      {showAlert && <AlertBox message={alertMessage} setShowAlert={setShowAlert} timeout={5500} />}
+      <div>
+        {!LobbyShowing && !props.popupShowing && (
+          <div onClick={showLobby} className="button-container">
+            <img src={buttonImage} className="homepagesign" alt="Wooden Sign" />
+            <h2 className="homepagesigntext">Create Lobby</h2>
+          </div>
+        )}
+        {LobbyShowing && props.popupShowing && (
+          <LobbyCreationPopup
+            lobbyCode={lobbyCode}
+            hideLobby={hideLobby}
+            setUsername={setUsername}
+            setGameSettings={setGameSettings}
+            gameSettings={gameSettings}
+            username={username}
+          />
+        )}
+      </div>
+    </>
   );
 };
 

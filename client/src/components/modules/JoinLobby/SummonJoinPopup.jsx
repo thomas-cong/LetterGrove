@@ -4,6 +4,7 @@ import buttonImage from "../../../assets/640signs_0.png";
 import "../../../assets/font.css";
 import "./SummonJoinPopup.css";
 import JoinLobbyPopup from "./JoinLobbyPopup";
+import AlertBox from "../AlertBox/AlertBox";
 /**
  * SummonJoinPopup is a component for bringing up the lobby joining popup
  *
@@ -16,11 +17,20 @@ const SummonJoinPopup = (props) => {
   const [username, setUsername] = useState("");
   const [lobbyCode, setLobbyCode] = useState("");
   const [showJoinPopup, setShowJoinPopup] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
 
   const openJoin = () => {
-    props.setPopupShowing(true);
-    setShowJoinPopup(true);
-    props.onShowJoin && props.onShowJoin();
+    get("/api/userInMatch").then((data) => {
+      if (data.isInMatch) {
+        setAlertMessage("You are already in lobby: " + data.lobbyCode);
+        setShowAlert(true);
+      } else {
+        props.setPopupShowing(true);
+        setShowJoinPopup(true);
+        props.onShowJoin && props.onShowJoin();
+      }
+    });
   };
 
   const closeJoin = () => {
@@ -32,24 +42,27 @@ const SummonJoinPopup = (props) => {
   };
 
   return (
-    <div>
-      {!showJoinPopup && !props.popupShowing && (
-        <div onClick={openJoin} className="button-container">
-          <img src={buttonImage} className="homepagesign" alt="Wooden Sign" />
-          <h2 className="homepagesigntext">Join Lobby</h2>
-        </div>
-      )}
-      {props.popupShowing && showJoinPopup && (
-        <JoinLobbyPopup
-          username={username}
-          setUsername={setUsername}
-          lobbyCode={lobbyCode}
-          setLobbyCode={setLobbyCode}
-          hideJoin={closeJoin}
-          setPopupShowing={props.setPopupShowing}
-        />
-      )}
-    </div>
+    <>
+      {showAlert && <AlertBox message={alertMessage} setShowAlert={setShowAlert} />}
+      <div>
+        {!showJoinPopup && !props.popupShowing && (
+          <div onClick={openJoin} className="button-container">
+            <img src={buttonImage} className="homepagesign" alt="Wooden Sign" />
+            <h2 className="homepagesigntext">Join Lobby</h2>
+          </div>
+        )}
+        {props.popupShowing && showJoinPopup && (
+          <JoinLobbyPopup
+            username={username}
+            setUsername={setUsername}
+            lobbyCode={lobbyCode}
+            setLobbyCode={setLobbyCode}
+            hideJoin={closeJoin}
+            setPopupShowing={props.setPopupShowing}
+          />
+        )}
+      </div>
+    </>
   );
 };
 
