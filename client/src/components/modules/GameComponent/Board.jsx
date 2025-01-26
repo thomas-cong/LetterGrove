@@ -24,6 +24,7 @@ import "./Board.css";
  * @param {Function} params.setSelectedY - Updates selected Y coordinate
  * @param {String} params.suggestedWord - Currently inputted word
  * @param {Function} params.setSuggestions - Function to update suggestions state
+ * @param {Function} params.setWord - Function to update the word state
  * @returns {Array<JSX.Element>} Array of row elements containing tiles
  */
 const renderBoard = (params) => {
@@ -51,6 +52,7 @@ const renderBoard = (params) => {
           setSelectedY={params.setSelectedY}
           suggestedWord={params.suggestedWord}
           setSuggestions={params.setSuggestions}
+          setWord={params.setWord}
         />
       );
     }
@@ -105,6 +107,7 @@ const Board = (props) => {
       setSelectedY: props.setSelectedY,
       suggestedWord: "",
       setSuggestions: props.setSuggestions,
+      setWord: props.setWord,
     })
   );
   const [validWord, setValidWord] = useState(false);
@@ -142,6 +145,7 @@ const Board = (props) => {
         setSelectedY: props.setSelectedY,
         suggestedWord: "",
         setSuggestions: props.setSuggestions,
+        setWord: props.setWord,
       })
     );
   }, [props.board]);
@@ -184,6 +188,7 @@ const Board = (props) => {
           setSelectedY: props.setSelectedY,
           suggestedWord: suggestedWord,
           setSuggestions: props.setSuggestions,
+          setWord: props.setWord,
         })
       );
     } else {
@@ -200,6 +205,7 @@ const Board = (props) => {
           setSelectedY: props.setSelectedY,
           suggestedWord: "",
           setSuggestions: props.setSuggestions,
+          setWord: props.setWord,
         })
       );
     }

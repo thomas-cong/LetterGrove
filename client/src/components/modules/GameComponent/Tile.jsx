@@ -200,6 +200,7 @@ const getCropImage = (cropType) => {
  * @param {Function} props.setSelectedY - Updates selected Y coordinate
  * @param {string} props.suggestedWord - Currently inputted words
  * @param {Function} props.setSuggestions - Function to update suggestions state
+ * @param {Function} props.setWord - Function to update the word state
  */
 const Tile = (props) => {
   const isSelected =
@@ -213,6 +214,7 @@ const Tile = (props) => {
     const handleEscape = (event) => {
       if (event.key === "Escape" && isSelected && props.suggestedWord.length > 0) {
         props.setSuggestions([]);
+        props.setWord("");
       }
     };
 

@@ -273,15 +273,22 @@ const startTimer = (props) => {
     if (game.mode === "Time") {
       console.log("Time remaining:", game.secondsRemaining);
       io.in(lobbyCode).emit("time update", { secondsRemaining: game.secondsRemaining });
-    }  
-    
+    }
+
     if (game.secondsRemaining === 0) {
       game.gameStatus = "ended";
-      handleEndGame({ lobbyCode: lobbyCode, reason: "Time's up! " + game.rankings[0].username + " wins with " + game.rankings[0].score + " points!" });
+      handleEndGame({
+        lobbyCode: lobbyCode,
+        reason:
+          "Time's up! " +
+          game.rankings[0].username +
+          " wins with " +
+          game.rankings[0].score +
+          " points!",
+      });
       clearInterval(game.timerInterval);
       return;
     }
-
   }, 1000);
 };
 
@@ -482,9 +489,9 @@ module.exports = {
         }
         if (user && game.players[user._id]) {
           output = gameLogic.confirmWord(user._id, props);
-          if (output.error) {
+          if (output.error === "Word too short" || output.error === "Not a valid word") {
             console.log(output.error);
-            socket.emit("invalid word", { error: output.error});
+            socket.emit("invalid word", { error: output.error });
             return;
           }
           /**
@@ -500,7 +507,10 @@ module.exports = {
            */
           socket.emit("user update", output.localUpdate);
           if (game.mode === "Words") {
-            socket.emit("words update", { wordsRemaining: output.localUpdate.wordsRemaining, wordLimit: game.userGameStates[user._id].wordLimit });
+            socket.emit("words update", {
+              wordsRemaining: output.localUpdate.wordsRemaining,
+              wordLimit: game.userGameStates[user._id].wordLimit,
+            });
           }
           if (game.mode === "Points") {
             socket.emit("points update", { pointsToWin: game.pointsToWin });

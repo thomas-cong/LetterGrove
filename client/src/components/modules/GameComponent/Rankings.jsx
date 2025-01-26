@@ -15,19 +15,18 @@ const Rankings = ({ rankings = [], currentUserId }) => {
     <div className="rankings-container">
       <div className="rankings-box">
         <div className="rankings-title">Rankings</div>
-        <div>
-          {rankings &&
-            rankings.map((player, index) => (
+        {rankings &&
+          rankings.map((player, index) => (
+            <div key={index} className="ranking-slip-container">
               <PlayerDisplay
-                key={index}
                 name={`${player.username} - ${player.score} pts`}
                 profilePicture={testProfilePicture}
                 playerId={player.playerId}
                 currentUserId={currentUserId}
                 isRankingSlip={true}
               />
-            ))}
-        </div>
+            </div>
+          ))}
       </div>
     </div>
   );
