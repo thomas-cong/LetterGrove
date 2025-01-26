@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import "../../utilities.css";
 import "../../assets/font.css";
 import { get } from "../../utilities";
-import { post } from "../../utilities";
 
 const SettingsDisplay = (props) => {
   const [settings, setSettings] = useState(null);
