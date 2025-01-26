@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { socket } from "../../../client-socket";
-import ScoreBox from "../../../assets/640signs_4.png";
+import ScoreBox from "../../../assets/remainingbox2.png";
 import "./Counter.css";
 
 /**
