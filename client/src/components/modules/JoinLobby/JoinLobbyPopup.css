@@ -4,6 +4,8 @@
   top: 1vh;
   left: 1vw;
   cursor: pointer;
+  filter: drop-shadow(0 0.5px 1px rgba(0, 0, 0, 1));
+
 }
 
 .closeButton:hover {
@@ -20,6 +22,8 @@
   display: block;
   margin: 0 auto;
   font-size: clamp(24px, 36px - 4vw, 36px);
+  filter: drop-shadow(0 0.5px 1px rgba(0, 0, 0, 1));
+
 }
 
 .mainboard {
@@ -38,6 +42,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   gap: min(20px, 2vh);
+
 }
 
 .joinlobbytext {
@@ -54,6 +59,8 @@
   color: rgb(255, 185, 138);
   transition: color 0.3s ease;
   white-space: nowrap;
+  filter: drop-shadow(0 0.25px 0.5px rgba(0, 0, 0, 1));
+
 }
 
 .joinlobbytext:hover {
@@ -68,6 +75,7 @@
   justify-content: center;
   cursor: pointer;
   width: 60%;
+  filter: drop-shadow(0 0.5px 1px rgba(0, 0, 0, 1));
 }
 
 .join-lobby-container img {
