@@ -127,7 +127,7 @@ router.post("/openLobby", (req, res) => {
 
   console.log("Lobby with ID " + lobbyCode + " opened");
   console.log("Current lobbies:", openLobbies);
-  socketManager.joinSocket({ lobbyCode: lobbyCode, socketid: req.user._id });
+  // socketManager.joinSocket({ lobbyCode: lobbyCode, socket: socket, userId: req.user._id });
   res.send({ message: "Lobby Created" });
 });
 
@@ -164,7 +164,7 @@ router.post("/joinLobby", (req, res) => {
 
   if (lobbyCode in openLobbies) {
     openLobbies[lobbyCode].players[req.user._id] = username;
-    socketManager.joinSocket({ lobbyCode: lobbyCode });
+    // socketManager.joinSocket({ lobbyCode: lobbyCode });
     res.send({ message: "Lobby Joined" });
   } else {
     console.log("Lobby with ID " + lobbyCode + " not found");

@@ -40,7 +40,8 @@ const SummonLobbyPopup = (props) => {
       .catch(setLobbyCode("ERROR"));
 
     get("/api/userInMatch").then((data) => {
-      if (data.isInMatch) {
+      // if (data.isInMatch) {\
+      if (false) {
         setAlertMessage("You are already in lobby: " + data.lobbyCode);
         setShowAlert(true);
       } else {

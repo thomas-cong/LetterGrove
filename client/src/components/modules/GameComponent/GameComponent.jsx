@@ -71,6 +71,7 @@ const GameComponent = (props) => {
 
   // Set up socket listeners
   useEffect(() => {
+    socket.emit("join socket", { lobbyCode: props.lobbyCode, userId: props.userId })
     setTimeout(() => {
       get("/api/currentGame", { lobbyCode: props.lobbyCode, userId: props.userId });
       // Initial game state
@@ -131,7 +132,7 @@ const GameComponent = (props) => {
         socket.off("turn update", handleTurnUpdate);
         socket.off("board update", handleBoardUpdate);
       };
-    }, 50);
+    }, 100);
   }, []); // Empty dependency array since we want to set up listeners only once
 
   useEffect(() => {
