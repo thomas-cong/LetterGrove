@@ -1,22 +1,46 @@
 .rankings-container {
-  --slip-width: 90%;
+  /* --slip-width: 90%; */
   display: flex;
   flex-direction: column;
-  width: 200%;
-  height: 80%;
+  width: 460px;
+  height: 200px;
   transform: translateX(-25%);
   background-image: url("../../../assets/RankingsBox.png");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
   margin-top: 20%;
+  left: 50%;
+  transform: translate(-5%, 0%);
+
 }
 
-.rankings-title {
+/* .rankings-title {
+  left: 50%;
+  transform: translate(-50%, 0%);
   position: relative;
   width: var(--slip-width);
-  /* margin: 0 auto; */
+  flex: 1;
   height: 10%;
+  aspect-ratio: 10/1;
+  background-image: url("../../../assets/Rankings_Slip.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+} */
+
+.rankings-title {
+  left: 50%;
+  transform: translate(-50%, 0%);
+  position: relative;
+  /* width: var(--slip-width); */
+  flex: 1;
+  width: 350px;
+  height: 200px;
   aspect-ratio: 10/1;
   background-image: url("../../../assets/Rankings_Slip.png");
   background-size: contain;
@@ -40,18 +64,15 @@
 }
 
 /* Individual player slip styling */
-.rankings-box > div {
+.ranking-slip-container {
   position: relative;
   transform: translateY(-15%);
   flex: 1;
-  width: var(--slip-width);
+  /* width: var(--slip-width); */
   margin: 0 auto;
+  width: 400px;
   height: 10%;
   aspect-ratio: 10/1;
-  background-image: url("../../../assets/Rankings_Slip.png");
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
   display: flex;
   align-items: center;
   justify-content: center;
