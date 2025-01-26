@@ -9,6 +9,8 @@
 | - Board dimensions and difficulty settings
 */
 
+const ARRAY_SIZE = 15;
+
 // Game state storage
 const games = {};
 
@@ -174,7 +176,11 @@ const hasAdjacentLetter = (row, col, board, ARRAY_SIZE) => {
  * @returns {boolean} True if tile is empty
  */
 const isEmptyTile = (row, col, board, ARRAY_SIZE) => {
-  return board[row][col].letter === "" && board[row][col].crop === null && board[row][col].powerup === null;
+  return (
+    board[row][col].letter === "" &&
+    board[row][col].crop === null &&
+    board[row][col].powerup === null
+  );
 };
 
 /*
@@ -458,17 +464,17 @@ const enterWord = (userId, props) => {
   if (validWord(word, games[lobbyCode].minWordLength)) {
     return {
       suggestions: suggestions,
-      validWord: true
+      validWord: true,
     };
   } else {
     return {
       suggestions: suggestions,
-      validWord: false
+      validWord: false,
     };
   }
 };
 
-const { isValidWord } = require('./dictionary');
+const { isValidWord } = require("./dictionary");
 
 const validWord = (word, minWordLength) => {
   if (word.length < minWordLength) {
@@ -592,7 +598,7 @@ const confirmWord = (userId, props) => {
   let cropUpdates = [];
   for (i = 0; i < powerupsCollected.wateringCan; i++) {
     let randomPositionGenerator = createRandomPositionGenerator(ARRAY_SIZE);
-    
+
     // Place each crop type once
     const cropTypes = ["cherry", "grape", "orange"];
     for (const cropType of cropTypes) {

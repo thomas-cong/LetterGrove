@@ -4,6 +4,7 @@ import App from "./components/App";
 import Home from "./components/pages/Home";
 import NotFound from "./components/pages/NotFound";
 import Lobby from "./components/pages/Lobby";
+import Profile from "./components/pages/Profile";
 
 import {
   createBrowserRouter,
@@ -22,6 +23,7 @@ const router = createBrowserRouter(
     <Route errorElement={<NotFound />} element={<App />}>
       <Route path="/" element={<Home />} />
       <Route path="/:lobbyId" element={<Lobby />} />
+      <Route path="/profile/:identifier" element={<Profile />} />
       <Route path="/LobbyNotFound" element={<NotFound />} />
     </Route>
   )
