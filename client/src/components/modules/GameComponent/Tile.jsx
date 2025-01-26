@@ -244,18 +244,19 @@ const Tile = (props) => {
    */
 
   const checkEndpoint = (params) => {
-    cancelSuggestions();
-    console.log(!props.cell.letter || (props.cell.letter && props.cell.default));
-    console.log("tile info:", params);
     if (params.isEndpoint) {
       console.log("Endpoint found at:", params.tileX, params.tileY);
       props.setEndPointSelected(true);
       props.setSelectedX(params.tileX);
       props.setSelectedY(params.tileY);
-    } else {
+      // Clear suggestions when selecting a new endpoint
+      props.setSuggestions([]);
+    } else if (!params.isSuggestionEnd) {
+      // Only clear endpoint selection if not clicking a suggestion end
       console.log("No endpoint found at:", params.tileX, params.tileY);
       props.setEndPointSelected(false);
     }
+    
     if (params.isSuggestionEnd) {
       // Calculate the difference between the clicked tile and the selected tile to get direction
       let x_diff = Math.sign(params.tileX - props.selectedX);
@@ -271,8 +272,6 @@ const Tile = (props) => {
         y_one_step: y_diff,
         word: props.suggestedWord,
       });
-    } else {
-      return;
     }
   };
 
