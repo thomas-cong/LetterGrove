@@ -26,8 +26,8 @@ const DetailedStats = ({ userStats }) => {
           </div>
         </div>
         <div className="stat-box full-width">
-          <label>Average Score</label>
-          <span>{(userStats.points / userStats.games_played || 0).toFixed(1)}</span>
+          <label>Score per Word</label>
+          <span>{(userStats.points / userStats.words || 0).toFixed(1)}</span>
         </div>
       </div>
     </div>
