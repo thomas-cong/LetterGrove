@@ -13,6 +13,9 @@ import grape from "../../../assets/Tiles/grape.png";
 import grassTile from "../../../assets/Tiles/Grass_Tile_01.png";
 import nullTile from "../../../assets/Tiles/NullTile.png";
 
+//Import endpoint crown
+import endpointCrown from "../../../assets/Tiles/EndPointCrown.png";
+
 // Import all letter and default letter tile images
 import letterA from "../../../assets/Tiles/Letter_Tile_01.png";
 import letterB from "../../../assets/Tiles/Letter_Tile_02.png";
@@ -286,9 +289,9 @@ const Tile = (props) => {
     <div
       className={`tile ${props.cell.visited ? "visited" : ""} ${
         props.cell.isSuggestion ? "suggestion" : ""
-      } ${props.cell.isSuggestionEnd ? "suggestion-end" : ""} ${
-        isSelected ? "selected" : ""
-      } ${props.isEndpoint ? "endpoint" : ""}`}
+      } ${props.cell.isSuggestionEnd ? "suggestion-end" : ""} ${isSelected ? "selected" : ""} ${
+        props.isEndpoint ? "endpoint" : ""
+      }`}
     >
       <img src={grassTile} alt="grass" className="grass-background" />
       {!props.cell.visited && <img src={nullTile} alt="null" className="tile-background" />}
@@ -307,6 +310,22 @@ const Tile = (props) => {
               tileY: props.tileY,
             })
           }
+        />
+      )}
+      {props.isEndpoint && (
+        <img
+          src={endpointCrown}
+          alt="endpoint"
+          className="endpoint-crown"
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            zIndex: 5,
+            pointerEvents: "none",
+          }}
         />
       )}
       {/* Crop image overlay shown when a crop is planted (z-index: 4) */}
