@@ -65,7 +65,7 @@
 /* Individual player slip styling */
 .ranking-slip-container {
   position: relative;
-  transform: translateY(-350%);
+  transform: translateY(-320%);
   flex: 0.2;
   /* width: var(--slip-width); */
   margin: 0 auto;
