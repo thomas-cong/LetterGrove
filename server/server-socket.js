@@ -313,9 +313,14 @@ const handleEndGame = (props) => {
   for (const userId in game.players) {
     boards[userId] = game.userGameStates[userId].board;
   }
+  let words = {};
+  for (const userId in game.players) {
+    words[userId] = game.userGameStates[userId].words;
+  }
   const completedGame = new CompletedGame({
     boards: boards,
     players: game.players,
+    words: words,
     finalRankings: game.rankings,
     mode: game.mode,
     sameBoard: game.sameBoard,

@@ -27,23 +27,23 @@ const WordInput = (props) => {
    * Only submits if an endpoint is selected
    * Emits the word and coordinates to the server and clears the input
    */
-  // const handleKeyPress = () => {
-  //   console.log(props.endpointSelected);
-  //   if (!props.endpointSelected) {
-  //     setAlertMessage("Select an endpoint first...");
-  //     setShowAlert(true);
-  //     return;
-  //   }
+  const handleKeyPress = () => {
+    console.log(props.endpointSelected);
+    if (!props.endpointSelected) {
+      setAlertMessage("Select an endpoint first...");
+      setShowAlert(true);
+      return;
+    }
 
-  //   console.log("Submitting word:", props.word);
-  //   socket.emit("enter word", {
-  //     lobbyCode: props.lobbyCode,
-  //     x: props.selectedX,
-  //     y: props.selectedY,
-  //     word: props.word,
-  //     board: props.board,
-  //   });
-  // };
+    console.log("Submitting word:", props.word);
+    socket.emit("enter word", {
+      lobbyCode: props.lobbyCode,
+      x: props.selectedX,
+      y: props.selectedY,
+      word: props.word,
+      board: props.board,
+    });
+  };
 
   /**
    * Updates placeholder text based on endpoint selection status

@@ -20,7 +20,7 @@ const Profile = () => {
         setLoading(false);
       });
       
-      get("/api/matches", { userId: identifier }).then((matches) => {
+      get("/api/completedGames", { userId: identifier }).then((matches) => {
         setMatchHistory(matches);
       });
     }
