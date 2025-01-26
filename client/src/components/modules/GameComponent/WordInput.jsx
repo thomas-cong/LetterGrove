@@ -71,10 +71,40 @@ const WordInput = (props) => {
       }
     };
 
-    document.addEventListener('keydown', handleGlobalKeyPress);
-    
+    document.addEventListener("keydown", handleGlobalKeyPress);
+
     return () => {
-      document.removeEventListener('keydown', handleGlobalKeyPress);
+      document.removeEventListener("keydown", handleGlobalKeyPress);
+    };
+  }, []);
+
+  useEffect(() => {
+    // Focus the input when component mounts
+    inputRef.current?.focus();
+
+    // Add event listener to refocus when focus is lost
+    const handleFocusOut = () => {
+      inputRef.current?.focus();
+    };
+
+    document.addEventListener("click", handleFocusOut);
+
+    // Cleanup event listener
+    return () => {
+      document.removeEventListener("click", handleFocusOut);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleInvalidWord = (info) => {
+      console.log("Invalid word:", info);
+      setAlertMessage(info.error);
+      setShowAlert(true);
+    };
+    socket.on("invalid word", handleInvalidWord);
+
+    return () => {
+      socket.off("invalid word", handleInvalidWord);
     };
   }, []);
 
@@ -87,7 +117,7 @@ const WordInput = (props) => {
             ref={inputRef}
             type="text"
             value={props.word}
-            disabled = {(props.isTurn === false )}
+            disabled={props.isTurn === false}
             onChange={(e) => {
               props.setWord(e.target.value.toUpperCase());
               console.log(props.endpointSelected);
@@ -105,11 +135,8 @@ const WordInput = (props) => {
               });
             }}
             placeholder={placeholder}
-            // onKeyPress={(event) => {
-            //   if (event.key === "Enter") {
-            //     handleEnter();
-            //   }
-            // }}
+            className="word-input"
+            autoFocus
           />
         </div>
         {/* <div className="confirm-button" onClick={handleEnter}>

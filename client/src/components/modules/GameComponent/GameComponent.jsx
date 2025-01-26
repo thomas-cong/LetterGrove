@@ -194,6 +194,7 @@ const GameComponent = (props) => {
               setLettersUpdated={setLettersUpdated}
               setSuggestions={setSuggestions}
               suggestions={suggestions}
+              setWord={setWord}
             />
           </div>
           {/* <div className="gamecompbottominfo"> */}
