@@ -71,6 +71,11 @@
   animation: fadeIn 0.4s ease-out 0.4s forwards;
 }
 
+.word-input-alert {
+  left: 25% !important;
+  transform: translateX(-50%) scale(1) !important;
+}
+
 @keyframes slideDown {
   0% {
     top: -100%;
