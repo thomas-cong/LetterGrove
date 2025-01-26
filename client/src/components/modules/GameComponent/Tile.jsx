@@ -224,15 +224,6 @@ const Tile = (props) => {
     }
   }, [isSelected, props.suggestedWord, props.setSuggestions, props.setEndPointSelected]);
 
-  const cancelSuggestions = () => {
-    if (!isSelected || props.suggestedWord.length === 0) {
-      return;
-    } else {
-      props.setSuggestions([]);
-      props.setEndPointSelected(false);
-    }
-  };
-
   /**
    * Handles tile clicks to check if it's a valid endpoint
    * Updates game state with selected coordinates if valid
@@ -256,7 +247,7 @@ const Tile = (props) => {
       console.log("No endpoint found at:", params.tileX, params.tileY);
       props.setEndPointSelected(false);
     }
-    
+
     if (params.isSuggestionEnd) {
       // Calculate the difference between the clicked tile and the selected tile to get direction
       let x_diff = Math.sign(params.tileX - props.selectedX);
@@ -264,14 +255,16 @@ const Tile = (props) => {
       console.log(x_diff, y_diff);
 
       // Emit console signal to confirm word.
-      socket.emit("confirm word", {
-        lobbyCode: lobbyId,
-        x: props.selectedX,
-        y: props.selectedY,
-        x_one_step: x_diff,
-        y_one_step: y_diff,
-        word: props.suggestedWord,
-      });
+      if (socket) {
+        socket.emit("confirm word", {
+          lobbyCode: lobbyId,
+          x: props.selectedX,
+          y: props.selectedY,
+          x_one_step: x_diff,
+          y_one_step: y_diff,
+          word: props.suggestedWord,
+        });
+      }
     }
   };
 
@@ -293,7 +286,9 @@ const Tile = (props) => {
     <div
       className={`tile ${props.cell.visited ? "visited" : ""} ${
         props.cell.isSuggestion ? "suggestion" : ""
-      } ${props.cell.isSuggestionEnd ? "suggestion-end" : ""}`}
+      } ${props.cell.isSuggestionEnd ? "suggestion-end" : ""} ${
+        isSelected ? "selected" : ""
+      } ${props.isEndpoint ? "endpoint" : ""}`}
     >
       <img src={grassTile} alt="grass" className="grass-background" />
       {!props.cell.visited && <img src={nullTile} alt="null" className="tile-background" />}

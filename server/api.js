@@ -13,6 +13,7 @@ const express = require("express");
 const User = require("./models/user");
 const LobbyCode = require("./models/lobby-code");
 const CompletedGame = require("./models/completed-game");
+const gameLogic = require("./game-logic");
 // import authentication library
 const auth = require("./auth");
 
@@ -44,6 +45,19 @@ router.post("/initsocket", (req, res) => {
 // |------------------------------|
 // | write your API methods below!|
 // |------------------------------|
+
+router.get("/userInMatch", (req, res) => {
+  if (!req.user) {
+    return res.send({ isInMatch: false });
+  }
+  for (const lobbyCode of Object.keys(gameLogic.games)) {
+    if (gameLogic.games[lobbyCode].players[req.user._id]) {
+      return res.send({ isInMatch: true, lobbyCode: lobbyCode });
+    }
+  }
+  res.send({ isInMatch: false, lobbyCode: null });
+});
+
 router.get("/generateLobbyCode", async (req, res) => {
   //Generate an initial code and find similar
   let lobbyCodeGenerated = Array.from({ length: 5 }, () =>
@@ -122,7 +136,7 @@ router.get("/isGameStarted", (req, res) => {
     res.status(404).send({ error: "Lobby not found" });
   }
   res.send({ gameStarted: openLobbies[req.query.lobbyCode].gameStarted });
-})
+});
 
 router.post("/joinLobby", (req, res) => {
   const lobbyCode = req.body.lobbyCode;
@@ -205,6 +219,7 @@ router.post("/startGame", (req, res) => {
     lobbyCode: req.body.lobbyCode,
   });
 });
+
 router.post("/deleteLobby", (req, res) => {
   const lobbyCode = req.body.lobbyCode;
   if (openLobbies[lobbyCode].lobbyOwner != req.user._id) {
@@ -228,8 +243,8 @@ router.get("/players", (req, res) => {
 
 router.get("/currentGame", (req, res) => {
   socketManager.sendUserInitialGame(req.user._id, req.query.lobbyCode);
-  res.send({})
-})
+  res.send({});
+});
 
 // @params: lobbyCode- lobby code of the game
 // returns true if the lobby exists, false otherwise
@@ -292,16 +307,30 @@ router.get("/playerStats", (req, res) => {
 });
 
 router.get("/completedGames", (req, res) => {
-  if (!req.user) {
-    return res.status(401).send({ error: "Not logged in" });
-  }
-
   const CompletedGame = require("./models/completed-game");
   // Find games where the player's ID exists in the players object
-  CompletedGame.find({ [`players.${req.user._id}`]: { $exists: true } })
-    .sort({ _id: -1 }) // Sort by newest first (assuming ObjectId contains timestamp)
-    .then((games) => {
-      res.send(games);
+  CompletedGame.find({ [`players.${req.query.userId}`]: { $exists: true } })
+    .sort({ date: -1 }) // Sort by date, newest first
+    .then((completedGames) => {
+      let matches = [];
+      for (const game of completedGames) {
+        // Find player's rank and score
+        const playerRank = game.finalRankings.find((r) => r.playerId === req.query.userId);
+        const topScore = Math.max(...game.finalRankings.map((r) => r.score));
+
+        matches.push({
+          date: game.date,
+          score: playerRank.score,
+          duration: game.secondsElapsed,
+          difficulty: game.difficulty,
+          words: game.words?.[req.query.userId] ?? [],
+          won: playerRank.score === topScore,
+          mode: game.mode,
+          board: game.boards?.[req.query.userId] ?? [],
+          finalRankings: game.finalRankings,
+        });
+      }
+      res.send(matches);
     })
     .catch((err) => {
       console.log(`Failed to get completed games: ${err}`);
