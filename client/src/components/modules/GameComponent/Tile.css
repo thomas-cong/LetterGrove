@@ -161,6 +161,19 @@
   transform: scale(1.05);
 }
 
+.tile.selected::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 255, 72, 0.481);
+  border-radius: 3px;
+  z-index: 4;
+  pointer-events: none;
+}
+
 .confirm-suggestion {
   position: fixed;
   bottom: 20px;
