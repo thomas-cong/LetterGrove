@@ -13,6 +13,7 @@ const express = require("express");
 const User = require("./models/user");
 const LobbyCode = require("./models/lobby-code");
 const CompletedGame = require("./models/completed-game");
+const gameLogic = require("./game-logic");
 // import authentication library
 const auth = require("./auth");
 
@@ -49,13 +50,13 @@ router.get("/userInMatch", (req, res) => {
   if (!req.user) {
     return res.send({ isInMatch: false });
   }
-  for (const lobbyCode of Object.keys(openLobbies)) {
-    if (openLobbies[lobbyCode].players[req.user._id]) {
+  for (const lobbyCode of Object.keys(gameLogic.games)) {
+    if (gameLogic.games[lobbyCode].players[req.user._id]) {
       return res.send({ isInMatch: true, lobbyCode: lobbyCode });
     }
   }
   res.send({ isInMatch: false, lobbyCode: null });
-})
+});
 
 router.get("/generateLobbyCode", async (req, res) => {
   //Generate an initial code and find similar
@@ -135,7 +136,7 @@ router.get("/isGameStarted", (req, res) => {
     res.status(404).send({ error: "Lobby not found" });
   }
   res.send({ gameStarted: openLobbies[req.query.lobbyCode].gameStarted });
-})
+});
 
 router.post("/joinLobby", (req, res) => {
   const lobbyCode = req.body.lobbyCode;
@@ -242,8 +243,8 @@ router.get("/players", (req, res) => {
 
 router.get("/currentGame", (req, res) => {
   socketManager.sendUserInitialGame(req.user._id, req.query.lobbyCode);
-  res.send({})
-})
+  res.send({});
+});
 
 // @params: lobbyCode- lobby code of the game
 // returns true if the lobby exists, false otherwise
@@ -314,9 +315,9 @@ router.get("/completedGames", (req, res) => {
       let matches = [];
       for (const game of completedGames) {
         // Find player's rank and score
-        const playerRank = game.finalRankings.find(r => r.playerId === req.query.userId);
-        const topScore = Math.max(...game.finalRankings.map(r => r.score));
-        
+        const playerRank = game.finalRankings.find((r) => r.playerId === req.query.userId);
+        const topScore = Math.max(...game.finalRankings.map((r) => r.score));
+
         matches.push({
           date: game.date,
           score: playerRank.score,
