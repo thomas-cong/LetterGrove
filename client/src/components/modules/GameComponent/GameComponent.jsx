@@ -8,11 +8,14 @@ import PointsCounter from "./PointsCounter";
 import Rankings from "./Rankings";
 import Log from "./Log";
 import "./GameComponent.css";
+import AlertBox from "../AlertBox/AlertBox";
 
 const GameComponent = (props) => {
   const [word, setWord] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [isTurn, setIsTurn] = useState(true);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
 
   // Game state management
   const [endPointSelected, setEndPointSelected] = useState(true);
@@ -71,7 +74,7 @@ const GameComponent = (props) => {
 
   // Set up socket listeners
   useEffect(() => {
-    socket.emit("join socket", { lobbyCode: props.lobbyCode, userId: props.userId })
+    socket.emit("join socket", { lobbyCode: props.lobbyCode, userId: props.userId });
     setTimeout(() => {
       get("/api/currentGame", { lobbyCode: props.lobbyCode, userId: props.userId });
       // Initial game state
@@ -81,42 +84,42 @@ const GameComponent = (props) => {
         console.log("GAME ENDPOINTS" + game.endpoints);
       };
 
-    // User-specific updates (letters, points, endpoints)
-    const handleUserUpdate = (info) => {
-      // Reset the suggestions since this only plays on user update
-      setSuggestions([]);
+      // User-specific updates (letters, points, endpoints)
+      const handleUserUpdate = (info) => {
+        // Reset the suggestions since this only plays on user update
+        setSuggestions([]);
 
-      console.log("User update:", info);
-      setGameState((prevState) => ({
-        ...prevState,
-        points: info.totalPoints,
-      }));
-      setLettersUpdated(info.letterUpdates);
-      setEndpoints(info.endpoints);
-    };
+        console.log("User update:", info);
+        setGameState((prevState) => ({
+          ...prevState,
+          points: info.totalPoints,
+        }));
+        setLettersUpdated(info.letterUpdates);
+        setEndpoints(info.endpoints);
+      };
 
-    // Global game updates (rankings, log messages)
-    const handleGlobalUpdate = (info) => {
-      console.log("Global update:", info);
-      setGameState((prevState) => ({
-        ...prevState,
-        rankings: info.updatedRankings,
-        log: [...prevState.log, ...info.logMessages],
-      }));
-    };
+      // Global game updates (rankings, log messages)
+      const handleGlobalUpdate = (info) => {
+        console.log("Global update:", info);
+        setGameState((prevState) => ({
+          ...prevState,
+          rankings: info.updatedRankings,
+          log: [...prevState.log, ...info.logMessages],
+        }));
+      };
 
-    const handleTurnUpdate = (info) => {
-      if (info.userId === props.userId) {
-        setIsTurn(true);
-      } else {
-        setIsTurn(false);
-      }
-    };
-    // Letter updates
-    const handleBoardUpdate = (info) => {
-      console.log("Board update:", info);
-      setLettersUpdated(info);
-    };
+      const handleTurnUpdate = (info) => {
+        if (info.userId === props.userId) {
+          setIsTurn(true);
+        } else {
+          setIsTurn(false);
+        }
+      };
+      // Letter updates
+      const handleBoardUpdate = (info) => {
+        console.log("Board update:", info);
+        setLettersUpdated(info);
+      };
 
       // Set up listeners
       socket.on("initial game", handleInitialGame);
@@ -178,62 +181,75 @@ const GameComponent = (props) => {
   }, [gameState.board]); // Recalculate when board changes
 
   return (
-    <div className="gamecompcontainer">
-      <div className="gamecompleftcontainer">
-        <div className="gamecompboardcontainer">
-          <div className="gamecompboard">
-            <Board
-              board={gameState.board}
-              points={gameState.points}
-              username={gameState.username}
-              endpoints={endpoints}
-              endPointSelected={endPointSelected}
-              setEndPointSelected={setEndPointSelected}
-              selectedX={selectedX}
-              selectedY={selectedY}
-              setSelectedX={setSelectedX}
-              setSelectedY={setSelectedY}
-              lettersUpdated={lettersUpdated}
-              setLettersUpdated={setLettersUpdated}
-              setSuggestions={setSuggestions}
-              suggestions={suggestions}
-              setWord={setWord}
-            />
-          </div>
-          {/* <div className="gamecompbottominfo"> */}
-          <div className="gamecompwordinput">
-            <WordInput
-              word={word}
-              setWord={setWord}
-              selectedX={selectedX}
-              selectedY={selectedY}
-              endpointSelected={endPointSelected}
-              lobbyCode={props.lobbyCode}
-              board={gameState.board}
-              suggestions={suggestions}
-              isTurn={isTurn}
-            />
-          </div>
-          {/* </div> */}
-          <div className="topinfo">
-            <div className="gamecomppoints">
-              <PointsCounter points={gameState.points} />
+    <>
+      {showAlert && (
+        <AlertBox
+          message={alertMessage}
+          setShowAlert={setShowAlert}
+          timeout={1500}
+          className="word-input-alert"
+        />
+      )}
+      <div className="gamecompcontainer">
+        <div className="gamecompleftcontainer">
+          <div className="gamecompboardcontainer">
+            <div className="gamecompboard">
+              <Board
+                board={gameState.board}
+                points={gameState.points}
+                username={gameState.username}
+                endpoints={endpoints}
+                endPointSelected={endPointSelected}
+                setEndPointSelected={setEndPointSelected}
+                selectedX={selectedX}
+                selectedY={selectedY}
+                setSelectedX={setSelectedX}
+                setSelectedY={setSelectedY}
+                lettersUpdated={lettersUpdated}
+                setLettersUpdated={setLettersUpdated}
+                setSuggestions={setSuggestions}
+                suggestions={suggestions}
+                setWord={setWord}
+              />
             </div>
-            <div className="gamecompcounter">
-              <Counter />
+            {/* <div className="gamecompbottominfo"> */}
+            <div className="gamecompwordinput">
+              <WordInput
+                word={word}
+                setWord={setWord}
+                selectedX={selectedX}
+                selectedY={selectedY}
+                endpointSelected={endPointSelected}
+                lobbyCode={props.lobbyCode}
+                board={gameState.board}
+                suggestions={suggestions}
+                isTurn={isTurn}
+                setShowAlert={setShowAlert}
+                AlertMessage={alertMessage}
+                setAlertMessage={setAlertMessage}
+              />
             </div>
+            {/* </div> */}
+            <div className="topinfo">
+              <div className="gamecomppoints">
+                <PointsCounter points={gameState.points} />
+              </div>
+              <div className="gamecompcounter">
+                <Counter />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="gamecomprightcontainer">
+          <div className="gamecomprankings">
+            <Rankings rankings={gameState.rankings} currentUserId={props.userId} />
+          </div>
+          <div className="gamecomplog">
+            <Log log={gameState.log} />
           </div>
         </div>
       </div>
-      <div className="gamecomprightcontainer">
-        <div className="gamecomprankings">
-          <Rankings rankings={gameState.rankings} currentUserId={props.userId} />
-        </div>
-        <div className="gamecomplog">
-          <Log log={gameState.log} />
-        </div>
-      </div>
-    </div>
+    </>
   );
 };
 

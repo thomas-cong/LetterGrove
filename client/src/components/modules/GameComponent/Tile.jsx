@@ -14,7 +14,8 @@ import grassTile from "../../../assets/Tiles/Grass_Tile_01.png";
 import nullTile from "../../../assets/Tiles/NullTile.png";
 
 //Import endpoint crown
-import endpointCrown from "../../../assets/Tiles/EndPointCrown.png";
+import EndPointHighLightTop from "../../../assets/Tiles/EndPointHighLight_Top.png";
+import EndPointHighlightBottom from "../../../assets/Tiles/EndPointHighLight_Bottom.png";
 
 // Import all letter and default letter tile images
 import letterA from "../../../assets/Tiles/Letter_Tile_01.png";
@@ -204,6 +205,7 @@ const getCropImage = (cropType) => {
  * @param {string} props.suggestedWord - Currently inputted words
  * @param {Function} props.setSuggestions - Function to update suggestions state
  * @param {Function} props.setWord - Function to update the word state
+ * @param {boolean} props.isValidWord - Whether the current word is valid
  */
 const Tile = (props) => {
   const isSelected =
@@ -291,6 +293,8 @@ const Tile = (props) => {
         props.cell.isSuggestion ? "suggestion" : ""
       } ${props.cell.isSuggestionEnd ? "suggestion-end" : ""} ${isSelected ? "selected" : ""} ${
         props.isEndpoint ? "endpoint" : ""
+      } ${props.cell.isSuggestion && !props.isValidWord ? "invalid-word" : ""} ${
+        props.cell.isSuggestion && props.isValidWord ? "valid-word" : ""
       }`}
     >
       <img src={grassTile} alt="grass" className="grass-background" />
@@ -313,20 +317,37 @@ const Tile = (props) => {
         />
       )}
       {props.isEndpoint && (
-        <img
-          src={endpointCrown}
-          alt="endpoint"
-          className="endpoint-crown"
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            zIndex: 5,
-            pointerEvents: "none",
-          }}
-        />
+        <>
+          <img
+            src={EndPointHighLightTop}
+            alt="endpoint-top"
+            className="endpoint-highlight-top"
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              zIndex: 5,
+              pointerEvents: "none",
+              transition: "transform 0.2s ease-out",
+            }}
+          />
+          <img
+            src={EndPointHighlightBottom}
+            alt="endpoint-bottom"
+            className="endpoint-highlight-bottom"
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              zIndex: 5,
+              pointerEvents: "none",
+            }}
+          />
+        </>
       )}
       {/* Crop image overlay shown when a crop is planted (z-index: 4) */}
       {props.cell.crop && (

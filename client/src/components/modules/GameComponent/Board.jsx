@@ -53,6 +53,7 @@ const renderBoard = (params) => {
           suggestedWord={params.suggestedWord}
           setSuggestions={params.setSuggestions}
           setWord={params.setWord}
+          isValidWord={params.isValidWord}
         />
       );
     }
@@ -95,6 +96,8 @@ const renderBoard = (params) => {
  */
 const Board = (props) => {
   // State for word suggestions and board display
+  const [validWord, setValidWord] = useState(false);
+
   const [display, setDisplay] = useState(
     renderBoard({
       board: props.board,
@@ -108,9 +111,9 @@ const Board = (props) => {
       suggestedWord: "",
       setSuggestions: props.setSuggestions,
       setWord: props.setWord,
+      isValidWord: validWord,
     })
   );
-  const [validWord, setValidWord] = useState(false);
 
   // Set up socket listener for suggestions
   useEffect(() => {
@@ -146,6 +149,7 @@ const Board = (props) => {
         suggestedWord: "",
         setSuggestions: props.setSuggestions,
         setWord: props.setWord,
+        isValidWord: validWord,
       })
     );
   }, [props.board]);
@@ -189,6 +193,7 @@ const Board = (props) => {
           suggestedWord: suggestedWord,
           setSuggestions: props.setSuggestions,
           setWord: props.setWord,
+          isValidWord: validWord,
         })
       );
     } else {
@@ -206,6 +211,7 @@ const Board = (props) => {
           suggestedWord: "",
           setSuggestions: props.setSuggestions,
           setWord: props.setWord,
+          isValidWord: validWord,
         })
       );
     }

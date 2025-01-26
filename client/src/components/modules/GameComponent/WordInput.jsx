@@ -15,10 +15,11 @@ import "./WordInput.css";
  * @param {string} props.lobbyCode - Current game lobby identifier
  * @param {boolean} props.endpointSelected - Whether a valid endpoint tile is selected
  * @param {Array} props.suggestions - Array of word suggestions currently on the board
+ * @param {string} props.AlertMessage - Message to display in the alert box
+ * @param {boolean} props.showAlert - Whether to show the alert box
  */
 const WordInput = (props) => {
   const [placeholder, setPlaceholder] = useState("Enter a word");
-  const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const inputRef = useRef(null);
 
@@ -44,7 +45,7 @@ const WordInput = (props) => {
         word: props.word,
         board: props.board,
       });
-    };
+    }
   };
 
   /**
@@ -100,8 +101,8 @@ const WordInput = (props) => {
   useEffect(() => {
     const handleInvalidWord = (info) => {
       console.log("Invalid word:", info);
-      setAlertMessage(info.error);
-      setShowAlert(true);
+      props.setAlertMessage(info.error);
+      props.setShowAlert(true);
       // Keep focus on input and clear the word
       inputRef.current?.focus();
     };
@@ -114,14 +115,6 @@ const WordInput = (props) => {
 
   return (
     <div className="gamecompwordinput">
-      {showAlert && (
-        <AlertBox
-          message={alertMessage}
-          setShowAlert={setShowAlert}
-          timeout={2500}
-          className="word-input-alert"
-        />
-      )}
       <div className="input-group">
         <div className="word-input-container">
           <input
@@ -133,8 +126,8 @@ const WordInput = (props) => {
               props.setWord(e.target.value.toUpperCase());
               console.log(props.endpointSelected);
               if (!props.endpointSelected) {
-                setAlertMessage("Select an endpoint first...");
-                setShowAlert(true);
+                props.setAlertMessage("Select an endpoint first...");
+                props.setShowAlert(true);
                 return;
               }
               socket.emit("enter word", {
@@ -150,9 +143,6 @@ const WordInput = (props) => {
             autoFocus
           />
         </div>
-        {/* <div className="confirm-button" onClick={handleEnter}>
-          <img src={ConfirmImage} alt="Confirm" />
-        </div> */}
       </div>
     </div>
   );
