@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { get, post } from "../../../utilities";
+import React, { useState } from "react";
+import { get } from "../../../utilities";
 import buttonImage from "../../../assets/640signs_1.png";
 import "./SummonLobbyPopup.css";
 import LobbyCreationPopup from "./LobbyCreationPopup";
+import BoardSelection from "./BoardSelection";
 import "../../../assets/font.css";
-import AlertBox from "../AlertBox/AlertBox";
 
 /**
- * SummonLobbyPopup is a component for briningup the lobby creation popup
+ * SummonLobbyPopup is a component for bringing up the lobby creation popup
  *
  * Proptypes
  * @param {popUpShowing} whether any global popup is showing on menu
@@ -15,9 +15,8 @@ import AlertBox from "../AlertBox/AlertBox";
  */
 
 const SummonLobbyPopup = (props) => {
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertMessage, setAlertMessage] = useState("");
   const [LobbyShowing, setLobbyShowing] = useState(false);
+  const [showBoardSelection, setShowBoardSelection] = useState(false);
   const [lobbyCode, setLobbyCode] = useState("");
   const [username, setUsername] = useState("");
 
@@ -29,9 +28,22 @@ const SummonLobbyPopup = (props) => {
     sameBoard: true, // boolean
   });
 
-  // handles showing the lobby by state update
-  const showLobby = () => {
-    // Generates an alphanumeric 5 char sequence for the lobby through api request
+  // handles showing the board selection by state update
+  const showSelection = () => {
+    setShowBoardSelection(true);
+    props.onShowLobby && props.onShowLobby();
+    props.setPopupShowing(true);
+  };
+
+  // handles board type selection
+  const handleBoardSelect = (isSameBoard) => {
+    setGameSettings(prev => ({
+      ...prev,
+      sameBoard: isSameBoard
+    }));
+    setShowBoardSelection(false);
+    
+    // After selecting board type, generate lobby code and show lobby popup
     get("/api/generateLobbyCode")
       .then((code) => {
         setLobbyCode(code.lobbyCodeGenerated);
@@ -51,8 +63,10 @@ const SummonLobbyPopup = (props) => {
       } // Check if the user is already in a match
     });
   };
-  // handles hiding the button by state update
+
+  // handles hiding all popups
   const hideLobby = () => {
+    setShowBoardSelection(false);
     setLobbyShowing(false);
     setLobbyCode("");
     setUsername("");
@@ -60,29 +74,33 @@ const SummonLobbyPopup = (props) => {
     props.setPopupShowing(false);
   };
 
-  // Conditionally render either the create game button or the damn lobby creation popup
   return (
-    <>
-      {showAlert && <AlertBox message={alertMessage} setShowAlert={setShowAlert} timeout={5500} />}
-      <div>
-        {!LobbyShowing && !props.popupShowing && (
-          <div onClick={showLobby} className="button-container">
-            <img src={buttonImage} className="homepagesign" alt="Wooden Sign" />
-            <h2 className="homepagesigntext">Create Lobby</h2>
-          </div>
-        )}
-        {LobbyShowing && props.popupShowing && (
-          <LobbyCreationPopup
-            lobbyCode={lobbyCode}
-            hideLobby={hideLobby}
-            setUsername={setUsername}
-            setGameSettings={setGameSettings}
-            gameSettings={gameSettings}
-            username={username}
-          />
-        )}
-      </div>
-    </>
+    <div>
+      {!LobbyShowing && !showBoardSelection && !props.popupShowing && (
+        <div onClick={showSelection} className="button-container">
+          <img src={buttonImage} className="homepagesign" alt="Wooden Sign" />
+          <h2 className="homepagesigntext">Create Lobby</h2>
+        </div>
+      )}
+
+      {showBoardSelection && props.popupShowing && (
+        <BoardSelection
+          onClose={hideLobby}
+          onSelect={handleBoardSelect}
+        />
+      )}
+
+      {LobbyShowing && props.popupShowing && (
+        <LobbyCreationPopup
+          lobbyCode={lobbyCode}
+          hideLobby={hideLobby}
+          setUsername={setUsername}
+          setGameSettings={setGameSettings}
+          gameSettings={gameSettings}
+          username={username}
+        />
+      )}
+    </div>
   );
 };
 

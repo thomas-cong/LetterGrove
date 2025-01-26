@@ -81,42 +81,42 @@ const GameComponent = (props) => {
         console.log("GAME ENDPOINTS" + game.endpoints);
       };
 
-      // User-specific updates (letters, points, endpoints)
-      const handleUserUpdate = (info) => {
-        // Reset the suggestions since this only plays on user update
-        setSuggestions([]);
+    // User-specific updates (letters, points, endpoints)
+    const handleUserUpdate = (info) => {
+      // Reset the suggestions since this only plays on user update
+      setSuggestions([]);
 
-        console.log("User update:", info);
-        setGameState((prevState) => ({
-          ...prevState,
-          points: info.totalPoints,
-        }));
-        setLettersUpdated(info.letterUpdates);
-        setEndpoints(info.endpoints);
-      };
+      console.log("User update:", info);
+      setGameState((prevState) => ({
+        ...prevState,
+        points: info.totalPoints,
+      }));
+      setLettersUpdated(info.letterUpdates);
+      setEndpoints(info.endpoints);
+    };
 
-      // Global game updates (rankings, log messages)
-      const handleGlobalUpdate = (info) => {
-        console.log("Global update:", info);
-        setGameState((prevState) => ({
-          ...prevState,
-          rankings: info.updatedRankings,
-          log: [...prevState.log, ...info.logMessages],
-        }));
-      };
+    // Global game updates (rankings, log messages)
+    const handleGlobalUpdate = (info) => {
+      console.log("Global update:", info);
+      setGameState((prevState) => ({
+        ...prevState,
+        rankings: info.updatedRankings,
+        log: [...prevState.log, ...info.logMessages],
+      }));
+    };
 
-      const handleTurnUpdate = (info) => {
-        if (info.userId === props.userId) {
-          setIsTurn(true);
-        } else {
-          setIsTurn(false);
-        }
-      };
-      // Letter updates
-      const handleBoardUpdate = (info) => {
-        console.log("Board update:", info);
-        setLettersUpdated(info);
-      };
+    const handleTurnUpdate = (info) => {
+      if (info.userId === props.userId) {
+        setIsTurn(true);
+      } else {
+        setIsTurn(false);
+      }
+    };
+    // Letter updates
+    const handleBoardUpdate = (info) => {
+      console.log("Board update:", info);
+      setLettersUpdated(info);
+    };
 
       // Set up listeners
       socket.on("initial game", handleInitialGame);

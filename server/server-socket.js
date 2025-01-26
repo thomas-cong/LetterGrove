@@ -394,6 +394,7 @@ const handleEndGame = (props) => {
   }
   delete gameLogic.games[lobbyCode];
   delete openLobbies[lobbyCode];
+  delete gameToUserToSocketMap[lobbyCode];
 };
 
 /**
@@ -407,9 +408,12 @@ const joinSocket = (props) => {
   console.log("gameToUserToSocketMap: ", gameToUserToSocketMap);
   console.log("gameToUserToSocketMap[lobbyCode]: ", gameToUserToSocketMap[lobbyCode]);
   if (gameToUserToSocketMap[lobbyCode] && gameToUserToSocketMap[lobbyCode][userId]) {
-    if (!(props.socketid in gameToUserToSocketMap[lobbyCode][userId])) {
-      gameToUserToSocketMap[lobbyCode][userId].push(props.socket);
+    for (const otherSocket of gameToUserToSocketMap[lobbyCode][userId]) {
+      if (otherSocket.id === props.socket.id) {
+        return;
+      }
     }
+    gameToUserToSocketMap[lobbyCode][userId].push(props.socket);
   } else {
     if (!gameToUserToSocketMap[lobbyCode]) {
       gameToUserToSocketMap[lobbyCode] = {};
@@ -417,7 +421,14 @@ const joinSocket = (props) => {
     if (!gameToUserToSocketMap[lobbyCode][userId]) {
       gameToUserToSocketMap[lobbyCode][userId] = [];
     }
-    gameToUserToSocketMap[lobbyCode][userId].push(props.socket);
+    for (const otherSocket of gameToUserToSocketMap[lobbyCode][userId]) {
+      if (otherSocket.id === props.socket.id) {
+        return;
+      }
+    }
+    if (!(props.socket in gameToUserToSocketMap[lobbyCode][userId])) {
+      gameToUserToSocketMap[lobbyCode][userId].push(props.socket);
+    }
   }
   updateLobbyUserList({ lobbyCode: props.lobbyCode, userId: props.userId, socket: props.socket });
 };
@@ -628,6 +639,7 @@ module.exports = {
            */
           for (const userId of Object.keys(game.players)) {
             for (const socket of getSocketsFromLobbyCodeAndUserID(props.lobbyCode, userId)) {
+              console.log("socketid: " + socket.id);
               if (socket) {
                 socket.emit("global update", output.globalUpdate);
               }
