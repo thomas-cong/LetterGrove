@@ -3,9 +3,9 @@
   display: flex;
   flex-direction: column;
   width: 460px;
-  height: 200px;
+  height: 300px;
   transform: translateX(-25%);
-  background-image: url("../../../assets/RankingsBox.png");
+  background-image: url("../../../assets/RankingsBoxV2.png");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -35,7 +35,7 @@
 
 .rankings-title {
   left: 50%;
-  transform: translate(-50%, 0%);
+  transform: translate(-50%, -30%);
   position: relative;
   /* width: var(--slip-width); */
   flex: 1;
@@ -56,22 +56,21 @@
 .rankings-box {
   display: flex;
   flex-direction: column;
-  gap: 5%;
+  gap: 0%;
   flex: 1;
   position: relative;
-  padding-bottom: 15%;
   margin-top: 5%;
 }
 
 /* Individual player slip styling */
 .ranking-slip-container {
   position: relative;
-  transform: translateY(-15%);
+  transform: translateY(-80%);
   flex: 1;
   /* width: var(--slip-width); */
   margin: 0 auto;
   width: 400px;
-  height: 10%;
+  height: 32px;
   aspect-ratio: 10/1;
   display: flex;
   align-items: center;
