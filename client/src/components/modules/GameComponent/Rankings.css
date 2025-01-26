@@ -35,7 +35,7 @@
 
 .rankings-title {
   left: 50%;
-  transform: translate(-50%, -30%);
+  transform: translate(-50%, -40%);
   position: relative;
   /* width: var(--slip-width); */
   flex: 1;
@@ -65,13 +65,13 @@
 /* Individual player slip styling */
 .ranking-slip-container {
   position: relative;
-  transform: translateY(-80%);
-  flex: 1;
+  transform: translateY(-350%);
+  flex: 0.2;
   /* width: var(--slip-width); */
   margin: 0 auto;
   width: 400px;
-  height: 32px;
-  aspect-ratio: 10/1;
+  height: 10px;
+  /* aspect-ratio: 10/1; */
   display: flex;
   align-items: center;
   justify-content: center;
