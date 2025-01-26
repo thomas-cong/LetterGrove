@@ -50,7 +50,18 @@ const SummonLobbyPopup = (props) => {
         console.log(code);
       })
       .catch(setLobbyCode("ERROR"));
-    setLobbyShowing(true);
+
+    get("/api/userInMatch").then((data) => {
+      // if (data.isInMatch) {\
+      if (false) {
+        setAlertMessage("You are already in lobby: " + data.lobbyCode);
+        setShowAlert(true);
+      } else {
+        setLobbyShowing(true);
+        props.onShowLobby && props.onShowLobby();
+        props.setPopupShowing(true);
+      } // Check if the user is already in a match
+    });
   };
 
   // handles hiding all popups

@@ -49,7 +49,7 @@ const Lobby = () => {
       }
       setU_id(String(user._id));
       // Join the socket room for this lobby
-      socket.emit("join socket", { lobbyCode: lobbyId });
+      socket.emit("join socket", { lobbyCode: lobbyId, userId: user._id });
     });
     if (u_id) {
       get("/api/players", { lobbyCode: lobbyId }).then((players) => {
