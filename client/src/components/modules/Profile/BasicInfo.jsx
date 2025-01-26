@@ -1,13 +1,13 @@
-
 import React from "react";
 import "./BasicInfo.css";
+import testProfilePicture from "../../../assets/TestingPFP.png";
 
 const BasicInfo = ({ userStats }) => {
   return (
     <div className="profile-basic">
       <div className="profile-header">
         <img 
-          src={userStats.profilePicture || "default-avatar.png"} 
+          src={userStats.profilePicture || testProfilePicture} 
           alt="Profile" 
           className="profile-picture"
         />

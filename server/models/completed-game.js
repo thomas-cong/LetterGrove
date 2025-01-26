@@ -5,6 +5,7 @@ const CompletedGameSchema = new mongoose.Schema({
   players: Object,
   finalRankings: Array,
   mode: String,
+  words: Object,
   sameBoard: Boolean,
   difficulty: String,
   secondsElapsed: Number,

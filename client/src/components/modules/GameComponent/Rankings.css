@@ -12,6 +12,8 @@
   margin-top: 20%;
   left: 50%;
   transform: translate(-5%, 0%);
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 1));
+
 
 }
 
@@ -50,6 +52,8 @@
   align-items: center;
   justify-content: center;
   font-weight: 600;
+  /* filter: drop-shadow(0 0 10px rgba(0, 0, 0, 1)); */
+
 }
 
 /* Container for player slips */
@@ -65,7 +69,7 @@
 /* Individual player slip styling */
 .ranking-slip-container {
   position: relative;
-  transform: translateY(-320%);
+  transform: translateY(-400%);
   flex: 0.2;
   /* width: var(--slip-width); */
   margin: 0 auto;
