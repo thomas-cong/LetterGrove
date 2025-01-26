@@ -47,5 +47,17 @@ input[type="number"] {
 }
 
 .steps-input {
-  width: 60px !important;
+  width: 80px;
+  text-align: center;
+}
+
+.time-input-container {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.time-input {
+  width: 35px;
+  text-align: center;
 }

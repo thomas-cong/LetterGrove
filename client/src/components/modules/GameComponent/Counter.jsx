@@ -22,23 +22,40 @@ const Counter = () => {
   const [rightMessage, setRightMessage] = useState("");
   const [value, setValue] = useState("");
 
+  const formatTime = (seconds) => {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const remainingSeconds = seconds % 60;
+
+    let timeString = "";
+    if (hours > 0) {
+      timeString += `${hours}hr ${minutes}m ${remainingSeconds}s`;
+    } else if (minutes > 0) {
+      timeString += `${minutes}m ${remainingSeconds}s`;
+    } else {
+      timeString += `${remainingSeconds}s`;
+    }
+
+    return timeString.trim();
+  };
+
   useEffect(() => {
     console.log("Counter mounted");
     const handleTimeUpdate = (params) => {
-      setLeftMessage("Time left: ");
-      setValue(params.secondsRemaining);
+      setLeftMessage("Time left:  ");
+      setValue(formatTime(params.secondsRemaining));
     };
 
     const handleWordsUpdate = (params) => {
       setLeftMessage("Words left: ");
       setValue(params.wordsRemaining);
       setRightMessage("/" + params.wordLimit);
-    }
+    };
 
     const handlePointsUpdate = (params) => {
       setLeftMessage("Points to win: ");
       setValue(params.pointsToWin);
-    }
+    };
 
     socket.on("time update", handleTimeUpdate);
     socket.on("words update", handleWordsUpdate);

@@ -39,7 +39,7 @@ const AlertBox = (props) => {
   };
 
   return (
-    <div className={`alert-box ${isHiding ? 'hiding' : ''}`}>
+    <div className={`alert-box ${isHiding ? 'hiding' : ''} ${props.className || ''}`}>
       <img src={alertSign} alt="Alert Sign" className="alert-sign" />
       <img src={confusionShiba} alt="Confusion Shiba" className="confusion-shiba" />
       <p>{props.message}</p>

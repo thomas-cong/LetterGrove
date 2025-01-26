@@ -11,7 +11,7 @@ const CreditsPopup = (props) => {
         <h3>
           <span style={{ color: "rgb(94, 129, 255)" }}>CREATED BY: </span>
           <span style={{ color: "rgb(94, 129, 255)" }}>Thomas Cong, Leon Chen, Steve Zhang</span>
-
+        </h3>
           <div style={{ color: "rgb(94, 129, 255)" }}>
             In order to preserve the authenticity of our game, we have chosen to use only original
             artwork and music. Artistically, we hope that the game is not only fun, but also
@@ -27,9 +27,9 @@ const CreditsPopup = (props) => {
             Game logic was implemented by Steve Zhang, and frontend development was completed by
             Leon Chen and Thomas Cong.
           </div>
-
+          <h3>
           <div style={{ color: "rgb(94, 129, 255)" }}>We hope you enjoy playing LetterGrove!</div>
-        </h3>
+          </h3>
       </div>
     </div>
   );

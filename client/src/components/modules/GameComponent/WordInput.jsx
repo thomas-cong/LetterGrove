@@ -100,17 +100,26 @@ const WordInput = (props) => {
       console.log("Invalid word:", info);
       setAlertMessage(info.error);
       setShowAlert(true);
+      // Keep focus on input and clear the word
+      inputRef.current?.focus();
     };
     socket.on("invalid word", handleInvalidWord);
 
     return () => {
       socket.off("invalid word", handleInvalidWord);
     };
-  }, []);
+  }, [props.setWord]);
 
   return (
     <div className="gamecompwordinput">
-      {showAlert && <AlertBox message={alertMessage} setShowAlert={setShowAlert} timeout={2500} />}
+      {showAlert && (
+        <AlertBox
+          message={alertMessage}
+          setShowAlert={setShowAlert}
+          timeout={2500}
+          className="word-input-alert"
+        />
+      )}
       <div className="input-group">
         <div className="word-input-container">
           <input
