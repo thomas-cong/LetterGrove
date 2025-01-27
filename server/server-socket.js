@@ -21,7 +21,8 @@ const getAllConnectedUsers = () => Object.values(socketToUserMap);
 const getSocketFromUserID = (userid) => userToSocketMap[userid];
 const getUserFromSocketID = (socketid) => socketToUserMap[socketid];
 const getSocketFromSocketID = (socketid) => io.sockets.sockets.get(socketid);
-const getSocketsFromLobbyCodeAndUserID = (lobbyCode, userid) => gameToUserToSocketMap[lobbyCode][userid];
+const getSocketsFromLobbyCodeAndUserID = (lobbyCode, userid) =>
+  gameToUserToSocketMap[lobbyCode][userid];
 
 /**
  * Associates a user with their socket connection
@@ -294,10 +295,12 @@ const initiateGame = (props) => {
     lobbyCode: lobbyCode,
     secondsRemaining: game.secondsRemaining,
   });
-  
+
   for (const userId of Object.keys(players)) {
     for (const socket of getSocketsFromLobbyCodeAndUserID(lobbyCode, userId)) {
       if (socket) {
+        console.log("Turn update emitted");
+
         socket.emit("turn update", {
           userId: game.turn,
           username: players[game.turn].username,
@@ -522,7 +525,7 @@ const updateLobbyUserList = (props) => {
  * @param {string} userId - ID of user to update
  * @param {string} lobbyCode - Code of the game
  */
-const sendBoardState = (userId, letterUpdates) => {
+const sendBoardState = (lobbyCode, userId, letterUpdates) => {
   for (const socket of getSocketsFromLobbyCodeAndUserID(lobbyCode, userId)) {
     if (socket) socket.emit("board update", letterUpdates);
   }
@@ -540,6 +543,8 @@ const passTurn = (lobbyCode) => {
     console.log("HIHIHI" + getSocketsFromLobbyCodeAndUserID(lobbyCode, userId));
     for (const socket of getSocketsFromLobbyCodeAndUserID(lobbyCode, userId)) {
       if (socket) {
+        console.log("Turn update emitted");
+
         socket.emit("turn update", {
           userId: game.turn,
           username: game.players[game.turn].username,
@@ -674,7 +679,7 @@ module.exports = {
           if (game.sameBoard) {
             for (const userId in game.players) {
               if (userId !== user._id) {
-                sendBoardState(userId, output.localUpdate.letterUpdates);
+                sendBoardState(props.lobbyCode, userId, output.localUpdate.letterUpdates);
               }
             }
           }
