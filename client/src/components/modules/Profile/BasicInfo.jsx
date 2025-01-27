@@ -16,7 +16,11 @@ const BasicInfo = ({ userStats }) => {
       <div className="profile-stats-basic">
         <div className="stat-item">
           <label>Time Played</label>
-          <span>{Math.floor(userStats.timePlayed / 3660)}h {Math.floor(userStats.timePlayed / 60)}m {userStats.timePlayed % 60}s</span>
+          <span>
+            {Math.floor(userStats.timePlayed / 3600)}h{" "}
+            {Math.floor((userStats.timePlayed % 3600) / 60)}m{" "}
+            {userStats.timePlayed % 60}s
+          </span>
         </div>
         <div className="stat-item">
           <label>Games Played</label>
