@@ -154,6 +154,7 @@ const initiateGame = (props) => {
       turnOrder: turnOrder,
       turn: turn,
       secondsElapsed: 0,
+      difficulty: gameInfo.difficulty,
     };
   } else {
     game = {
@@ -167,6 +168,7 @@ const initiateGame = (props) => {
       rankings: [],
       log: [],
       secondsElapsed: 0,
+      difficulty: gameInfo.difficulty,
     };
   }
 
@@ -218,9 +220,9 @@ const initiateGame = (props) => {
           twoTimes: 0,
         },
         endpoints: [startingEndpoints.pop()],
-        letters_collected: 0,
-        words_formed: 0,
-        powerups_used: 0,
+        lettersCollected: 0,
+        wordsFormed: 0,
+        powerupsUsed: 0,
         wordsRemaining: mode === "Words" ? gameInfo.steps : null,
         wordLimit: mode === "Words" ? gameInfo.steps : null,
       };
@@ -234,9 +236,9 @@ const initiateGame = (props) => {
           twoTimes: 0,
         },
         endpoints: [[0, 0]],
-        letters_collected: 0,
-        words_formed: 0,
-        powerups_used: 0,
+        lettersCollected: 0,
+        wordsFormed: 0,
+        powerupsUsed: 0,
         wordsRemaining: mode === "Words" ? gameInfo.steps : null,
         wordLimit: mode === "Words" ? gameInfo.steps : null,
       };
@@ -382,7 +384,7 @@ const handleEndGame = (props) => {
   }
   let words = {};
   for (const userId in game.players) {
-    words[userId] = game.userGameStates[userId].words;
+    words[userId] = game.userGameStates[userId].wordsFormed;
   }
   const completedGame = new CompletedGame({
     boards: boards,
@@ -403,9 +405,9 @@ const handleEndGame = (props) => {
         $inc: {
           games_played: 1,
           wins: game.rankings[0].score === userGameState.points ? 1 : 0,
-          letters: userGameState.letters_collected || 0,
-          powerups: userGameState.powerups_used || 0,
-          words: userGameState.words_formed || 0,
+          letters: userGameState.lettersCollected || 0,
+          powerups: userGameState.powerupsUsed || 0,
+          words: userGameState.wordsFormed || 0,
           points: userGameState.points || 0,
           timePlayed: game.secondsElapsed || 0,
         },
