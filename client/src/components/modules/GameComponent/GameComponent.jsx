@@ -96,6 +96,7 @@ const GameComponent = (props) => {
 
   // Set up socket listeners
   useEffect(() => {
+    console.log("useEffect called");
     socket.emit("join socket", { lobbyCode: props.lobbyCode, userId: props.userId });
     socket.on("socket joined", () => {
       get("/api/currentGame", { lobbyCode: props.lobbyCode, userId: props.userId });
@@ -127,10 +128,19 @@ const GameComponent = (props) => {
       // Global game updates (rankings, log messages)
       const handleGlobalUpdate = (info) => {
         console.log("Global update:", info);
+        let logMessages = [];
+        for (const message of info.logMessages) {
+          let { userId, username, pointsGained } = message;
+          logMessages.push({
+            userId: userId,
+            username: username,
+            pointsGained: pointsGained,
+          });
+        }
         setGameState((prevState) => ({
           ...prevState,
           rankings: info.updatedRankings,
-          log: [...prevState.log, ...info.logMessages],
+          log: [...prevState.log, ...logMessages],
         }));
       };
 
@@ -146,7 +156,7 @@ const GameComponent = (props) => {
             console.log("props id: " + props.userId);
             setIsTurn(false);
           }
-        }, 500);
+        }, 300);
       };
       // Letter updates
       const handleBoardUpdate = (info) => {
@@ -286,7 +296,7 @@ const GameComponent = (props) => {
             <Rankings rankings={gameState.rankings} currentUserId={props.userId} />
           </div>
           <div className="gamecomplog">
-            <Log log={gameState.log} />
+            <Log log={gameState.log} userId={props.userId} />
           </div>
         </div>
       </div>

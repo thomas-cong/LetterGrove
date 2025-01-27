@@ -22,11 +22,12 @@
 
 .createdtitle {
   order: 0;
-  color: rgb(94, 129, 255);
-  font-size: 36px;
+  color: var(--primary);
+  font-size: 48px;
   text-align: center;
   margin-bottom: 20px;
   cursor: default;
+  
 }
 
 .board-options {
@@ -82,12 +83,14 @@
 .board-option p strong {
   font-size: 26px;
   font-weight: bold;
+  color: pink;
+
 }
 
 .selectheader {
-  font-size: 28px;
+  font-size: 32px;
   font-weight: bold;
-  color: pink;
+  color: rgb(252, 139, 158);
   margin-bottom: 12px;
   text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4);
 }

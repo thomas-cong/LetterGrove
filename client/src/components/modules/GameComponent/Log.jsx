@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import "./../../../utilities.css";
 import "./Log.css";
 
 /**
@@ -7,7 +8,7 @@ import "./Log.css";
  * @param {Object} props
  * @param {Array} props.log - Array of log messages
  */
-const Log = ({ log = [] }) => {
+const Log = ({ log = [], userId }) => {
   const logContainerRef = useRef(null);
 
   // Auto-scroll to bottom when new messages arrive
@@ -23,7 +24,15 @@ const Log = ({ log = [] }) => {
       <div className="log-messages" ref={logContainerRef}>
         {log.map((message, index) => (
           <div key={index} className="log-message">
-            {message}
+            {(message.userId === userId) ? (
+              <div style={{ color: "rgb(147, 149, 151)" }}>
+                <span style={{ color: "var(--primary--dim)" }}>{message.username}</span> collected <span style={{ color: "rgb(220,20,60)"}}>{message.pointsGained}</span> {message.pointsGained === 1 ? "point" : "points"}
+              </div>
+            ) : (
+              <div style={{ color: "rgb(147, 149, 151)" }}>
+                <span style={{ color: "black" }}>{message.username}</span> collected <span style={{ color: "rgb(220,20,60)"}}>{message.pointsGained}</span> {message.pointsGained === 1 ? "point" : "points"}
+              </div>
+            )}
           </div>
         ))}
       </div>

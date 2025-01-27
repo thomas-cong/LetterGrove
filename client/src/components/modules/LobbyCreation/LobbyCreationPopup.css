@@ -77,7 +77,7 @@
 }
 
 .lobby-code-title {
-  color: rgb(94, 129, 255);
+  color: var(--primary);
   font-size: max(32px, min(3.5vw, 40px));
   text-align: center;
   width: 100%;
