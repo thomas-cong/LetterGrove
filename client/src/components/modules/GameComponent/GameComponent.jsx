@@ -112,10 +112,11 @@ const GameComponent = (props) => {
 
       const handleTurnUpdate = (info) => {
         console.log("Turn update:", info);
+        setTurnUsername(info.username); // Set username first
         setTimeout(() => {
           if (info.userId === props.userId) {
+            console.log("emiitted username: " + info.username);
             setIsTurn(true);
-            setTurnUsername(info.username);
           } else {
             console.log("emitted id: " + info.userId);
             console.log("props id: " + props.userId);
