@@ -47,7 +47,7 @@ const Counter = () => {
     };
 
     const handleWordsUpdate = (params) => {
-      setLeftMessage("Words left: ");
+      setLeftMessage("Words left:  ");
       setValue(params.wordsRemaining);
       setRightMessage("/" + params.wordLimit);
     };
@@ -72,8 +72,11 @@ const Counter = () => {
     <div className="counter-container">
       <img src={ScoreBox} alt="Score Box" />
       <span className="counter-content">
-        <span className="counter-label">{leftMessage}</span>
-        <span className="counter-label">{value}</span>
+        <div className="space">
+          <span className="counter-label">{leftMessage}</span>
+          <span className="counter-label-value">{value}</span>
+        </div>
+
         <span className="counter-label">{rightMessage}</span>
       </span>
     </div>

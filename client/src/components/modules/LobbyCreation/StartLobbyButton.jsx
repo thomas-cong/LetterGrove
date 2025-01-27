@@ -10,6 +10,7 @@ const StartLobbyButton = (props) => {
   const [alertMessage, setAlertMessage] = React.useState(""); // Test message
 
   const handleClick = () => {
+    console.log("Game Settings:", props.gameSettings);
     if (props.username === "") {
       props.setAlertMessage("A username is required to create a lobby!");
       props.setShowAlert(true);

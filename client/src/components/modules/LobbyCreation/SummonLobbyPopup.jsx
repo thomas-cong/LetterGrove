@@ -37,12 +37,12 @@ const SummonLobbyPopup = (props) => {
 
   // handles board type selection
   const handleBoardSelect = (isSameBoard) => {
-    setGameSettings(prev => ({
+    setGameSettings((prev) => ({
       ...prev,
-      sameBoard: isSameBoard
+      sameBoard: isSameBoard,
     }));
     setShowBoardSelection(false);
-    
+
     // After selecting board type, generate lobby code and show lobby popup
     get("/api/generateLobbyCode")
       .then((code) => {
@@ -84,10 +84,7 @@ const SummonLobbyPopup = (props) => {
       )}
 
       {showBoardSelection && props.popupShowing && (
-        <BoardSelection
-          onClose={hideLobby}
-          onSelect={handleBoardSelect}
-        />
+        <BoardSelection onClose={hideLobby} onSelect={handleBoardSelect} />
       )}
 
       {LobbyShowing && props.popupShowing && (
