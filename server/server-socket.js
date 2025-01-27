@@ -59,7 +59,9 @@ const removeUser = (user, socket) => {
  * @param {string} lobbyCode - Code of the lobby/game to get state from
  */
 const sendUserInitialGame = (userId, lobbyCode) => {
-  game = {
+  let game = {
+    sameBoard: gameLogic.games[lobbyCode].sameBoard,
+    mode: gameLogic.games[lobbyCode].mode,
     lobbyCode: lobbyCode,
     username: gameLogic.games[lobbyCode].userGameStates[userId].username,
     board: gameLogic.games[lobbyCode].userGameStates[userId].board,
@@ -73,7 +75,37 @@ const sendUserInitialGame = (userId, lobbyCode) => {
     log: gameLogic.games[lobbyCode].log,
   };
   for (const socket of getSocketsFromLobbyCodeAndUserID(lobbyCode, userId)) {
-    if (socket) socket.emit("initial game", game);
+    if (socket) {
+      socket.emit("initial game", game);
+      if (game.sameBoard) {
+        socket.emit("turn update", {
+          userId: game.turn,
+          username: gameLogic.games[lobbyCode].players[game.turn].username,
+        });
+      }
+      if (game.mode === "Time") {
+        if (socket) {
+          socket.emit("time update", {
+            secondsRemaining: gameLogic.games[lobbyCode].secondsRemaining,
+          });
+        }
+      }
+      if (game.mode === "Words") {
+        if (socket) {
+          socket.emit("words update", {
+            wordsRemaining: gameLogic.games[lobbyCode].wordsRemaining,
+            wordLimit: gameLogic.games[lobbyCode].wordLimit,
+          });
+        }
+      }
+      if (game.mode === "Points") {
+        if (socket) {
+          socket.emit("points update", {
+            pointsToWin: gameLogic.games[lobbyCode].pointsToWin,
+          });
+        }
+      }
+    }
   }
 };
 
@@ -444,6 +476,8 @@ const joinSocket = (props) => {
     }
   }
   updateLobbyUserList({ lobbyCode: props.lobbyCode, userId: props.userId, socket: props.socket });
+  props.socket.emit("socket joined");
+  
 };
 
 /**
