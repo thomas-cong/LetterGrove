@@ -13,6 +13,10 @@ import grape from "../../../assets/Tiles/grape.png";
 import grassTile from "../../../assets/Tiles/Grass_Tile_01.png";
 import nullTile from "../../../assets/Tiles/NullTile.png";
 
+// Import powerups
+import wateringCan from "../../../assets/Tiles/wateringCan.png";
+import twoTimes from "../../../assets/Tiles/twoTimes.png";
+
 //Import endpoint crown
 import EndPointHighLightTop from "../../../assets/Tiles/EndPointHighLight_Top.png";
 import EndPointHighlightBottom from "../../../assets/Tiles/EndPointHighLight_Bottom.png";
@@ -150,6 +154,16 @@ const getLetterTile = (letter, isDefault) => {
   return isDefault ? defaultLetterTiles[letter] : letterTiles[letter];
 };
 
+const getPowerUpImage = (powerUp) => {
+  switch (powerUp.toLowerCase()) {
+    case "wateringcan":
+      return wateringCan;
+    case "twotimes":
+      return twoTimes;
+    default:
+      return null;
+  }
+};
 /**
  * Gets the appropriate crop tile image based on the crop type
  * @param {string} cropType - The type of crop to display (blueberries, carrots, pumpkins, tomatoes)
@@ -363,6 +377,23 @@ const Tile = (props) => {
           src={getCropImage(props.cell.crop)}
           alt={props.cell.crop}
           className={`crop-tile ${props.cell.isSuggestion ? "suggestion-letter" : ""} ${
+            props.cell.isSuggestionEnd ? "suggestion-end-letter" : ""
+          }`}
+          onClick={() =>
+            checkEndpoint({
+              isEndpoint: props.isEndpoint,
+              isSuggestionEnd: props.cell.isSuggestionEnd,
+              tileX: props.tileX,
+              tileY: props.tileY,
+            })
+          }
+        />
+      )}
+      {props.cell.powerUp && (
+        <img
+          src={getPowerUpImage(props.cell.powerUp)}
+          alt={props.cell.powerUp}
+          className={`powerup-tile ${props.cell.isSuggestion ? "suggestion-letter" : ""} ${
             props.cell.isSuggestionEnd ? "suggestion-end-letter" : ""
           }`}
           onClick={() =>
