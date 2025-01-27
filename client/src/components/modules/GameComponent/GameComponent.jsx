@@ -109,11 +109,14 @@ const GameComponent = (props) => {
       };
 
       const handleTurnUpdate = (info) => {
-        if (info.userId === props.userId) {
-          setIsTurn(true);
-        } else {
-          setIsTurn(false);
-        }
+        console.log("Turn update:", info);
+        setTimeout(() => {
+          if (info.userId === props.userId) {
+            setIsTurn(true);
+          } else {
+            setIsTurn(false);
+          }
+        }, 500);
       };
       // Letter updates
       const handleBoardUpdate = (info) => {
@@ -210,6 +213,7 @@ const GameComponent = (props) => {
                 setSuggestions={setSuggestions}
                 suggestions={suggestions}
                 setWord={setWord}
+                isTurn={isTurn}
               />
             </div>
             {/* <div className="gamecompbottominfo"> */}
