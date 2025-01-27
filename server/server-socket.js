@@ -503,11 +503,11 @@ const joinSocket = (props) => {
     }
   }
   props.socket.emit("socket joined");
-  setTimeout(() => {
+  setInterval(() => {
     if (openLobbies[props.lobbyCode] && !openLobbies[props.lobbyCode].gameStarted) {
       updateLobbyUserList({ lobbyCode: props.lobbyCode, userId: props.userId, socket: props.socket });
     }
-  }, 0);
+  }, 50);
   //test
 };
 
