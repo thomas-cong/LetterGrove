@@ -28,7 +28,7 @@
   width: 60%;
   min-width: 500px;
   min-height: 100%;
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
   overflow-x: hidden;
 }
 
@@ -109,7 +109,7 @@
   /* background-color: blue; */
   width: 40%;
   height: 100%;
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
   align-items: center;
   overflow-x: hidden;
 }
