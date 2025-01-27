@@ -32,6 +32,7 @@ const Lobby = () => {
   const [showAnimation, setShowAnimation] = useState(false);
   const [reverseAnimation, setReverseAnimation] = useState(false);
   const [showButton, setShowButton] = useState(false);
+  const [tooltipText, setTooltipText] = useState("Click to Copy!");
 
   const cloudImages = [
     { bottom: firstBottomLeft, top: firstTopRight },
@@ -75,15 +76,13 @@ const Lobby = () => {
       console.log(res);
       setShowButton(res);
     });
-
   }, []);
 
   useEffect(() => {
-
     get("/api/lobbyCheck", { lobbyCode: lobbyId }).catch((err) => {
       window.location.href = "/LobbyNotFound";
     });
-  
+
     const handleLobbyToGame = () => {
       console.log("received lobby to game transition");
       setShowAnimation(true);
@@ -145,13 +144,25 @@ const Lobby = () => {
   //   };
   // }, []);
 
- 
   return (
     <>
       {lobbyState === "lobby" && (
         <div className="lobby-container">
           <div className="lobby-content">
-            <div className="lobby-code">Lobby Code: {lobbyId}</div>
+            <div
+              className="lobby-code"
+              onClick={() => {
+                navigator.clipboard.writeText(lobbyId);
+                setTooltipText("Copied!");
+                setTimeout(() => {
+                  setTooltipText("Click to Copy!");
+                }, 2000);
+              }}
+              style={{ cursor: "pointer" }}
+            >
+              Lobby Code: {lobbyId}
+              <div className="copy-tooltip">{tooltipText}</div>
+            </div>
             <div className="lobby-sections">
               <div className="lobby-section">
                 <div style={{ color: "rgb(94, 129, 255)", fontSize: "40px" }}>Players</div>

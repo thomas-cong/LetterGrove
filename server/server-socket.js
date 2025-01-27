@@ -94,8 +94,8 @@ const sendUserInitialGame = (userId, lobbyCode) => {
       if (game.mode === "Words") {
         if (socket) {
           socket.emit("words update", {
-            wordsRemaining: gameLogic.games[lobbyCode].wordsRemaining,
-            wordLimit: gameLogic.games[lobbyCode].wordLimit,
+            wordsRemaining: gameLogic.games[lobbyCode].userGameStates[userId].wordsRemaining,
+            wordLimit: gameLogic.games[lobbyCode].userGameStates[userId].wordLimit,
           });
         }
       }
@@ -478,7 +478,7 @@ const joinSocket = (props) => {
       gameToUserToSocketMap[lobbyCode][userId].push(props.socket);
     }
   }
-  if (openLobbies[props.lobbyCode] && !(openLobbies[props.lobbyCode].gameStarted)) {
+  if (openLobbies[props.lobbyCode] && !openLobbies[props.lobbyCode].gameStarted) {
     updateLobbyUserList({ lobbyCode: props.lobbyCode, userId: props.userId, socket: props.socket });
   }
   props.socket.emit("socket joined");
