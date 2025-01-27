@@ -44,6 +44,31 @@
   padding: 0.5rem;
   box-sizing: border-box;
   word-break: break-all;
+  position: relative;
+  transition: background-color 0.2s ease;
+}
+
+.lobby-code:hover {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.copy-tooltip {
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgb(0, 0, 0);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.lobby-code:hover .copy-tooltip {
+  opacity: 1;
 }
 
 .lobby-sections {
