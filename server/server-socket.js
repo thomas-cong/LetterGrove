@@ -478,9 +478,11 @@ const joinSocket = (props) => {
       gameToUserToSocketMap[lobbyCode][userId].push(props.socket);
     }
   }
-  updateLobbyUserList({ lobbyCode: props.lobbyCode, userId: props.userId, socket: props.socket });
+  if (openLobbies[props.lobbyCode] && !(openLobbies[props.lobbyCode].gameStarted)) {
+    updateLobbyUserList({ lobbyCode: props.lobbyCode, userId: props.userId, socket: props.socket });
+  }
   props.socket.emit("socket joined");
-  
+  //test
 };
 
 /**

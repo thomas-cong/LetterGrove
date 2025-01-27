@@ -114,6 +114,8 @@ const GameComponent = (props) => {
           if (info.userId === props.userId) {
             setIsTurn(true);
           } else {
+            console.log("emitted id: " + info.userId);
+            console.log("props id: " + props.userId);
             setIsTurn(false);
           }
         }, 500);

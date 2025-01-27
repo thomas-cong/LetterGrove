@@ -134,6 +134,7 @@ router.post("/openLobby", (req, res) => {
 router.get("/isGameStarted", (req, res) => {
   if (!openLobbies[req.query.lobbyCode]) {
     res.status(404).send({ error: "Lobby not found" });
+    return;
   }
   res.send({ gameStarted: openLobbies[req.query.lobbyCode].gameStarted });
 });
@@ -260,6 +261,11 @@ router.get("/lobbyCheck", (req, res) => {
 router.get("/gameSettings", (req, res) => {
   const lobbyCode = req.query.lobbyCode;
   const lobby = openLobbies[lobbyCode];
+  if (!lobby) {
+    res.status(404);
+    res.send({ error: "Lobby not found" });
+    return;
+  }
   const gameSettings = {
     minWordLength: lobby.minWordLength,
     pointsModifier: lobby.pointsModifier,
