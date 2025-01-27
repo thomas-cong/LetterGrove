@@ -104,6 +104,8 @@ const GameComponent = (props) => {
       const handleInitialGame = (game) => {
         setGameState(game);
         setEndpoints(game.endpoints);
+        setSelectedX(game.endpoints[0][0]);
+        setSelectedY(game.endpoints[0][1]);
         console.log("GAME ENDPOINTS" + game.endpoints);
       };
 
