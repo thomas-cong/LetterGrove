@@ -132,7 +132,7 @@ const GameComponent = (props) => {
             console.log("props id: " + props.userId);
             setIsTurn(false);
           }
-        }, 500);
+        }, 300);
       };
       // Letter updates
       const handleBoardUpdate = (info) => {

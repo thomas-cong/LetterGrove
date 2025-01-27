@@ -507,7 +507,7 @@ const joinSocket = (props) => {
     if (openLobbies[props.lobbyCode] && !openLobbies[props.lobbyCode].gameStarted) {
       updateLobbyUserList({ lobbyCode: props.lobbyCode, userId: props.userId, socket: props.socket });
     }
-  }, 100);
+  }, 0);
   //test
 };
 
@@ -532,7 +532,7 @@ const lobbyToGameTransition = (props) => {
  * @param {Object} props - Contains lobbyCode
  */
 const updateLobbyUserList = (props) => {
-  for (const userId of Object.keys(openLobbies[props.lobbyCode].players)) {
+  for (const userId of Object.keys(gameToUserToSocketMap[props.lobbyCode])) {
     console.log(props.lobbyCode);
     console.log(userId);
     console.log(gameToUserToSocketMap);
