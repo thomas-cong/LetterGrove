@@ -52,3 +52,30 @@
 .rankings-container .playerDisplay {
   margin: 12px 0;
 }
+
+.playerInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
+}
+
+.playerName {
+  font-size: 24px;
+  font-weight: 500;
+  color: #333333;
+  margin: 0;
+  position: relative;
+}
+
+.playerScore {
+  font-size: 24px;
+  font-weight: 500;
+  color: #333333;
+  margin: 0;
+  text-align: right;
+}
+
+.playerDisplay.ranking-slip .playerScore {
+  font-size: calc(24px * 0.8);
+}
