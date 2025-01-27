@@ -81,7 +81,7 @@ const sendUserInitialGame = (userId, lobbyCode) => {
       if (game.sameBoard) {
         socket.emit("turn update", {
           userId: game.turn,
-          username: gameLogic.games[lobbyCode].players[game.turn].username,
+          username: gameLogic.games[lobbyCode].players[game.turn],
         });
       }
       if (game.mode === "Time") {
@@ -303,7 +303,7 @@ const initiateGame = (props) => {
 
         socket.emit("turn update", {
           userId: game.turn,
-          username: players[game.turn].username,
+          username: players[game.turn],
         });
       }
     }
@@ -549,7 +549,7 @@ const passTurn = (lobbyCode) => {
 
         socket.emit("turn update", {
           userId: game.turn,
-          username: game.players[game.turn].username,
+          username: game.players[game.turn],
         });
       }
     }
