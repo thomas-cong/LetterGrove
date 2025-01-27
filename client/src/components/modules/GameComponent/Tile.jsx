@@ -13,6 +13,10 @@ import grape from "../../../assets/Tiles/grape.png";
 import grassTile from "../../../assets/Tiles/Grass_Tile_01.png";
 import nullTile from "../../../assets/Tiles/NullTile.png";
 
+// Import powerups
+import wateringCan from "../../../assets/Tiles/wateringCan.png";
+import twoTimes from "../../../assets/Tiles/twoTimes.png";
+
 //Import endpoint crown
 import EndPointHighLightTop from "../../../assets/Tiles/EndPointHighLight_Top.png";
 import EndPointHighlightBottom from "../../../assets/Tiles/EndPointHighLight_Bottom.png";
@@ -150,6 +154,18 @@ const getLetterTile = (letter, isDefault) => {
   return isDefault ? defaultLetterTiles[letter] : letterTiles[letter];
 };
 
+const getPowerUpImage = (powerUp) => {
+  if (!powerUp) return null;
+
+  switch (powerUp) {
+    case "wateringCan":
+      return wateringCan;
+    case "twoTimes":
+      return twoTimes;
+    default:
+      return null;
+  }
+};
 /**
  * Gets the appropriate crop tile image based on the crop type
  * @param {string} cropType - The type of crop to display (blueberries, carrots, pumpkins, tomatoes)
@@ -207,6 +223,7 @@ const getCropImage = (cropType) => {
  * @param {Function} props.setWord - Function to update the word state
  * @param {boolean} props.isValidWord - Whether the current word is valid
  * @param {boolean} props.isTurn - Whether it's the player's turn
+ * @param {board} props.board - The current game board
  */
 const Tile = (props) => {
   const isSelected =
@@ -247,6 +264,18 @@ const Tile = (props) => {
       props.setEndPointSelected(true);
       props.setSelectedX(params.tileX);
       props.setSelectedY(params.tileY);
+      console.log("Submitting word:", props.word);
+      console.log(socket);
+
+      if (socket) {
+        socket.emit("enter word", {
+          lobbyCode: lobbyId,
+          x: params.tileX,
+          y: params.tileY,
+          word: props.word,
+          board: props.board,
+        });
+      }
       // Clear suggestions when selecting a new endpoint
       props.setSuggestions([]);
     } else if (!params.isSuggestionEnd) {
@@ -363,6 +392,23 @@ const Tile = (props) => {
           src={getCropImage(props.cell.crop)}
           alt={props.cell.crop}
           className={`crop-tile ${props.cell.isSuggestion ? "suggestion-letter" : ""} ${
+            props.cell.isSuggestionEnd ? "suggestion-end-letter" : ""
+          }`}
+          onClick={() =>
+            checkEndpoint({
+              isEndpoint: props.isEndpoint,
+              isSuggestionEnd: props.cell.isSuggestionEnd,
+              tileX: props.tileX,
+              tileY: props.tileY,
+            })
+          }
+        />
+      )}
+      {props.cell.powerUp && (
+        <img
+          src={getPowerUpImage(props.cell.powerUp)}
+          alt={props.cell.powerUp}
+          className={`powerup-tile ${props.cell.isSuggestion ? "suggestion-letter" : ""} ${
             props.cell.isSuggestionEnd ? "suggestion-end-letter" : ""
           }`}
           onClick={() =>

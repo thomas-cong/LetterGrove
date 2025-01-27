@@ -292,6 +292,7 @@ const GameComponent = (props) => {
                 setSuggestions={setSuggestions}
                 suggestions={suggestions}
                 setWord={setWord}
+                word={word}
                 isTurn={isTurn}
               />
             </div>

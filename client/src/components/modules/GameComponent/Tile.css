@@ -71,6 +71,12 @@
   animation: smoothPulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
+.powerup-tile {
+  z-index: 3;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.3));
+  animation: smoothPulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
 @keyframes fallIn {
   0% {
     transform: translateY(-100%) scale(0.8);
