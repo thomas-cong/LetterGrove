@@ -14,7 +14,7 @@ import TurnDisplay from "./TurnDisplay";
 const GameComponent = (props) => {
   const [word, setWord] = useState("");
   const [suggestions, setSuggestions] = useState([]);
-  const [isTurn, setIsTurn] = useState("");
+  const [isTurn, setIsTurn] = useState(true);
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [turnUsername, setTurnUsername] = useState("");

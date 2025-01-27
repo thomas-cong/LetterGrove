@@ -22,8 +22,8 @@ const SummonLobbyPopup = (props) => {
 
   const [gameSettings, setGameSettings] = useState({
     minWordLength: 3, // int
-    mode: "Time", // string
-    steps: 180, // int
+    mode: "Words", // string
+    steps: 15, // int
     difficulty: "Easy", // slider
     sameBoard: true, // boolean
   });
