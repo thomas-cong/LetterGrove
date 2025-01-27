@@ -114,7 +114,7 @@ const logBoardState = (board) => {
       } else if (cell.powerUp) {
         symbol = "*";
       } else if (cell.crop) {
-        symbol = "C";
+        symbol = "/";
       }
       row += symbol.padEnd(3);
     }

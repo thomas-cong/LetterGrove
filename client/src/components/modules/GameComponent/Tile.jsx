@@ -259,6 +259,7 @@ const Tile = (props) => {
 
   const checkEndpoint = (params) => {
     console.log("Is Your Turn?", props.isTurn);
+    console.log("Tile properties", props.cell);
     if (params.isEndpoint) {
       console.log("Endpoint found at:", params.tileX, params.tileY);
       props.setEndPointSelected(true);
@@ -315,7 +316,7 @@ const Tile = (props) => {
       const timer = setTimeout(() => setIsAnimating(false), 500);
       return () => clearTimeout(timer);
     }
-  }, [props.cell.letter]);
+  }, [props.cell.letter, props.cell.crop]);
 
   // Use dynamic class names for styling tiles
   const tileStyle = {
@@ -392,8 +393,8 @@ const Tile = (props) => {
           src={getCropImage(props.cell.crop)}
           alt={props.cell.crop}
           className={`crop-tile ${props.cell.isSuggestion ? "suggestion-letter" : ""} ${
-            props.cell.isSuggestionEnd ? "suggestion-end-letter" : ""
-          }`}
+            isAnimating ? "falling" : ""
+          }${props.cell.isSuggestionEnd ? "suggestion-end-letter" : ""}`}
           onClick={() =>
             checkEndpoint({
               isEndpoint: props.isEndpoint,

@@ -529,9 +529,10 @@ const updateLobbyUserList = (props) => {
  * @param {string} userId - ID of user to update
  * @param {string} lobbyCode - Code of the game
  */
-const sendBoardState = (lobbyCode, userId, letterUpdates) => {
+const sendBoardState = (lobbyCode, userId, letterUpdates, cropUpdates) => {
   for (const socket of getSocketsFromLobbyCodeAndUserID(lobbyCode, userId)) {
-    if (socket) socket.emit("board update", letterUpdates);
+    if (socket)
+      socket.emit("board update", { letterUpdates: letterUpdates, cropUpdates: cropUpdates });
   }
 };
 
@@ -683,7 +684,12 @@ module.exports = {
           if (game.sameBoard) {
             for (const userId in game.players) {
               if (userId !== user._id) {
-                sendBoardState(props.lobbyCode, userId, output.localUpdate.letterUpdates);
+                sendBoardState(
+                  props.lobbyCode,
+                  userId,
+                  output.localUpdate.letterUpdates,
+                  output.localUpdate.cropUpdates
+                );
               }
             }
           }
