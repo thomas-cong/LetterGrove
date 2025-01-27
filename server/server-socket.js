@@ -133,6 +133,7 @@ const initiateGame = (props) => {
       pointsToWin: mode === "Points" ? gameInfo.steps : null,
       rankings: [],
       log: [],
+      secondsElapsed: 0,
     };
   }
 
@@ -407,6 +408,18 @@ const joinSocket = (props) => {
   const userId = props.userId;
   console.log("gameToUserToSocketMap: ", gameToUserToSocketMap);
   console.log("gameToUserToSocketMap[lobbyCode]: ", gameToUserToSocketMap[lobbyCode]);
+  for (let tempLobbyCode of Object.keys(gameToUserToSocketMap)) {
+    for (let tempUserId of Object.keys(gameToUserToSocketMap[tempLobbyCode])) {
+      for (let i = 0; i < gameToUserToSocketMap[tempLobbyCode][tempUserId].length; i++) {
+        let tempSocket = gameToUserToSocketMap[tempLobbyCode][tempUserId][i];
+        if (tempSocket.id === props.socket.id) {
+          console.log("SOCKET REMOVED");
+          gameToUserToSocketMap[tempLobbyCode][tempUserId].splice(i, 1);
+          break;
+        }
+      }
+    }
+  }
   if (gameToUserToSocketMap[lobbyCode] && gameToUserToSocketMap[lobbyCode][userId]) {
     for (const otherSocket of gameToUserToSocketMap[lobbyCode][userId]) {
       if (otherSocket.id === props.socket.id) {

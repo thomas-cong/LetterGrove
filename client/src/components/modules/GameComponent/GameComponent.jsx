@@ -135,7 +135,7 @@ const GameComponent = (props) => {
         socket.off("turn update", handleTurnUpdate);
         socket.off("board update", handleBoardUpdate);
       };
-    }, 100);
+    }, 150);
   }, []); // Empty dependency array since we want to set up listeners only once
 
   useEffect(() => {
