@@ -4,54 +4,38 @@
   flex-direction: column;
   width: 460px;
   height: 300px;
-  transform: translateX(-25%);
+  /* transform: translateX(-25%); */
   background-image: url("../../../assets/RankingsBoxV2.png");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
   margin-top: 20%;
   left: 50%;
-  transform: translate(-5%, 0%);
+  /* transform: translate(-5%, -5%); */
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 1));
 
 
 }
 
-/* .rankings-title {
-  left: 50%;
-  transform: translate(-50%, 0%);
-  position: relative;
-  width: var(--slip-width);
-  flex: 1;
-  height: 10%;
-  aspect-ratio: 10/1;
-  background-image: url("../../../assets/Rankings_Slip.png");
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-} */
-
 .rankings-title {
   left: 50%;
   transform: translate(-50%, -40%);
   position: relative;
-  /* width: var(--slip-width); */
   flex: 1;
   width: 350px;
   height: 200px;
   aspect-ratio: 10/1;
-  background-image: url("../../../assets/Rankings_Slip.png");
+  /* background-image: url("../../../assets/Rankings_Slip.png");
   background-size: contain;
   background-repeat: no-repeat;
-  background-position: center;
+  background-position: center; */
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 600;
+  color: white;
+  font-size: 32px;
+  text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4);
 
 }
 
@@ -84,20 +68,4 @@
 /* Hide empty player slots */
 .rankings-box > div:empty {
   display: none;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .rankings-container {
-    padding: 3%;
-    gap: 3%;
-  }
-
-  .rankings-title {
-    width: 95%;
-  }
-
-  .rankings-box > div {
-    width: 95%;
-  }
 }

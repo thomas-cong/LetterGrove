@@ -6,40 +6,20 @@
 
 .word-input-container {
   display: flex;
-  flex-direction: row;
   align-items: center;
   justify-content: center;
+  gap: 8px;
   width: 100%;
-  flex-wrap: nowrap;
 }
 
-.word-input-container input {
+.word-input {
   padding: clamp(6px, 0.8vw, 8px);
   border-radius: 4px;
+  outline: none;
+  background-color: white;
+  width: min(300px, 60vw);
   border: 1px solid #ccc;
   font-size: clamp(14px, 1.6vw, 16px);
-}
-
-.confirm-button {
-  display: flex;
-  /* align-items: center;
-  justify-content: center; */
-  cursor: pointer;
-  padding: clamp(3px, 0.4vw, 4px);
-  border-radius: 4px;
-  /* transition: background-color 0.2s ease; */
-  width: clamp(24px, 3vw, 32px);
-  height: clamp(24px, 3vw, 32px);
-  flex-shrink: 0; /* Prevent button from shrinking */
-}
-
-.confirm-button:hover {
-  transform: scale(1.1);
-  transition: all 0.3s ease;
-}
-
-.confirm-button img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+  text-align: center;
+  margin-bottom: 2%;
 }
