@@ -25,12 +25,12 @@ const Log = ({ log = [], userId }) => {
         {log.map((message, index) => (
           <div key={index} className="log-message">
             {(message.userId === userId) ? (
-              <div style={{ color: "white" }}>
-                <span style={{ color: "var(--primary--dim)" }}>{message.username}</span> collected <span style={{ color: "rgb(211, 255, 131)"}}>{message.pointsGained}</span> {message.pointsGained === 1 ? "point" : "points"}
+              <div style={{ color: "rgb(147, 149, 151)" }}>
+                <span style={{ color: "var(--primary--dim)" }}>{message.username}</span> collected <span style={{ color: "rgb(220,20,60)"}}>{message.pointsGained}</span> {message.pointsGained === 1 ? "point" : "points"}
               </div>
             ) : (
-              <div style={{ color: "white" }}>
-                <span style={{ color: "black" }}>{message.username}</span> collected <span style={{ color: "rgb(211, 255, 131)"}}>{message.pointsGained}</span> {message.pointsGained === 1 ? "point" : "points"}
+              <div style={{ color: "rgb(147, 149, 151)" }}>
+                <span style={{ color: "black" }}>{message.username}</span> collected <span style={{ color: "rgb(220,20,60)"}}>{message.pointsGained}</span> {message.pointsGained === 1 ? "point" : "points"}
               </div>
             )}
           </div>
