@@ -7,32 +7,32 @@ const BoardSelection = ({ onClose, onSelect }) => {
   return (
     <div className="selectionmainboard">
       <img src={closeButton} alt="Close" className="createdcloseButton" onClick={onClose} />
-      <div className="createdtitle">Select Board Type</div>
+      <div className="createdtitle">SELECT BOARD TYPE</div>
       <div className="board-options">
         <div className="board-option" onClick={() => onSelect(true)}>
-          <div className="selectheader">Same Board</div>
+          <div className="selectheader">SAME BOARD</div>
           <p>
           All players will share the same board and race to collect fruits!
           </p>
-          <p style={{ fontWeight: "bold", fontSize: "28px", color: "pink"}}>Modes:</p>
+          <p style={{ fontWeight: "bold", fontSize: "32px", color: "rgb(252, 139, 158);"}}>MODES:</p>
           <p style={{ textAlign: "start" }}>
             {" "}
-            <strong>Points: </strong>First to hit the target score wins!
+            <strong>POINTS: </strong>First to hit the target score wins!
             <br />
-            <strong>Turns: </strong>Outscore your friends before you run out of turns!
+            <strong>TURNS: </strong>Outscore your friends before you run out of turns!
           </p>
         </div>
         <div className="board-option" onClick={() => onSelect(false)}>
-          <div className="selectheader">Different Boards</div>
+          <div className="selectheader">DIFFERENT BOARDS</div>
           <p>
           Everyone gets their own separate but identical board.
           </p>
-          <p style={{ fontWeight: "bold", fontSize: "28px", color: "pink" }}>Modes:</p>
+          <p style={{ fontWeight: "bold", fontSize: "32px", color: "rgb(252, 139, 158);" }}>MODES:</p>
           <p style={{ textAlign: "start" }}>
-            <strong>Points: </strong>First to hit the target score wins!<br />
-            <strong>Turns: </strong>Outscore your friends before you run out of turns!
+            <strong>POINTS: </strong>First to hit the target score wins!<br />
+            <strong>TURNS: </strong>Outscore your friends before you run out of turns!
             <br />
-            <strong>Time: </strong>Collect as many points as you can before time's up!
+            <strong>TIME: </strong>Collect as many points as you can before time's up!
           </p>
         </div>
       </div>

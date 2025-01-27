@@ -93,7 +93,7 @@
 }
 
 .difficulty-option.active span {
-  color: #5e81ff;
+  color: var(--primary--dim);
   font-weight: 600;
 }
 
@@ -160,5 +160,5 @@
 
 .labels .active {
   opacity: 1;
-  color: #5e81ff;
+  color: var(--primary--dim);
 }

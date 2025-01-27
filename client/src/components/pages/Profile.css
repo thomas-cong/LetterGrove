@@ -30,12 +30,12 @@
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  border: 4px solid rgb(94, 129, 255);
+  border: 4px solid var(--primary--dim);
   margin-bottom: 1rem;
 }
 
 .profile-name {
-  color: rgb(94, 129, 255);
+  color: var(--primary--dim);
   margin: 0 0 2rem 0;
   font-size: 1.5rem;
 }
@@ -75,7 +75,7 @@
 }
 
 .profile-detailed h3 {
-  color: rgb(94, 129, 255);
+  color: var(--primary--dim);
   margin-top: 0;
   margin-bottom: 1.5rem;
   font-size: 1.5rem;
@@ -94,7 +94,7 @@
 
 .stat-box {
   flex: 1;
-  background: rgb(94, 129, 255, 0.1);
+  background: var(--primary--dim, 0.1);
   padding: 1.5rem;
   border-radius: 8px;
   text-align: center;
@@ -107,7 +107,7 @@
 
 .stat-box label {
   display: block;
-  color: rgb(94, 129, 255);
+  color: var(--primary--dim);
   margin-bottom: 0.5rem;
   font-size: 0.9rem;
 }
@@ -132,7 +132,7 @@
 }
 
 .match-history h3 {
-  color: rgb(94, 129, 255);
+  color: var(--primary--dim);
   margin-top: 0;
   margin-bottom: 1.5rem;
   font-size: 1.5rem;

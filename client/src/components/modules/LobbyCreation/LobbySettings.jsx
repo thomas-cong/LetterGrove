@@ -28,7 +28,7 @@ const IntInput = (props) => {
 };
 // Dropdown Input for mode selection
 const ModeSelector = (props) => {
-  const [mode, setMode] = useState("Time");
+  const [mode, setMode] = useState("Words");
 
   const getDefaultSteps = (selectedMode) => {
     switch (selectedMode) {
@@ -56,10 +56,10 @@ const ModeSelector = (props) => {
             steps: getDefaultSteps(selectedMode),
           });
         }}
-        defaultValue="Time"
+        defaultValue="Words"
       >
-        <option value="Time">Time (s)</option>
         <option value="Words">Words</option>
+        {!(props.gameSettings.sameBoard) && <option value="Time">Time (s)</option>}
         <option value="Points">Points</option>
       </select>
     </div>

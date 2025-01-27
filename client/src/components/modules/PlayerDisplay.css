@@ -46,7 +46,7 @@
 }
 
 .current-user .playerName {
-  color: #396dff !important;
+  color: var(--primary--dim) !important;
 }
 
 .rankings-container .playerDisplay {

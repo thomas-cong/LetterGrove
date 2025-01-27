@@ -19,7 +19,7 @@ const LobbyCreationPopup = (props) => {
           <img src={Closebutton} onClick={() => props.hideLobby()} className="createdcloseButton" />
 
           <div className="lobby-code-container">
-            <div className="lobby-code-title">Lobby Settings</div>
+            <div className="lobby-code-title">LOBBY SETTINGS</div>
           </div>
 
           <input
