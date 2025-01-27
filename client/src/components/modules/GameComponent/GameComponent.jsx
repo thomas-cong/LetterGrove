@@ -23,9 +23,9 @@ const GameComponent = (props) => {
 
   // Game state management
   const [endPointSelected, setEndPointSelected] = useState(true);
+  const [endpoints, setEndpoints] = useState([[0, 0]]);
   const [selectedX, setSelectedX] = useState(0);
   const [selectedY, setSelectedY] = useState(0);
-  const [endpoints, setEndpoints] = useState([[0, 0]]);
   const [lettersUpdated, setLettersUpdated] = useState([]);
   const [cropsUpdated, setCropsUpdated] = useState([]);
   const [gameState, setGameState] = useState({
@@ -106,8 +106,8 @@ const GameComponent = (props) => {
       const handleInitialGame = (game) => {
         setGameState(game);
         setEndpoints(game.endpoints);
-        setSelectedX(game.endpoints[0][0]);
-        setSelectedY(game.endpoints[0][1]);
+        setSelectedX(game.endpoints[game.endpoints.length - 1][0]);
+        setSelectedY(game.endpoints[game.endpoints.length - 1][1]);
         console.log("GAME ENDPOINTS" + game.endpoints);
       };
 
