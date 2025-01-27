@@ -296,15 +296,17 @@ const initiateGame = (props) => {
     secondsRemaining: game.secondsRemaining,
   });
 
-  for (const userId of Object.keys(players)) {
-    for (const socket of getSocketsFromLobbyCodeAndUserID(lobbyCode, userId)) {
-      if (socket) {
-        console.log("Turn update emitted");
+  if (sameBoard) {
+    for (const userId of Object.keys(players)) {
+      for (const socket of getSocketsFromLobbyCodeAndUserID(lobbyCode, userId)) {
+        if (socket) {
+          console.log("Turn update emitted");
 
-        socket.emit("turn update", {
-          userId: game.turn,
-          username: players[game.turn],
-        });
+          socket.emit("turn update", {
+            userId: game.turn,
+            username: players[game.turn],
+          });
+        }
       }
     }
   }
