@@ -9,13 +9,15 @@ import Rankings from "./Rankings";
 import Log from "./Log";
 import "./GameComponent.css";
 import AlertBox from "../AlertBox/AlertBox";
+import TurnDisplay from "./TurnDisplay";
 
 const GameComponent = (props) => {
   const [word, setWord] = useState("");
   const [suggestions, setSuggestions] = useState([]);
-  const [isTurn, setIsTurn] = useState(true);
+  const [isTurn, setIsTurn] = useState("");
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
+  const [turnUsername, setTurnUsername] = useState("");
 
   // Game state management
   const [endPointSelected, setEndPointSelected] = useState(true);
@@ -113,6 +115,7 @@ const GameComponent = (props) => {
         setTimeout(() => {
           if (info.userId === props.userId) {
             setIsTurn(true);
+            setTurnUsername(info.username);
           } else {
             setIsTurn(false);
           }
@@ -193,10 +196,12 @@ const GameComponent = (props) => {
           className="word-input-alert"
         />
       )}
+
       <div className="gamecompcontainer">
         <div className="gamecompleftcontainer">
           <div className="gamecompboardcontainer">
             <div className="gamecompboard">
+              {!isTurn && <TurnDisplay username={turnUsername} />}
               <Board
                 board={gameState.board}
                 points={gameState.points}
