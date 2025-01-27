@@ -80,7 +80,7 @@
 }
 
 .lobby-section {
-  background: rgba(255, 255, 255, 0.671);
+  background: rgba(255, 255, 255, 0.695);
   border-radius: 8px;
   padding: clamp(0.5rem, 1.5vw, 1rem);
   border: 2px solid rgb(255, 255, 255);

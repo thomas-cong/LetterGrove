@@ -33,7 +33,7 @@ input[type="number"] {
 
 select {
   cursor: pointer;
-  color: rgb(94, 129, 255);
+  color: var(--primary--dim);
   background-color: white;
 }
 
@@ -43,7 +43,7 @@ select option {
 
 input[type="number"] {
   width: 60px;
-  color: rgb(94, 129, 255);
+  color: var(--primary--dim);
 }
 
 .steps-input {

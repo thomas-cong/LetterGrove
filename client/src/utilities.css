@@ -105,7 +105,7 @@ form {
 }
 
 .u-link {
-  color: var(--primary);
+  color: var(--primary--dim);
   text-decoration: none;
   cursor: pointer;
 }

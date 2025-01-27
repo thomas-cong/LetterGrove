@@ -629,7 +629,13 @@ const confirmWord = (userId, props) => {
 
   let logMessages = [];
   if (pointsGained > 0) {
-    logMessages.push(userGameState.username + " collected " + pointsGained + " points");
+    logMessages.push({
+      userId: userId,
+      username: userGameState.username,
+      pointsGained: pointsGained,
+    });
+    
+    // logMessages.push(userGameState.username + " collected " + pointsGained + " points");
   }
 
   /*
