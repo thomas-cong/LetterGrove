@@ -19,8 +19,7 @@ const Rankings = ({ rankings = [], currentUserId }) => {
           rankings.map((player, index) => (
             <div key={index} className="ranking-slip-container">
               <PlayerDisplay
-                name={player.username}
-                score={`${player.score} pts`}
+                name={`${player.username} - ${player.score} pts`}
                 profilePicture={testProfilePicture}
                 playerId={player.playerId}
                 currentUserId={currentUserId}

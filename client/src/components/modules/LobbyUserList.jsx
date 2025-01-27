@@ -14,20 +14,27 @@ import testProfilePicture from "../../assets/TestingPFP.png";
 const LobbyUserList = (props) => {
   const [usernameList, setUsernameList] = useState([]);
   useEffect(() => {
-    const handleUpdateLobbyUserList = (players) => {
-      let tempUsernameList = [];
-      for (let userId in players) {
-        tempUsernameList.push({
-          playerId: userId,
-          username: players[userId],
-        });
+    get("/api/isGameStarted", { lobbyCode: props.lobbyCode}).then((res) => {
+      if (!res.gameStarted) {
+        socket.emit("join socket", { lobbyCode: props.lobbyCode, userId: props.userId });
       }
-      setUsernameList(tempUsernameList);
-    };
-    socket.on("update lobby user list", handleUpdateLobbyUserList);
-    return () => {
-      socket.off("update lobby user list", handleUpdateLobbyUserList);
-    };
+    })
+    socket.on("socket joined", () => {
+      const handleUpdateLobbyUserList = (players) => {
+        let tempUsernameList = [];
+        for (let userId in players) {
+          tempUsernameList.push({
+            playerId: userId,
+            username: players[userId],
+          });
+        }
+        setUsernameList(tempUsernameList);
+      };
+      socket.on("update lobby user list", handleUpdateLobbyUserList);
+      return () => {
+        socket.off("update lobby user list", handleUpdateLobbyUserList);
+      };
+    });
   }, []);
 
   return (

@@ -76,6 +76,7 @@ const GameComponent = (props) => {
 
   // Set up socket listeners
   useEffect(() => {
+    console.log("useEffect called");
     socket.emit("join socket", { lobbyCode: props.lobbyCode, userId: props.userId });
     socket.on("socket joined", () => {
       get("/api/currentGame", { lobbyCode: props.lobbyCode, userId: props.userId });
