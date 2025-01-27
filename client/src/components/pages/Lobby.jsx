@@ -33,6 +33,7 @@ const Lobby = () => {
   const [reverseAnimation, setReverseAnimation] = useState(false);
   const [showButton, setShowButton] = useState(false);
   const [tooltipText, setTooltipText] = useState("Click to Copy!");
+  const [socketJoined, setSocketJoined] = useState(false);
 
   const cloudImages = [
     { bottom: firstBottomLeft, top: firstTopRight },
@@ -50,7 +51,12 @@ const Lobby = () => {
       }
       setU_id(String(user._id));
       // Join the socket room for this lobby
-      socket.emit("join socket", { lobbyCode: lobbyId, userId: user._id });
+      get("/api/isGameStarted", { lobbyCode: lobbyId}).then((res) => {
+        if (!res.gameStarted) {
+          socket.emit("join socket", { lobbyCode: lobbyId, userId: user._id });
+        }
+      })
+      setSocketJoined(true);
     });
     if (u_id) {
       get("/api/players", { lobbyCode: lobbyId }).then((players) => {
@@ -89,9 +95,12 @@ const Lobby = () => {
       setReverseAnimation(false);
 
       setTimeout(() => {
-        setLobbyState("game");
         post("/api/startGame", { lobbyCode: lobbyId });
-      }, 1300);
+      }, 0);
+
+      setTimeout(() => {
+        setLobbyState("game");
+      }, 1000);
 
       setTimeout(() => {
         setReverseAnimation(true);
@@ -105,17 +114,17 @@ const Lobby = () => {
   }, []);
 
   const startGameRequest = () => {
-    setShowAnimation(true);
-    setReverseAnimation(false);
+    // setShowAnimation(true);
+    // setReverseAnimation(false);
 
-    setTimeout(() => {
-      setLobbyState("game");
-      post("/api/startGame", { lobbyCode: lobbyId });
-    }, 1300);
+    // setTimeout(() => {
+    //   setLobbyState("game");
+    //   post("/api/startGame", { lobbyCode: lobbyId });
+    // }, 1300);
 
-    setTimeout(() => {
-      setReverseAnimation(true);
-    }, 1500);
+    // setTimeout(() => {
+    //   setReverseAnimation(true);
+    // }, 1500);
   };
 
   // useEffect(() => {

@@ -10,6 +10,7 @@ import Log from "./Log";
 import "./GameComponent.css";
 import AlertBox from "../AlertBox/AlertBox";
 import TurnDisplay from "./TurnDisplay";
+import GameEndPopup from "./GameEndPopup/GameEndPopup.jsx";
 
 const GameComponent = (props) => {
   const [word, setWord] = useState("");
@@ -18,13 +19,15 @@ const GameComponent = (props) => {
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [turnUsername, setTurnUsername] = useState("");
+  const [showEndGamePopup, setShowEndGamePopup] = useState(false);
 
   // Game state management
   const [endPointSelected, setEndPointSelected] = useState(true);
+  const [endpoints, setEndpoints] = useState([[0, 0]]);
   const [selectedX, setSelectedX] = useState(0);
   const [selectedY, setSelectedY] = useState(0);
-  const [endpoints, setEndpoints] = useState([[0, 0]]);
   const [lettersUpdated, setLettersUpdated] = useState([]);
+  const [cropsUpdated, setCropsUpdated] = useState([]);
   const [gameState, setGameState] = useState({
     lobbyCode: "",
     username: "",
@@ -39,10 +42,18 @@ const GameComponent = (props) => {
 
   //@{params} letters updated
   //@{params} board
-  const updateLetters = (params) => {
+  const updateBoard = (params) => {
+    console.log(params);
     let updatedLetters = params.lettersUpdated;
+    let updatedCrops = [];
+    if (params.cropsUpdated) {
+      updatedCrops = params.cropsUpdated;
+    }
+
     console.log("Updated letters:");
     console.log(updatedLetters);
+    console.log("Updated crops:");
+    console.log(updatedCrops);
 
     // Create a deep copy of the board
     let newBoard = JSON.parse(JSON.stringify(params.board));
@@ -54,8 +65,8 @@ const GameComponent = (props) => {
       newBoard[y][x] = {
         ...newBoard[y][x], // preserve existing tile properties
         letter: letter,
-        crop: "",
-        powerup: "",
+        crop: null,
+        powerUp: null,
         visited: true,
         isSuggestion: false,
         isSuggestionEnd: false,
@@ -67,6 +78,17 @@ const GameComponent = (props) => {
         setWord("");
       }
     }
+    for (let i = 0; i < updatedCrops.length; i++) {
+      let x = updatedCrops[i].x;
+      let y = updatedCrops[i].y;
+      let crop = updatedCrops[i].crop;
+      newBoard[y][x] = {
+        ...newBoard[y][x], // preserve existing tile properties
+        crop: crop,
+        isSuggestion: false,
+        isSuggestionEnd: false,
+      };
+    }
 
     setGameState((prevState) => ({
       ...prevState,
@@ -76,6 +98,7 @@ const GameComponent = (props) => {
 
   // Set up socket listeners
   useEffect(() => {
+    console.log("useEffect called");
     socket.emit("join socket", { lobbyCode: props.lobbyCode, userId: props.userId });
     socket.on("socket joined", () => {
       get("/api/currentGame", { lobbyCode: props.lobbyCode, userId: props.userId });
@@ -83,6 +106,8 @@ const GameComponent = (props) => {
       const handleInitialGame = (game) => {
         setGameState(game);
         setEndpoints(game.endpoints);
+        setSelectedX(game.endpoints[game.endpoints.length - 1][0]);
+        setSelectedY(game.endpoints[game.endpoints.length - 1][1]);
         console.log("GAME ENDPOINTS" + game.endpoints);
       };
 
@@ -98,6 +123,10 @@ const GameComponent = (props) => {
         }));
         setLettersUpdated(info.letterUpdates);
         setEndpoints(info.endpoints);
+        if (info.cropUpdates) {
+          console.log("Updated crops: " + info.cropUpdates);
+          setCropsUpdated(info.cropUpdates);
+        }
       };
 
       // Global game updates (rankings, log messages)
@@ -131,12 +160,16 @@ const GameComponent = (props) => {
             console.log("props id: " + props.userId);
             setIsTurn(false);
           }
-        }, 500);
+        }, 300);
       };
       // Letter updates
       const handleBoardUpdate = (info) => {
         console.log("Board update:", info);
-        setLettersUpdated(info);
+        setLettersUpdated(info.letterUpdates);
+        setCropsUpdated(info.cropUpdates);
+      };
+      const handleGameOver = () => {
+        setShowEndGamePopup(true);
       };
 
       // Set up listeners
@@ -145,6 +178,7 @@ const GameComponent = (props) => {
       socket.on("global update", handleGlobalUpdate);
       socket.on("turn update", handleTurnUpdate);
       socket.on("board update", handleBoardUpdate);
+      socket.on("end game", handleEndGame);
       // Cleanup listeners on unmount
       return () => {
         socket.off("initial game", handleInitialGame);
@@ -152,76 +186,18 @@ const GameComponent = (props) => {
         socket.off("global update", handleGlobalUpdate);
         socket.off("turn update", handleTurnUpdate);
         socket.off("board update", handleBoardUpdate);
+        socket.off("game over", handleGameOver);
       };
     });
   }, []);
-  //   setTimeout(() => {
-  //     get("/api/currentGame", { lobbyCode: props.lobbyCode, userId: props.userId });
-  //     // Initial game state
-  //     const handleInitialGame = (game) => {
-  //       setGameState(game);
-  //       setEndpoints(game.endpoints);
-  //       console.log("GAME ENDPOINTS" + game.endpoints);
-  //     };
-
-  //     // User-specific updates (letters, points, endpoints)
-  //     const handleUserUpdate = (info) => {
-  //       // Reset the suggestions since this only plays on user update
-  //       setSuggestions([]);
-
-  //       console.log("User update:", info);
-  //       setGameState((prevState) => ({
-  //         ...prevState,
-  //         points: info.totalPoints,
-  //       }));
-  //       setLettersUpdated(info.letterUpdates);
-  //       setEndpoints(info.endpoints);
-  //     };
-
-  //     // Global game updates (rankings, log messages)
-  //     const handleGlobalUpdate = (info) => {
-  //       console.log("Global update:", info);
-  //       setGameState((prevState) => ({
-  //         ...prevState,
-  //         rankings: info.updatedRankings,
-  //         log: [...prevState.log, ...info.logMessages],
-  //       }));
-  //     };
-
-  //     const handleTurnUpdate = (info) => {
-  //       if (info.userId === props.userId) {
-  //         setIsTurn(true);
-  //       } else {
-  //         setIsTurn(false);
-  //       }
-  //     };
-  //     // Letter updates
-  //     const handleBoardUpdate = (info) => {
-  //       console.log("Board update:", info);
-  //       setLettersUpdated(info);
-  //     };
-
-  //     // Set up listeners
-  //     socket.on("initial game", handleInitialGame);
-  //     socket.on("user update", handleUserUpdate);
-  //     socket.on("global update", handleGlobalUpdate);
-  //     socket.on("turn update", handleTurnUpdate);
-  //     socket.on("board update", handleBoardUpdate);
-  //     // Cleanup listeners on unmount
-  //     return () => {
-  //       socket.off("initial game", handleInitialGame);
-  //       socket.off("user update", handleUserUpdate);
-  //       socket.off("global update", handleGlobalUpdate);
-  //       socket.off("turn update", handleTurnUpdate);
-  //       socket.off("board update", handleBoardUpdate);
-  //     };
-  //   }, 150);
-  // }, []); // Empty dependency array since we want to set up listeners only once
 
   useEffect(() => {
-    updateLetters({ lettersUpdated: lettersUpdated, board: gameState.board });
-  }, [lettersUpdated]);
-
+    updateBoard({
+      cropsUpdated: cropsUpdated,
+      lettersUpdated: lettersUpdated,
+      board: gameState.board,
+    });
+  }, [lettersUpdated, cropsUpdated]);
   // Add resize handler for board scaling
   useEffect(() => {
     const updateBoardScale = () => {
@@ -270,6 +246,8 @@ const GameComponent = (props) => {
           className="word-input-alert"
         />
       )}
+
+      {showEndGamePopup && <GameEndPopup />}
 
       <div className="gamecompcontainer">
         <div className="gamecompleftcontainer">

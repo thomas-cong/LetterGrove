@@ -561,6 +561,7 @@ const confirmWord = (userId, props) => {
       powerupsCollected[powerup] += 1;
     }
     if (board[currentY][currentX].crop !== null) {
+      console.log("Crop Found: " + board[currentY][currentX].crop);
       crop = board[currentY][currentX].crop;
       board[currentY][currentX].crop = null;
       cropsCollected[crop] += 1;
@@ -610,6 +611,9 @@ const confirmWord = (userId, props) => {
             y: randomY,
             crop: cropType,
           });
+          // Apply the crop to the board immediately
+          board[randomY][randomX].crop = cropType;
+          board[randomY][randomX].value = cropValues[cropType];
           break;
         }
       }
@@ -634,7 +638,6 @@ const confirmWord = (userId, props) => {
       username: userGameState.username,
       pointsGained: pointsGained,
     });
-    
     // logMessages.push(userGameState.username + " collected " + pointsGained + " points");
   }
 
@@ -659,6 +662,29 @@ const confirmWord = (userId, props) => {
   if (mode === "Words") userGameState.wordsRemaining -= 1;
   userGameState.endpoints.push([currentX - dx, currentY - dy]);
   game.log.push(...logMessages);
+
+  // Log the board state after word confirmation
+  console.log("\nBoard State after word confirmation:");
+  console.log("Word:", word);
+  console.log("Points gained:", pointsGained);
+  let boardLog = "";
+  for (let i = 0; i < ARRAY_SIZE; i++) {
+    let row = "";
+    for (let j = 0; j < ARRAY_SIZE; j++) {
+      let cell = board[i][j];
+      let symbol = ".";
+      if (cell.letter) {
+        symbol = cell.letter;
+      } else if (cell.powerUp) {
+        symbol = "*";
+      } else if (cell.crop) {
+        symbol = "/";
+      }
+      row += symbol.padEnd(3);
+    }
+    boardLog += row + "\n";
+  }
+  console.log(boardLog);
 
   return {
     localUpdate: {

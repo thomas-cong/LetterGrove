@@ -435,6 +435,24 @@ const handleEndGame = (props) => {
   delete gameToUserToSocketMap[lobbyCode];
 };
 
+// const deleteDuplicateJoins = (lobbyCode) => {
+//   for (const userId of Object.keys(gameToUserToSocketMap[lobbyCode])) {
+//     for (const socket of gameToUserToSocketMap[lobbyCode][userId]) {
+//       if (!gameToUserToSocketMap[lobbyCode] && !gameToUserToSocketMap[lobbyCode][userId]) {
+//         sockets = gameToUserToSocketMap[lobbyCode][userId];
+//         while (true) {
+//           const socketIndex = sockets.findIndex((s) => s.id === socket.id);
+//           if (socketIndex === -1) {
+//             break;
+//           } else {
+//             sockets.splice(socketIndex, 1);
+//           }
+//         }
+//       }
+//     }
+//   }
+// };
+
 /**
  * Adds a user to a game room (socket.io room)
  * Verifies user is authorized to join the specified lobby
@@ -445,6 +463,14 @@ const joinSocket = (props) => {
   const userId = props.userId;
   console.log("gameToUserToSocketMap: ", gameToUserToSocketMap);
   console.log("gameToUserToSocketMap[lobbyCode]: ", gameToUserToSocketMap[lobbyCode]);
+  if (gameToUserToSocketMap[lobbyCode] && gameToUserToSocketMap[lobbyCode][userId]) {
+    for (const otherSocket of gameToUserToSocketMap[lobbyCode][userId]) {
+      if (otherSocket.id === props.socket.id) {
+        props.socket.emit("socket joined");
+        return;
+      }
+    }
+  }
   for (let tempLobbyCode of Object.keys(gameToUserToSocketMap)) {
     for (let tempUserId of Object.keys(gameToUserToSocketMap[tempLobbyCode])) {
       for (let i = 0; i < gameToUserToSocketMap[tempLobbyCode][tempUserId].length; i++) {
@@ -458,32 +484,34 @@ const joinSocket = (props) => {
     }
   }
   if (gameToUserToSocketMap[lobbyCode] && gameToUserToSocketMap[lobbyCode][userId]) {
-    for (const otherSocket of gameToUserToSocketMap[lobbyCode][userId]) {
-      if (otherSocket.id === props.socket.id) {
-        return;
-      }
-    }
-    gameToUserToSocketMap[lobbyCode][userId].push(props.socket);
+    gameToUserToSocketMap[lobbyCode][userId].add(props.socket);
   } else {
     if (!gameToUserToSocketMap[lobbyCode]) {
       gameToUserToSocketMap[lobbyCode] = {};
     }
     if (!gameToUserToSocketMap[lobbyCode][userId]) {
-      gameToUserToSocketMap[lobbyCode][userId] = [];
+      gameToUserToSocketMap[lobbyCode][userId] = new Set();
     }
     for (const otherSocket of gameToUserToSocketMap[lobbyCode][userId]) {
       if (otherSocket.id === props.socket.id) {
+        props.socket.emit("socket joined");
         return;
       }
     }
     if (!(props.socket in gameToUserToSocketMap[lobbyCode][userId])) {
-      gameToUserToSocketMap[lobbyCode][userId].push(props.socket);
+      gameToUserToSocketMap[lobbyCode][userId].add(props.socket);
     }
   }
-  if (openLobbies[props.lobbyCode] && !openLobbies[props.lobbyCode].gameStarted) {
-    updateLobbyUserList({ lobbyCode: props.lobbyCode, userId: props.userId, socket: props.socket });
-  }
   props.socket.emit("socket joined");
+  setInterval(() => {
+    if (openLobbies[props.lobbyCode] && !openLobbies[props.lobbyCode].gameStarted) {
+      updateLobbyUserList({
+        lobbyCode: props.lobbyCode,
+        userId: props.userId,
+        socket: props.socket,
+      });
+    }
+  }, 50);
   //test
 };
 
@@ -508,7 +536,7 @@ const lobbyToGameTransition = (props) => {
  * @param {Object} props - Contains lobbyCode
  */
 const updateLobbyUserList = (props) => {
-  for (const userId of Object.keys(openLobbies[props.lobbyCode].players)) {
+  for (const userId of Object.keys(gameToUserToSocketMap[props.lobbyCode])) {
     console.log(props.lobbyCode);
     console.log(userId);
     console.log(gameToUserToSocketMap);
@@ -529,9 +557,10 @@ const updateLobbyUserList = (props) => {
  * @param {string} userId - ID of user to update
  * @param {string} lobbyCode - Code of the game
  */
-const sendBoardState = (lobbyCode, userId, letterUpdates) => {
+const sendBoardState = (lobbyCode, userId, letterUpdates, cropUpdates) => {
   for (const socket of getSocketsFromLobbyCodeAndUserID(lobbyCode, userId)) {
-    if (socket) socket.emit("board update", letterUpdates);
+    if (socket)
+      socket.emit("board update", { letterUpdates: letterUpdates, cropUpdates: cropUpdates });
   }
 };
 
@@ -573,7 +602,6 @@ module.exports = {
         removeUser(user, socket);
       });
       socket.on("join socket", (props) => {
-        props.socketid = socket.id;
         joinSocket({
           lobbyCode: props.lobbyCode,
           socket: socket,
@@ -617,6 +645,7 @@ module.exports = {
         }
       });
       socket.on("confirm word", (props) => {
+        // deleteDuplicateJoins(props.lobbyCode);
         console.log("confirm word");
         const user = getUserFromSocketID(socket.id);
         const game = gameLogic.games[props.lobbyCode];
@@ -650,7 +679,7 @@ module.exports = {
           /**
            * Emits updates specific to the current user
            * @param {Object} localUpdate
-           * @param {Object} localUpdate.fruitsCollected - Count of each fruit type collected
+           * @param {Object} localUpdate.cropsCollected - Count of each fruit type collected
            * @param {Object} localUpdate.powerupsCollected - Count of each powerup type collected
            * @param {number} localUpdate.pointsGained - Points earned from this word
            * @param {Array} localUpdate.letterUpdates - Array of letter placements on board
@@ -683,7 +712,12 @@ module.exports = {
           if (game.sameBoard) {
             for (const userId in game.players) {
               if (userId !== user._id) {
-                sendBoardState(props.lobbyCode, userId, output.localUpdate.letterUpdates);
+                sendBoardState(
+                  props.lobbyCode,
+                  userId,
+                  output.localUpdate.letterUpdates,
+                  output.localUpdate.cropUpdates
+                );
               }
             }
           }
@@ -696,6 +730,7 @@ module.exports = {
           for (const userId of Object.keys(game.players)) {
             for (const socket of getSocketsFromLobbyCodeAndUserID(props.lobbyCode, userId)) {
               console.log("socketid: " + socket.id);
+              console.log("userid: " + userId);
               if (socket) {
                 socket.emit("global update", output.globalUpdate);
               }
