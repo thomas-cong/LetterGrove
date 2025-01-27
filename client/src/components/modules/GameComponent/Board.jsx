@@ -56,8 +56,10 @@ const renderBoard = (params) => {
           suggestedWord={params.suggestedWord}
           setSuggestions={params.setSuggestions}
           setWord={params.setWord}
+          word={params.word}
           isValidWord={params.isValidWord}
           isTurn={params.isTurn}
+          board={params.board}
         />
       );
     }
@@ -99,6 +101,28 @@ const renderBoard = (params) => {
  * @param {Array<Object>} props.suggestions - Array of word suggestions
  * @param {boolean} props.isPlayerTurn - Whether it's the player's turn
  */
+const logBoardState = (board) => {
+  let output = "\nBoard State:\n";
+  for (let i = 0; i < board.length; i++) {
+    let row = "";
+    for (let j = 0; j < board[i].length; j++) {
+      const cell = board[i][j];
+      let symbol = "-";
+      if (cell.letter) {
+        symbol = cell.letter;
+        if (cell.powerUp) symbol = `${symbol}*`;
+      } else if (cell.powerUp) {
+        symbol = "*";
+      } else if (cell.crop) {
+        symbol = "C";
+      }
+      row += symbol.padEnd(3);
+    }
+    output += row + "\n";
+  }
+  console.log(output);
+};
+
 const Board = (props) => {
   // State for word suggestions and board display
   const [validWord, setValidWord] = useState(false);
@@ -118,8 +142,13 @@ const Board = (props) => {
       setWord: props.setWord,
       isValidWord: validWord,
       isTurn: props.isTurn,
+      word: props.word,
     })
   );
+
+  useEffect(() => {
+    logBoardState(props.board);
+  }, [props.board]);
 
   // Set up socket listener for suggestions
   useEffect(() => {
@@ -157,6 +186,7 @@ const Board = (props) => {
         setWord: props.setWord,
         isValidWord: validWord,
         isTurn: props.isTurn,
+        word: props.word,
       })
     );
   }, [props.board, props.isTurn]);
@@ -202,6 +232,7 @@ const Board = (props) => {
           setWord: props.setWord,
           isValidWord: validWord,
           isTurn: props.isTurn,
+          word: props.word,
         })
       );
     } else {
@@ -221,6 +252,7 @@ const Board = (props) => {
           setWord: props.setWord,
           isValidWord: validWord,
           isTurn: props.isTurn,
+          word: props.word,
         })
       );
     }

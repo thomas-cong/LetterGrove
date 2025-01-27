@@ -179,7 +179,7 @@ const isEmptyTile = (row, col, board, ARRAY_SIZE) => {
   return (
     board[row][col].letter === "" &&
     board[row][col].crop === null &&
-    board[row][col].powerup === null
+    board[row][col].powerUp === null
   );
 };
 
@@ -254,7 +254,7 @@ const randomlyGenerateBoard = (props) => {
         .fill()
         .map(() => ({
           letter: "",
-          powerup: null,
+          powerUp: null,
           crop: null,
           default: false,
           value: 0,
@@ -275,7 +275,7 @@ const randomlyGenerateBoard = (props) => {
   const firstLetter = generateStartingLetter();
   board[0][0] = {
     letter: firstLetter,
-    powerup: null,
+    powerUp: null,
     crop: null,
     default: true,
     value: letterValues[firstLetter],
@@ -286,7 +286,7 @@ const randomlyGenerateBoard = (props) => {
     const secondLetter = generateStartingLetter();
     board[14][14] = {
       letter: secondLetter,
-      powerup: null,
+      powerUp: null,
       crop: null,
       default: true,
       value: letterValues[secondLetter],
@@ -298,7 +298,7 @@ const randomlyGenerateBoard = (props) => {
     const thirdLetter = generateStartingLetter();
     board[14][0] = {
       letter: thirdLetter,
-      powerup: null,
+      powerUp: null,
       crop: null,
       default: true,
       value: letterValues[thirdLetter],
@@ -310,7 +310,7 @@ const randomlyGenerateBoard = (props) => {
     const fourthLetter = generateStartingLetter();
     board[0][14] = {
       letter: fourthLetter,
-      powerup: null,
+      powerUp: null,
       crop: null,
       default: true,
       value: letterValues[fourthLetter],
@@ -347,7 +347,7 @@ const randomlyGenerateBoard = (props) => {
       const letter = generateRandomLetter();
       board[row][col] = {
         letter,
-        powerup: null,
+        powerUp: null,
         crop: null,
         default: true,
         value: letterValues[letter],
@@ -386,7 +386,7 @@ const randomlyGenerateBoard = (props) => {
       const randomIndex = Math.floor(Math.random() * positions.length);
       const [row, col] = positions[randomIndex].split(",").map(Number);
 
-      board[row][col].powerup = powerup;
+      board[row][col].powerUp = powerup;
 
       positions.splice(randomIndex, 1);
       availablePositions.delete(`${row},${col}`);
@@ -554,10 +554,10 @@ const confirmWord = (userId, props) => {
     if (i === word.length - 1) {
       userGameState.endpoints.push([currentX, currentY]);
     }
-    if (board[currentY][currentX].powerup !== null) {
-      powerup = board[currentY][currentX].powerup;
+    if (board[currentY][currentX].powerUp !== null) {
+      powerup = board[currentY][currentX].powerUp;
       userGameState.powerups[powerup] += 1;
-      board[currentY][currentX].powerup = null;
+      board[currentY][currentX].powerUp = null;
       powerupsCollected[powerup] += 1;
     }
     if (board[currentY][currentX].crop !== null) {

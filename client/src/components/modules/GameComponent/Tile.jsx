@@ -155,10 +155,12 @@ const getLetterTile = (letter, isDefault) => {
 };
 
 const getPowerUpImage = (powerUp) => {
-  switch (powerUp.toLowerCase()) {
-    case "wateringcan":
+  if (!powerUp) return null;
+
+  switch (powerUp) {
+    case "wateringCan":
       return wateringCan;
-    case "twotimes":
+    case "twoTimes":
       return twoTimes;
     default:
       return null;
@@ -221,6 +223,7 @@ const getCropImage = (cropType) => {
  * @param {Function} props.setWord - Function to update the word state
  * @param {boolean} props.isValidWord - Whether the current word is valid
  * @param {boolean} props.isTurn - Whether it's the player's turn
+ * @param {board} props.board - The current game board
  */
 const Tile = (props) => {
   const isSelected =
@@ -261,6 +264,18 @@ const Tile = (props) => {
       props.setEndPointSelected(true);
       props.setSelectedX(params.tileX);
       props.setSelectedY(params.tileY);
+      console.log("Submitting word:", props.word);
+      console.log(socket);
+
+      if (socket) {
+        socket.emit("enter word", {
+          lobbyCode: lobbyId,
+          x: params.tileX,
+          y: params.tileY,
+          word: props.word,
+          board: props.board,
+        });
+      }
       // Clear suggestions when selecting a new endpoint
       props.setSuggestions([]);
     } else if (!params.isSuggestionEnd) {
