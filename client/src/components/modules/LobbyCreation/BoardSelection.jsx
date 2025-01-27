@@ -14,7 +14,7 @@ const BoardSelection = ({ onClose, onSelect }) => {
           <p>
           All players will share the same board and race to collect fruits!
           </p>
-          <p style={{ fontWeight: "bold", fontSize: "32px", color: "rgb(252, 139, 158);"}}>MODES:</p>
+          <p style={{ fontWeight: "bold", fontSize: "32px", color: "rgb(252, 139, 158)"}}>MODES:</p>
           <p style={{ textAlign: "start" }}>
             {" "}
             <strong>POINTS: </strong>First to hit the target score wins!
@@ -27,7 +27,7 @@ const BoardSelection = ({ onClose, onSelect }) => {
           <p>
           Everyone gets their own separate but identical board.
           </p>
-          <p style={{ fontWeight: "bold", fontSize: "32px", color: "rgb(252, 139, 158);" }}>MODES:</p>
+          <p style={{ fontWeight: "bold", fontSize: "32px", color: "rgb(252, 139, 158)" }}>MODES:</p>
           <p style={{ textAlign: "start" }}>
             <strong>POINTS: </strong>First to hit the target score wins!<br />
             <strong>TURNS: </strong>Outscore your friends before you run out of turns!
