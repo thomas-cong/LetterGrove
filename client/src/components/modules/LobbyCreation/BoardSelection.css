@@ -1,7 +1,6 @@
 .selectionmainboard {
-  width: min(900px, 90%);
-  height: fit-content;
-  max-height: 80%;
+  width: min(1200px, 95%);
+  height: min(800px, 90vh);
   background-color: rgba(255, 255, 255, 0.671);
   border-radius: min(10px, 1vw);
   border: min(2px, 0.2vw) solid rgb(255, 255, 255);
@@ -10,8 +9,10 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  overflow-y: auto;
-  padding-top: 50px;
+  padding: 50px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .createdtitle {
@@ -19,9 +20,8 @@
   color: rgb(94, 129, 255);
   font-size: 36px;
   text-align: center;
-  top: 12%;
+  margin-bottom: 20px;
   cursor: default;
-  /* width: 100%; */
 }
 
 .board-options {
@@ -29,40 +29,58 @@
   display: flex;
   justify-content: space-around;
   gap: 40px;
-  padding: 20px;
+  padding: 0 20px 20px;
+  flex: 1;
 }
 
 .board-option {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
   flex: 1;
-  padding: 30px;
-  background-color: rgba(255, 255, 255, 0.8);
+  padding: 20px;
+  background-image: url("../../../assets/BoardSelectionSign.png");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
   border-radius: 8px;
   cursor: pointer;
   transition: transform 0.3s ease;
   text-align: center;
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0));
-  height: 80%;
+  position: relative;
+  min-width: 350px;
+  max-width: 500px;
+  height: 100%;
+}
+
+.board-option > * {
+  position: relative;
+  z-index: 1;
+  max-width: 80%;
 }
 
 .board-option:hover {
-  transform: scale(1.05);
+  transform: scale(1.02);
 }
 
 .board-option p {
-  color: rgb(94, 129, 255);
-  font-size: 16px;
-  line-height: 1.5;
+  color: rgb(255, 255, 255);
+  font-size: 24px;
+  line-height: 1.4;
   filter: drop-shadow(0 0.25px 0.5px rgba(0, 0, 0, 0));
+  margin: 8px auto;
 }
 
 .board-option p strong {
-  font-size: 18px;
+  font-size: 26px;
   font-weight: bold;
 }
 
 .selectheader {
-  font-size: 28px;
+  font-size: 26px;
   font-weight: bold;
+  color: rgb(94, 129, 255);
+  margin-bottom: 12px;
 }

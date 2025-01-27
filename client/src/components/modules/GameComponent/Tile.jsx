@@ -206,6 +206,7 @@ const getCropImage = (cropType) => {
  * @param {Function} props.setSuggestions - Function to update suggestions state
  * @param {Function} props.setWord - Function to update the word state
  * @param {boolean} props.isValidWord - Whether the current word is valid
+ * @param {boolean} props.isTurn - Whether it's the player's turn
  */
 const Tile = (props) => {
   const isSelected =
@@ -240,6 +241,7 @@ const Tile = (props) => {
    */
 
   const checkEndpoint = (params) => {
+    console.log("Is Your Turn?", props.isTurn);
     if (params.isEndpoint) {
       console.log("Endpoint found at:", params.tileX, params.tileY);
       props.setEndPointSelected(true);
@@ -287,15 +289,21 @@ const Tile = (props) => {
   }, [props.cell.letter]);
 
   // Use dynamic class names for styling tiles
+  const tileStyle = {
+    filter: props.isTurn === false ? "grayscale(100%) brightness(70%)" : "none",
+    transition: "filter 0.3s ease",
+  };
+
   return (
     <div
-      className={`tile ${props.cell.visited ? "visited" : ""} ${
-        props.cell.isSuggestion ? "suggestion" : ""
-      } ${props.cell.isSuggestionEnd ? "suggestion-end" : ""} ${isSelected ? "selected" : ""} ${
-        props.isEndpoint ? "endpoint" : ""
-      } ${props.cell.isSuggestion && !props.isValidWord ? "invalid-word" : ""} ${
-        props.cell.isSuggestion && props.isValidWord ? "valid-word" : ""
-      }`}
+      className={`tile ${props.isEndpoint ? "endpoint" : ""} ${
+        props.cell.visited ? "visited" : ""
+      } ${props.cell.isSuggestion ? "suggestion" : ""} ${
+        props.cell.isSuggestionEnd ? "suggestion-end" : ""
+      } ${isSelected ? "selected" : ""} ${props.isEndpoint ? "endpoint" : ""} ${
+        props.cell.isSuggestion && !props.isValidWord ? "invalid-word" : ""
+      } ${props.cell.isSuggestion && props.isValidWord ? "valid-word" : ""}`}
+      style={tileStyle}
     >
       <img src={grassTile} alt="grass" className="grass-background" />
       {!props.cell.visited && <img src={nullTile} alt="null" className="tile-background" />}

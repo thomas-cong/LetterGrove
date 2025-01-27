@@ -9,13 +9,15 @@ import Rankings from "./Rankings";
 import Log from "./Log";
 import "./GameComponent.css";
 import AlertBox from "../AlertBox/AlertBox";
+import TurnDisplay from "./TurnDisplay";
 
 const GameComponent = (props) => {
   const [word, setWord] = useState("");
   const [suggestions, setSuggestions] = useState([]);
-  const [isTurn, setIsTurn] = useState(true);
+  const [isTurn, setIsTurn] = useState("");
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
+  const [turnUsername, setTurnUsername] = useState("");
 
   // Game state management
   const [endPointSelected, setEndPointSelected] = useState(true);
@@ -75,7 +77,7 @@ const GameComponent = (props) => {
   // Set up socket listeners
   useEffect(() => {
     socket.emit("join socket", { lobbyCode: props.lobbyCode, userId: props.userId });
-    setTimeout(() => {
+    socket.on("socket joined", () => {
       get("/api/currentGame", { lobbyCode: props.lobbyCode, userId: props.userId });
       // Initial game state
       const handleInitialGame = (game) => {
@@ -109,11 +111,18 @@ const GameComponent = (props) => {
       };
 
       const handleTurnUpdate = (info) => {
-        if (info.userId === props.userId) {
-          setIsTurn(true);
-        } else {
-          setIsTurn(false);
-        }
+        console.log("Turn update:", info);
+        setTurnUsername(info.username); // Set username first
+        setTimeout(() => {
+          if (info.userId === props.userId) {
+            console.log("emiitted username: " + info.username);
+            setIsTurn(true);
+          } else {
+            console.log("emitted id: " + info.userId);
+            console.log("props id: " + props.userId);
+            setIsTurn(false);
+          }
+        }, 500);
       };
       // Letter updates
       const handleBoardUpdate = (info) => {
@@ -135,8 +144,70 @@ const GameComponent = (props) => {
         socket.off("turn update", handleTurnUpdate);
         socket.off("board update", handleBoardUpdate);
       };
-    }, 100);
-  }, []); // Empty dependency array since we want to set up listeners only once
+    });
+  }, []);
+  //   setTimeout(() => {
+  //     get("/api/currentGame", { lobbyCode: props.lobbyCode, userId: props.userId });
+  //     // Initial game state
+  //     const handleInitialGame = (game) => {
+  //       setGameState(game);
+  //       setEndpoints(game.endpoints);
+  //       console.log("GAME ENDPOINTS" + game.endpoints);
+  //     };
+
+  //     // User-specific updates (letters, points, endpoints)
+  //     const handleUserUpdate = (info) => {
+  //       // Reset the suggestions since this only plays on user update
+  //       setSuggestions([]);
+
+  //       console.log("User update:", info);
+  //       setGameState((prevState) => ({
+  //         ...prevState,
+  //         points: info.totalPoints,
+  //       }));
+  //       setLettersUpdated(info.letterUpdates);
+  //       setEndpoints(info.endpoints);
+  //     };
+
+  //     // Global game updates (rankings, log messages)
+  //     const handleGlobalUpdate = (info) => {
+  //       console.log("Global update:", info);
+  //       setGameState((prevState) => ({
+  //         ...prevState,
+  //         rankings: info.updatedRankings,
+  //         log: [...prevState.log, ...info.logMessages],
+  //       }));
+  //     };
+
+  //     const handleTurnUpdate = (info) => {
+  //       if (info.userId === props.userId) {
+  //         setIsTurn(true);
+  //       } else {
+  //         setIsTurn(false);
+  //       }
+  //     };
+  //     // Letter updates
+  //     const handleBoardUpdate = (info) => {
+  //       console.log("Board update:", info);
+  //       setLettersUpdated(info);
+  //     };
+
+  //     // Set up listeners
+  //     socket.on("initial game", handleInitialGame);
+  //     socket.on("user update", handleUserUpdate);
+  //     socket.on("global update", handleGlobalUpdate);
+  //     socket.on("turn update", handleTurnUpdate);
+  //     socket.on("board update", handleBoardUpdate);
+  //     // Cleanup listeners on unmount
+  //     return () => {
+  //       socket.off("initial game", handleInitialGame);
+  //       socket.off("user update", handleUserUpdate);
+  //       socket.off("global update", handleGlobalUpdate);
+  //       socket.off("turn update", handleTurnUpdate);
+  //       socket.off("board update", handleBoardUpdate);
+  //     };
+  //   }, 150);
+  // }, []); // Empty dependency array since we want to set up listeners only once
 
   useEffect(() => {
     updateLetters({ lettersUpdated: lettersUpdated, board: gameState.board });
@@ -190,10 +261,12 @@ const GameComponent = (props) => {
           className="word-input-alert"
         />
       )}
+
       <div className="gamecompcontainer">
         <div className="gamecompleftcontainer">
           <div className="gamecompboardcontainer">
             <div className="gamecompboard">
+              {!isTurn && <TurnDisplay username={turnUsername} />}
               <Board
                 board={gameState.board}
                 points={gameState.points}
@@ -210,6 +283,7 @@ const GameComponent = (props) => {
                 setSuggestions={setSuggestions}
                 suggestions={suggestions}
                 setWord={setWord}
+                isTurn={isTurn}
               />
             </div>
             {/* <div className="gamecompbottominfo"> */}

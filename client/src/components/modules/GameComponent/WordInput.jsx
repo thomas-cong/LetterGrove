@@ -123,7 +123,13 @@ const WordInput = (props) => {
             value={props.word}
             disabled={props.isTurn === false}
             onChange={(e) => {
-              props.setWord(e.target.value.toUpperCase());
+              // Only allow letters
+              const lettersOnly = e.target.value.replace(/[^A-Za-z]/g, "");
+              if (lettersOnly !== e.target.value) {
+                return; // Don't update if non-letters were entered
+              }
+
+              props.setWord(lettersOnly.toUpperCase());
               console.log(props.endpointSelected);
               if (!props.endpointSelected) {
                 props.setAlertMessage("Select an endpoint first...");
@@ -134,13 +140,14 @@ const WordInput = (props) => {
                 lobbyCode: props.lobbyCode,
                 x: props.selectedX,
                 y: props.selectedY,
-                word: e.target.value.toUpperCase(),
+                word: lettersOnly.toUpperCase(),
                 board: props.board,
               });
             }}
             placeholder={placeholder}
             className="word-input"
             autoFocus
+            pattern="[A-Za-z]*"
           />
         </div>
       </div>

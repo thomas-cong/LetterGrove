@@ -20,11 +20,14 @@ import "./Board.css";
  * @param {Array<Array<number>>} params.endpoints - Array of [x, y] coordinates for valid endpoints
  * @param {boolean} params.endPointSelected - Whether an endpoint is currently selected
  * @param {Function} params.setEndPointSelected - Updates endpoint selection state
+ * @param {number} params.selectedX - Currently selected X coordinate
+ * @param {number} params.selectedY - Currently selected Y coordinate
  * @param {Function} params.setSelectedX - Updates selected X coordinate
  * @param {Function} params.setSelectedY - Updates selected Y coordinate
  * @param {String} params.suggestedWord - Currently inputted word
  * @param {Function} params.setSuggestions - Function to update suggestions state
  * @param {Function} params.setWord - Function to update the word state
+ * @param {boolean} params.isTurn - Whether it's the player's turn
  * @returns {Array<JSX.Element>} Array of row elements containing tiles
  */
 const renderBoard = (params) => {
@@ -54,6 +57,7 @@ const renderBoard = (params) => {
           setSuggestions={params.setSuggestions}
           setWord={params.setWord}
           isValidWord={params.isValidWord}
+          isTurn={params.isTurn}
         />
       );
     }
@@ -93,6 +97,7 @@ const renderBoard = (params) => {
  * @param {String} props.suggestedWord - Currently inputted word
  * @param {Function} props.setSuggestions - Function to update suggestions state
  * @param {Array<Object>} props.suggestions - Array of word suggestions
+ * @param {boolean} props.isPlayerTurn - Whether it's the player's turn
  */
 const Board = (props) => {
   // State for word suggestions and board display
@@ -112,6 +117,7 @@ const Board = (props) => {
       setSuggestions: props.setSuggestions,
       setWord: props.setWord,
       isValidWord: validWord,
+      isTurn: props.isTurn,
     })
   );
 
@@ -150,9 +156,10 @@ const Board = (props) => {
         setSuggestions: props.setSuggestions,
         setWord: props.setWord,
         isValidWord: validWord,
+        isTurn: props.isTurn,
       })
     );
-  }, [props.board]);
+  }, [props.board, props.isTurn]);
 
   // Handle suggestion display
   useEffect(() => {
@@ -194,6 +201,7 @@ const Board = (props) => {
           setSuggestions: props.setSuggestions,
           setWord: props.setWord,
           isValidWord: validWord,
+          isTurn: props.isTurn,
         })
       );
     } else {
@@ -212,6 +220,7 @@ const Board = (props) => {
           setSuggestions: props.setSuggestions,
           setWord: props.setWord,
           isValidWord: validWord,
+          isTurn: props.isTurn,
         })
       );
     }
