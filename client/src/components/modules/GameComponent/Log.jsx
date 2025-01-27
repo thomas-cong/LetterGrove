@@ -19,7 +19,7 @@ const Log = ({ log = [] }) => {
 
   return (
     <div className="log-container">
-      <h3>Game Log</h3>
+      <h3 className="log-title">Game Log</h3>
       <div className="log-messages" ref={logContainerRef}>
         {log.map((message, index) => (
           <div key={index} className="log-message">

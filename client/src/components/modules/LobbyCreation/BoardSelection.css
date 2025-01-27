@@ -1,8 +1,7 @@
 .selectionmainboard {
   width: min(900px, 90%);
   height: fit-content;
-  /* max-height: 80%; */
-  height: 80%;
+  max-height: 80%;
   background-color: rgba(255, 255, 255, 0.671);
   border-radius: min(10px, 1vw);
   border: min(2px, 0.2vw) solid rgb(255, 255, 255);
