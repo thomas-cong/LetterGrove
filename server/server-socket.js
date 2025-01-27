@@ -368,11 +368,13 @@ const handleEndGame = (props) => {
   const lobbyCode = props.lobbyCode;
   const game = gameLogic.games[lobbyCode];
   gameResults = {
-    winner: game.rankings[0].playerId,
-    winnerUsername: game.rankings[0].username,
-    winnerScore: game.rankings[0].score,
     finalRankings: game.rankings,
+    timeElapsed: game.secondsElapsed,
+    wordsFormed: {},
   };
+  for (const userId in game.players) {
+    gameResults.wordsFormed[userId] = game.userGameStates[userId].wordsFormed;
+  }
   clearInterval(game.timerInterval);
   let boards = {};
   for (const userId in game.players) {
@@ -511,7 +513,7 @@ const joinSocket = (props) => {
         socket: props.socket,
       });
     }
-  }, 50);
+  }, 100);
   //test
 };
 
