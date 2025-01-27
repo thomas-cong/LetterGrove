@@ -79,21 +79,33 @@ const TimeInput = (props) => {
 
 // Dropdown Input for mode selection
 const ModeSelector = (props) => {
-  const [mode, setMode] = useState("Time");
+  const [mode, setMode] = useState(props.gameSettings.mode || "Time");
 
-  //Select the necessary type of game mode, default is Time
+  useEffect(() => {
+    // If sameBoard is enabled and mode is Time, switch to Words
+    if (props.gameSettings.sameBoard && mode === "Time") {
+      setMode("Words");
+      props.setGameSettings({ ...props.gameSettings, mode: "Words" });
+    }
+  }, [props.gameSettings.sameBoard]);
+
+  // Keep local state in sync with props
+  useEffect(() => {
+    setMode(props.gameSettings.mode);
+  }, [props.gameSettings.mode]);
 
   return (
     <div className="settings-row">
       <span className="settings-label">Mode</span>
       <select
         onChange={(event) => {
-          setMode(event.target.value);
-          props.setGameSettings({ ...props.gameSettings, ["mode"]: event.target.value });
+          const newMode = event.target.value;
+          setMode(newMode);
+          props.setGameSettings({ ...props.gameSettings, mode: newMode });
         }}
-        defaultValue="Time"
+        value={mode}
       >
-        <option value="Time">Time</option>
+        {!props.gameSettings.sameBoard && <option value="Time">Time</option>}
         <option value="Words">Words</option>
         <option value="Points">Points</option>
       </select>
