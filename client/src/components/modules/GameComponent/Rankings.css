@@ -35,6 +35,7 @@
   font-weight: 600;
   color: white;
   font-size: 32px;
+  text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4);
 
 }
 
@@ -68,5 +69,3 @@
 .rankings-box > div:empty {
   display: none;
 }
-
-

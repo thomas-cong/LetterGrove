@@ -101,7 +101,7 @@
   transform: translate(-10px, 19px);
   transition: all 0.3s ease;
   cursor: pointer;
-  filter: drop-shadow(0 0.25px 0.5px rgba(0, 0, 0, 1));
+  text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4);
 }
 
 .logouttext:hover {
