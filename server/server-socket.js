@@ -505,7 +505,11 @@ const joinSocket = (props) => {
   props.socket.emit("socket joined");
   setInterval(() => {
     if (openLobbies[props.lobbyCode] && !openLobbies[props.lobbyCode].gameStarted) {
-      updateLobbyUserList({ lobbyCode: props.lobbyCode, userId: props.userId, socket: props.socket });
+      updateLobbyUserList({
+        lobbyCode: props.lobbyCode,
+        userId: props.userId,
+        socket: props.socket,
+      });
     }
   }, 50);
   //test
@@ -675,7 +679,7 @@ module.exports = {
           /**
            * Emits updates specific to the current user
            * @param {Object} localUpdate
-           * @param {Object} localUpdate.fruitsCollected - Count of each fruit type collected
+           * @param {Object} localUpdate.cropsCollected - Count of each fruit type collected
            * @param {Object} localUpdate.powerupsCollected - Count of each powerup type collected
            * @param {number} localUpdate.pointsGained - Points earned from this word
            * @param {Array} localUpdate.letterUpdates - Array of letter placements on board

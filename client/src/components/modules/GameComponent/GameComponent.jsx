@@ -10,6 +10,7 @@ import Log from "./Log";
 import "./GameComponent.css";
 import AlertBox from "../AlertBox/AlertBox";
 import TurnDisplay from "./TurnDisplay";
+import GameEndPopup from "./GameEndPopup/GameEndPopup.jsx";
 
 const GameComponent = (props) => {
   const [word, setWord] = useState("");
@@ -18,6 +19,7 @@ const GameComponent = (props) => {
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [turnUsername, setTurnUsername] = useState("");
+  const [showEndGamePopup, setShowEndGamePopup] = useState(false);
 
   // Game state management
   const [endPointSelected, setEndPointSelected] = useState(true);
@@ -166,6 +168,9 @@ const GameComponent = (props) => {
         setLettersUpdated(info.letterUpdates);
         setCropsUpdated(info.cropUpdates);
       };
+      const handleGameOver = () => {
+        setShowEndGamePopup(true);
+      };
 
       // Set up listeners
       socket.on("initial game", handleInitialGame);
@@ -173,6 +178,7 @@ const GameComponent = (props) => {
       socket.on("global update", handleGlobalUpdate);
       socket.on("turn update", handleTurnUpdate);
       socket.on("board update", handleBoardUpdate);
+      socket.on("end game", handleEndGame);
       // Cleanup listeners on unmount
       return () => {
         socket.off("initial game", handleInitialGame);
@@ -180,6 +186,7 @@ const GameComponent = (props) => {
         socket.off("global update", handleGlobalUpdate);
         socket.off("turn update", handleTurnUpdate);
         socket.off("board update", handleBoardUpdate);
+        socket.off("game over", handleGameOver);
       };
     });
   }, []);
@@ -239,6 +246,8 @@ const GameComponent = (props) => {
           className="word-input-alert"
         />
       )}
+
+      {showEndGamePopup && <GameEndPopup />}
 
       <div className="gamecompcontainer">
         <div className="gamecompleftcontainer">
