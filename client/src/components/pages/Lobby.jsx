@@ -193,7 +193,7 @@ const Lobby = () => {
         cloudImages={cloudImages}
         reverse={reverseAnimation}
       />
-      {lobbyState === "game" && (
+      {lobbyState === "game" && u_id !== "" && (
         <div>
           <GameComponent
             lobbyCode={lobbyId}
