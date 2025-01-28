@@ -23,10 +23,12 @@ const GameEndPopup = (props) => {
         <div className="game-end-content">
           <div className="rankings-box">
             <h3>Final Rankings</h3>
-            <div className="rankings-list">
+            <div className="final-rankings-list">
               {props.endGameInfo?.results?.finalRankings?.map((player, index) => (
                 <div
-                  className={`ranking-item ${selectedPlayer === player.playerId ? "selected" : ""}`}
+                  className={`final-ranking-item ${
+                    selectedPlayer === player.playerId ? "selected" : ""
+                  }`}
                   onClick={() => setSelectedPlayer(player.playerId)}
                 >
                   <span className="rank">{index + 1}</span>
