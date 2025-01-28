@@ -77,6 +77,9 @@ router.get("/generateLobbyCode", async (req, res) => {
     sharedCodes = await LobbyCode.find({ lobbyCode: lobbyCodeGenerated });
   }
   const newLobbyCode = new LobbyCode({ lobbyCode: lobbyCodeGenerated });
+  if (req.query.isTutorial) {
+    newLobbyCode.lobbyCode = "tutorial" + lobbyCodeGenerated;
+  }
   newLobbyCode.save().then((code) => {
     console.log("Lobby with ID " + code.lobbyCode + " created");
   });

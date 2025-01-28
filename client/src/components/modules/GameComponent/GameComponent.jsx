@@ -102,99 +102,106 @@ const GameComponent = (props) => {
   // Set up socket listeners
   useEffect(() => {
     console.log("useEffect called");
+    
+    // Initial game state
+    const handleInitialGame = (game) => {
+      setGameState(game);
+      setEndpoints(game.endpoints);
+      setSelectedX(game.endpoints[game.endpoints.length - 1][0]);
+      setSelectedY(game.endpoints[game.endpoints.length - 1][1]);
+      console.log("GAME ENDPOINTS" + game.endpoints);
+    };
+
+    // User-specific updates (letters, points, endpoints)
+    const handleUserUpdate = (info) => {
+      // Reset the suggestions since this only plays on user update
+      setSuggestions([]);
+
+      console.log("User update:", info);
+      setGameState((prevState) => ({
+        ...prevState,
+        points: info.totalPoints,
+      }));
+      setLettersUpdated(info.letterUpdates);
+      setEndpoints(info.endpoints);
+      if (info.cropUpdates) {
+        console.log("Updated crops: " + info.cropUpdates);
+        setCropsUpdated(info.cropUpdates);
+      }
+    };
+
+    // Global game updates (rankings, log messages)
+    const handleGlobalUpdate = (info) => {
+      console.log("Global update:", info);
+      let logMessages = [];
+      for (const message of info.logMessages) {
+        let { userId, username, pointsGained } = message;
+        logMessages.push({
+          userId: userId,
+          username: username,
+          pointsGained: pointsGained,
+        });
+      }
+      setGameState((prevState) => ({
+        ...prevState,
+        rankings: info.updatedRankings,
+        log: [...prevState.log, ...logMessages],
+      }));
+    };
+
+    const handleTurnUpdate = (info) => {
+      console.log("Turn update:", info);
+      setTurnUsername(info.username); // Set username first
+      setTimeout(() => {
+        if (info.userId === props.userId) {
+          console.log("emitted username: " + info.username);
+          setIsTurn(true);
+        } else {
+          console.log("emitted id: " + info.userId);
+          console.log("props id: " + props.userId);
+          setIsTurn(false);
+        }
+      }, 300);
+    };
+
+    const handleBoardUpdate = (info) => {
+      console.log("Board update:", info);
+      setLettersUpdated(info.letterUpdates);
+      setCropsUpdated(info.cropUpdates);
+    };
+
+    const handleGameOver = (info) => {
+      console.log("Game over:", info);
+      setShowEndGamePopup(true);
+      setEndGameInfo(info);
+    };
+
+    // Set up socket connection
     socket.emit("join socket", { lobbyCode: props.lobbyCode, userId: props.userId });
+    
+    // Set up socket event handlers
     socket.on("socket joined", () => {
       get("/api/currentGame", { lobbyCode: props.lobbyCode, userId: props.userId });
-      // Initial game state
-      const handleInitialGame = (game) => {
-        setGameState(game);
-        setEndpoints(game.endpoints);
-        setSelectedX(game.endpoints[game.endpoints.length - 1][0]);
-        setSelectedY(game.endpoints[game.endpoints.length - 1][1]);
-        console.log("GAME ENDPOINTS" + game.endpoints);
-      };
-
-      // User-specific updates (letters, points, endpoints)
-      const handleUserUpdate = (info) => {
-        // Reset the suggestions since this only plays on user update
-        setSuggestions([]);
-
-        console.log("User update:", info);
-        setGameState((prevState) => ({
-          ...prevState,
-          points: info.totalPoints,
-        }));
-        setLettersUpdated(info.letterUpdates);
-        setEndpoints(info.endpoints);
-        if (info.cropUpdates) {
-          console.log("Updated crops: " + info.cropUpdates);
-          setCropsUpdated(info.cropUpdates);
-        }
-      };
-
-      // Global game updates (rankings, log messages)
-      const handleGlobalUpdate = (info) => {
-        console.log("Global update:", info);
-        let logMessages = [];
-        for (const message of info.logMessages) {
-          let { userId, username, pointsGained } = message;
-          logMessages.push({
-            userId: userId,
-            username: username,
-            pointsGained: pointsGained,
-          });
-        }
-        setGameState((prevState) => ({
-          ...prevState,
-          rankings: info.updatedRankings,
-          log: [...prevState.log, ...logMessages],
-        }));
-      };
-
-      const handleTurnUpdate = (info) => {
-        console.log("Turn update:", info);
-        setTurnUsername(info.username); // Set username first
-        setTimeout(() => {
-          if (info.userId === props.userId) {
-            console.log("emitted username: " + info.username);
-            setIsTurn(true);
-          } else {
-            console.log("emitted id: " + info.userId);
-            console.log("props id: " + props.userId);
-            setIsTurn(false);
-          }
-        }, 300);
-      };
-      // Letter updates
-      const handleBoardUpdate = (info) => {
-        console.log("Board update:", info);
-        setLettersUpdated(info.letterUpdates);
-        setCropsUpdated(info.cropUpdates);
-      };
-      const handleGameOver = (info) => {
-        console.log("Game over:", info);
-        setShowEndGamePopup(true);
-        setEndGameInfo(info);
-      };
-
-      // Set up listeners
-      socket.on("initial game", handleInitialGame);
-      socket.on("user update", handleUserUpdate);
-      socket.on("global update", handleGlobalUpdate);
-      socket.on("turn update", handleTurnUpdate);
-      socket.on("board update", handleBoardUpdate);
-      socket.on("game over", handleGameOver);
-      // Cleanup listeners on unmount
-      return () => {
-        socket.off("initial game", handleInitialGame);
-        socket.off("user update", handleUserUpdate);
-        socket.off("global update", handleGlobalUpdate);
-        socket.off("turn update", handleTurnUpdate);
-        socket.off("board update", handleBoardUpdate);
-        socket.off("game over", handleGameOver);
-      };
     });
-  }, []);
+    
+    socket.on("initial game", handleInitialGame);
+    socket.on("user update", handleUserUpdate);
+    socket.on("global update", handleGlobalUpdate);
+    socket.on("turn update", handleTurnUpdate);
+    socket.on("board update", handleBoardUpdate);
+    socket.on("game over", handleGameOver);
+
+    // Cleanup listeners on unmount
+    return () => {
+      socket.off("socket joined");
+      socket.off("initial game", handleInitialGame);
+      socket.off("user update", handleUserUpdate);
+      socket.off("global update", handleGlobalUpdate);
+      socket.off("turn update", handleTurnUpdate);
+      socket.off("board update", handleBoardUpdate);
+      socket.off("game over", handleGameOver);
+    };
+  }, [props.lobbyCode, props.userId]);
 
   useEffect(() => {
     updateBoard({

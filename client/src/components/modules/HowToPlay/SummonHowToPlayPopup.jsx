@@ -59,7 +59,7 @@ const SummonHowToPlayPopup = (props) => {
   }, []);
 
   const handleClick = (event) => {
-    get("/api/generateLobbyCode")
+    get("/api/generateLobbyCode", { isTutorial: true })
       .then((code) => {
         if (!code || !code.lobbyCodeGenerated) {
           throw new Error("Failed to generate lobby code");

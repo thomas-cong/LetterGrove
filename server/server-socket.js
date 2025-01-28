@@ -705,6 +705,7 @@ module.exports = {
         removeUser(user, socket);
       });
       socket.on("join socket", (props) => {
+        console.log("join socket");
         joinSocket({
           lobbyCode: props.lobbyCode,
           socket: socket,
