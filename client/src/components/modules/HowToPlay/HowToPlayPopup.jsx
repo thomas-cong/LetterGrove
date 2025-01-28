@@ -27,9 +27,9 @@ const HowToPlayPopup = ({ lobbyCode, userId }) => {
           <InstructionPopup
             message={
               <>
-                Notice the tile with the <span className="highlight-gold">golden highlight</span>.
-                This is your <span className="highlight-goldtile">golden tile</span>. You can only
-                play words from <span className="highlight-goldtile">golden tiles</span>. Try{" "}
+                Notice the tile with the <span className="highlight-gold">golden outline</span>.
+                This is a <span className="highlight-goldtile">golden tile</span>. You can only form words beginning from 
+                <span className="highlight-goldtile"> golden tiles</span>. Try{" "}
                 <span className="highlight-warning">typing</span> the word{" "}
                 <span className="highlight-success">"letter"</span>!
               </>
@@ -62,7 +62,7 @@ const HowToPlayPopup = ({ lobbyCode, userId }) => {
               <span className="highlight-fruit">Cherries</span> are worth{" "}
               <span className="highlight-points-2">2 pts</span> and{" "}
               <span className="highlight-fruit">Grapes</span> are worth{" "}
-              <span className="highlight-points-5">5 pts</span>! Each{" "}
+              <span className="highlight-points-3">3 pts</span>! Each{" "}
               <span className="highlight-gray">gray letter</span> also has its own point value! You
               can see your score at the top of the page or on the ranking box.
             </>
@@ -92,9 +92,9 @@ const HowToPlayPopup = ({ lobbyCode, userId }) => {
           message={
             <>
               <span className="highlight-fruit">Oranges</span> are worth{" "}
-              <span className="highlight-points-10">10 pts</span>, and{" "}
+              <span className="highlight-points-10">5 pts</span>, and{" "}
               <span className="highlight-fruit">Fruit Crates</span> are worth{" "}
-              <span className="highlight-points-20">20 pts</span>! You should prioritize collecting
+              <span className="highlight-points-20">10 pts</span>! You should prioritize collecting
               these!
             </>
           }
@@ -108,7 +108,7 @@ const HowToPlayPopup = ({ lobbyCode, userId }) => {
         <InstructionPopup
           message={
             <>
-              Now you can <span className="highlight-warning">type and place</span> the word{" "}
+              Now, <span className="highlight-warning">type and place</span> the word{" "}
               <span className="highlight-success">"grove"</span> and move diagonally! In{" "}
               LetterGrove, you can move in all eight directions.
             </>
@@ -125,7 +125,7 @@ const HowToPlayPopup = ({ lobbyCode, userId }) => {
             <>
               Look at the board! You might have noticed some fruits have spawned on the board. These
               are from the <span className="highlight-powerup">watering can</span> you just
-              collected! The <span className="highlight-powerup">golden shovel</span> you just
+              collected! The <span className="highlight-gold">golden shovel</span> you just
               collected doubles the points of the word that you collected it with.
             </>
           }
@@ -141,11 +141,8 @@ const HowToPlayPopup = ({ lobbyCode, userId }) => {
             <>
               <span className="highlight-warning">Click</span> on the{" "}
               <span className="highlight-primary">G</span> with the{" "}
-              <span className="highlight-gold">golden highlight</span>. This takes you to another
-              <span className="highlight-goldtile"> golden tile</span>. All{" "}
-              <span className="highlight-goldtile">golden tiles</span> have{" "}
-              <span className="highlight-gold">golden highlights</span>. Now try{" "}
-              <span className="highlight-warning">typing and placing</span> the word{" "}
+              <span className="highlight-gold">golden outline</span>. This takes you to another
+              <span className="highlight-goldtile"> golden tile</span>. Now, <span className="highlight-warning">type and place</span> the word{" "}
               <span className="highlight-success">"game"</span>.
             </>
           }
@@ -159,10 +156,9 @@ const HowToPlayPopup = ({ lobbyCode, userId }) => {
         <InstructionPopup
           message={
             <>
-              Great! Now, go to the other <span className="highlight-primary">E</span> endpoint and
+              Great! Now, click on the golden <span className="highlight-primary">E</span> and
               <span className="highlight-warning"> type and place</span> the word{" "}
-              <span className="highlight-success">"end"</span>. This will complete the tutorial! You
-              should now understand the basic mechanics of the game. Have fun playing LetterGrove!
+              <span className="highlight-success">"end"</span>. This completes the tutorial. Have fun playing LetterGrove!
             </>
           }
           title="Ending Tutorial"

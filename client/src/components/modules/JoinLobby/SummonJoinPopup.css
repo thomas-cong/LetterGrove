@@ -2,7 +2,7 @@
   position: relative;
   width: 40vw;
   margin: 0 auto;
-  transform: translate(0%, 350%);
+  transform: translate(0%, 0%);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -53,6 +53,7 @@ h2 {
 }
 
 .button-container:hover {
-  transform: translate(0%, 350%) scale(1.1);
+  /* transform: translate(0%, 350%) scale(1.1); */
+  transform: scale(1.1);
   transition: all 0.3s ease;
 }

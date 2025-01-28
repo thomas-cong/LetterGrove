@@ -24,39 +24,41 @@ const Home = () => {
         className="background-animation"
         style={{ backgroundImage: `url(${cloudanimation})` }}
       ></div>
-      {showLogo && (
-        <img src={lettergrovelogo} alt="LetterGrove Logo" className="lettergrove-logo" />
-      )}
-      {userId && (
-        <div className="buttonscontainer">
-          <SummonHowToPlayPopup
-            onShowHowToPlay={() => setShowLogo(false)}
-            onHideHowToPlay={() => setShowLogo(true)}
-            popupShowing={popupShowing}
-            setPopupShowing={setPopupShowing}
-          />
-          <SummonLobbyPopup
-            onShowLobby={() => setShowLogo(false)}
-            onHideLobby={() => setShowLogo(true)}
-            popupShowing={popupShowing}
-            setPopupShowing={setPopupShowing}
-          />
-          <SummonJoinPopup
-            onShowJoin={() => setShowLogo(false)}
-            onHideJoin={() => setShowLogo(true)}
-            popupShowing={popupShowing}
-            setPopupShowing={setPopupShowing}
-          />
+      <div className="homepagecontent">
+        {showLogo && (
+          <img src={lettergrovelogo} alt="LetterGrove Logo" className="lettergrove-logo" />
+        )}
+        {userId && (
+          <div className="buttonscontainer">
+            <SummonHowToPlayPopup
+              onShowHowToPlay={() => setShowLogo(false)}
+              onHideHowToPlay={() => setShowLogo(true)}
+              popupShowing={popupShowing}
+              setPopupShowing={setPopupShowing}
+            />
+            <SummonLobbyPopup
+              onShowLobby={() => setShowLogo(false)}
+              onHideLobby={() => setShowLogo(true)}
+              popupShowing={popupShowing}
+              setPopupShowing={setPopupShowing}
+            />
+            <SummonJoinPopup
+              onShowJoin={() => setShowLogo(false)}
+              onHideJoin={() => setShowLogo(true)}
+              popupShowing={popupShowing}
+              setPopupShowing={setPopupShowing}
+            />
 
-          <ProfileButton popupShowing={popupShowing} setPopupShowing={setPopupShowing} />
-          <SummonCreditsPopup
-            onShowCredits={() => setShowLogo(false)}
-            onHideCredits={() => setShowLogo(true)}
-            popupShowing={popupShowing}
-            setPopupShowing={setPopupShowing}
-          />
-        </div>
-      )}
+            <ProfileButton popupShowing={popupShowing} setPopupShowing={setPopupShowing} />
+            <SummonCreditsPopup
+              onShowCredits={() => setShowLogo(false)}
+              onHideCredits={() => setShowLogo(true)}
+              popupShowing={popupShowing}
+              setPopupShowing={setPopupShowing}
+            />
+          </div>
+        )}
+      </div>
       {userId && !popupShowing ? (
         <div
           className="home-logoutbutton-container"
