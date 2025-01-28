@@ -1,5 +1,5 @@
 .createdcloseButton {
-  height: min(48px, 4vw);
+  height: 48px;
   position: absolute;
   top: 1vh;
   left: 1vw;

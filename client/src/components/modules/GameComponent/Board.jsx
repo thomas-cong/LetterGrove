@@ -60,6 +60,8 @@ const renderBoard = (params) => {
           isValidWord={params.isValidWord}
           isTurn={params.isTurn}
           board={params.board}
+          lobbyCode={params.lobbyCode}
+          isTutorial={params.isTutorial}
         />
       );
     }
@@ -143,6 +145,8 @@ const Board = (props) => {
       isValidWord: validWord,
       isTurn: props.isTurn,
       word: props.word,
+      lobbyCode: props.lobbyCode,
+      isTutorial: props.isTutorial,
     })
   );
 
@@ -187,6 +191,8 @@ const Board = (props) => {
         isValidWord: validWord,
         isTurn: props.isTurn,
         word: props.word,
+        lobbyCode: props.lobbyCode,
+        isTutorial: props.isTutorial,
       })
     );
   }, [props.board, props.isTurn]);
@@ -233,6 +239,8 @@ const Board = (props) => {
           isValidWord: validWord,
           isTurn: props.isTurn,
           word: props.word,
+          lobbyCode: props.lobbyCode,
+          isTutorial: props.isTutorial,
         })
       );
     } else {
@@ -253,6 +261,8 @@ const Board = (props) => {
           isValidWord: validWord,
           isTurn: props.isTurn,
           word: props.word,
+          lobbyCode: props.lobbyCode,
+          isTutorial: props.isTutorial,
         })
       );
     }

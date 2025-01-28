@@ -410,7 +410,7 @@ form {
   cursor: pointer;
   color: var(--darkgrey);
   display: flex;
-  align-items: center;
+  right: 0;
   justify-content: center;
   border-radius: 4px;
   transition: all 0.2s ease;
@@ -447,7 +447,7 @@ form {
 }
 
 .board-modal {
-  background: white;
+  background: rgb(222, 222, 222);
   border-radius: 8px;
   padding: 1.5rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
@@ -473,7 +473,7 @@ form {
   background: none;
   border: none;
   font-size: 1.5rem;
-  color: var(--darkgrey);
+  color: rgb(141, 141, 141);
   cursor: pointer;
   padding: 0.5rem;
   line-height: 1;

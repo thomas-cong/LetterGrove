@@ -51,11 +51,13 @@ const Lobby = () => {
       }
       setU_id(String(user._id));
       // Join the socket room for this lobby
-      get("/api/isGameStarted", { lobbyCode: lobbyId}).then((res) => {
+      get("/api/isGameStarted", { lobbyCode: lobbyId }).then((res) => {
         if (!res.gameStarted) {
+          console.log("from here");
+
           socket.emit("join socket", { lobbyCode: lobbyId, userId: user._id });
         }
-      })
+      });
       setSocketJoined(true);
     });
     if (u_id) {
@@ -118,12 +120,10 @@ const Lobby = () => {
   const startGameRequest = () => {
     // setShowAnimation(true);
     // setReverseAnimation(false);
-
     // setTimeout(() => {
     //   setLobbyState("game");
     //   post("/api/startGame", { lobbyCode: lobbyId });
     // }, 1300);
-
     // setTimeout(() => {
     //   setReverseAnimation(true);
     // }, 1500);
@@ -176,11 +176,15 @@ const Lobby = () => {
             </div>
             <div className="lobby-sections">
               <div className="lobby-section">
-                <div style={{ color: "var(--primary)", fontSize: "40px", alignSelf: "center" }}>PLAYERS</div>
-                <LobbyUserList lobbyCode={lobbyId} userId={u_id} />
+                <div style={{ color: "var(--primary)", fontSize: "40px", alignSelf: "center" }}>
+                  Players
+                </div>
+                {u_id !== "" && <LobbyUserList lobbyCode={lobbyId} userId={u_id} />}
               </div>
               <div className="lobby-section">
-                <div style={{ color: "var(--primary)", fontSize: "40px", alignSelf: "center" }}>GAME SETTINGS</div>
+                <div style={{ color: "var(--primary)", fontSize: "40px", alignSelf: "center" }}>
+                  Game Settings
+                </div>
                 <SettingsDisplay lobbyCode={lobbyId} />
               </div>
             </div>

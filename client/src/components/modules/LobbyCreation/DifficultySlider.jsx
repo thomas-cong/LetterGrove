@@ -11,17 +11,17 @@ const DifficultySlider = (props) => {
     {
       label: "Easy",
       icon: easyShiba,
-      description: "More common letters, longer time limits, and simpler word requirements. Perfect for casual play!"
+      description: "More crops, fewer default letters"
     },
     {
       label: "Medium",
       icon: mediumShiba,
-      description: "Balanced letter distribution with moderate challenges. The standard LetterGrove experience!"
+      description: "Fewer crops, fewer default letters"
     },
     {
       label: "Hard",
       icon: hardShiba,
-      description: "Rare letters appear more often, shorter time limits, and stricter word requirements. For word wizards!"
+      description: "Fewer crops, more default letters"
     }
   ];
 

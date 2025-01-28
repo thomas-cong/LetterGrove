@@ -77,6 +77,9 @@ router.get("/generateLobbyCode", async (req, res) => {
     sharedCodes = await LobbyCode.find({ lobbyCode: lobbyCodeGenerated });
   }
   const newLobbyCode = new LobbyCode({ lobbyCode: lobbyCodeGenerated });
+  if (req.query.isTutorial) {
+    newLobbyCode.lobbyCode = "tutorial" + lobbyCodeGenerated;
+  }
   newLobbyCode.save().then((code) => {
     console.log("Lobby with ID " + code.lobbyCode + " created");
   });
@@ -165,6 +168,7 @@ router.post("/joinLobby", (req, res) => {
 
   if (lobbyCode in openLobbies) {
     openLobbies[lobbyCode].players[req.user._id] = username;
+    console.log("Lobby Joined");
     // socketManager.joinSocket({ lobbyCode: lobbyCode });
     res.send({ message: "Lobby Joined" });
   } else {
@@ -218,6 +222,19 @@ router.post("/startGame", (req, res) => {
   socketManager.initiateGame({
     gameInfo: gameInfo,
     lobbyCode: req.body.lobbyCode,
+  });
+});
+
+router.post("/startTutorial", (req, res) => {
+  const gameInfo = openLobbies[req.body.lobbyCode];
+  if (!gameInfo) {
+    return res.status(404).send({ error: "Lobby not found" });
+  }
+  console.log(gameInfo);
+  socketManager.initiateGame({
+    gameInfo: gameInfo,
+    lobbyCode: req.body.lobbyCode,
+    isTutorial: true,
   });
 });
 

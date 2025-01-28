@@ -14,15 +14,24 @@ let io;
 // Bidirectional mappings for user-socket relationships
 const userToSocketMap = {}; // maps user ID to socket object
 const socketToUserMap = {}; // maps socket ID to user object
-const gameToUserToSocketMap = {}; // maps game ID to user-socket object
+const lobbyAndUserToSocketMap = {}; // maps game ID and user ID to socket object
+const socketToLobbyMap = {};
 
 // Helper functions for user-socket management
 const getAllConnectedUsers = () => Object.values(socketToUserMap);
 const getSocketFromUserID = (userid) => userToSocketMap[userid];
 const getUserFromSocketID = (socketid) => socketToUserMap[socketid];
 const getSocketFromSocketID = (socketid) => io.sockets.sockets.get(socketid);
-const getSocketsFromLobbyCodeAndUserID = (lobbyCode, userid) =>
-  gameToUserToSocketMap[lobbyCode][userid];
+
+// Socket operations
+const getSocketFromLobbyCodeAndUserID = (lobbyCode, userid) => {
+  return lobbyAndUserToSocketMap[lobbyCode][userid];
+}
+const getLobbyCodeFromSocketID = (socketid) => {
+  return socketToLobbyMap[socketid];
+}
+
+const getGameFromSocketID = (socketid) => socketToLobbyMap[socketid];
 
 /**
  * Associates a user with their socket connection
@@ -75,36 +84,35 @@ const sendUserInitialGame = (userId, lobbyCode) => {
     turnOrder: gameLogic.games[lobbyCode].turnOrder,
     log: gameLogic.games[lobbyCode].log,
   };
-  for (const socket of getSocketsFromLobbyCodeAndUserID(lobbyCode, userId)) {
-    if (socket) {
-      socket.emit("initial game", game);
-      if (game.sameBoard) {
-        socket.emit("turn update", {
-          userId: game.turn,
-          username: gameLogic.games[lobbyCode].players[game.turn],
+  const socket = getSocketFromLobbyCodeAndUserID(lobbyCode, userId);
+  if (socket) {
+    socket.emit("initial game", game);
+    if (game.sameBoard) {
+      socket.emit("turn update", {
+        userId: game.turn,
+        username: gameLogic.games[lobbyCode].players[game.turn],
+      });
+    }
+    if (game.mode === "Time") {
+      if (socket) {
+        socket.emit("time update", {
+          secondsRemaining: gameLogic.games[lobbyCode].secondsRemaining,
         });
       }
-      if (game.mode === "Time") {
-        if (socket) {
-          socket.emit("time update", {
-            secondsRemaining: gameLogic.games[lobbyCode].secondsRemaining,
-          });
-        }
+    }
+    if (game.mode === "Words") {
+      if (socket) {
+        socket.emit("words update", {
+          wordsRemaining: gameLogic.games[lobbyCode].userGameStates[userId].wordsRemaining,
+          wordLimit: gameLogic.games[lobbyCode].userGameStates[userId].wordLimit,
+        });
       }
-      if (game.mode === "Words") {
-        if (socket) {
-          socket.emit("words update", {
-            wordsRemaining: gameLogic.games[lobbyCode].userGameStates[userId].wordsRemaining,
-            wordLimit: gameLogic.games[lobbyCode].userGameStates[userId].wordLimit,
-          });
-        }
-      }
-      if (game.mode === "Points") {
-        if (socket) {
-          socket.emit("points update", {
-            pointsToWin: gameLogic.games[lobbyCode].pointsToWin,
-          });
-        }
+    }
+    if (game.mode === "Points") {
+      if (socket) {
+        socket.emit("points update", {
+          pointsToWin: gameLogic.games[lobbyCode].pointsToWin,
+        });
       }
     }
   }
@@ -117,6 +125,7 @@ const sendUserInitialGame = (userId, lobbyCode) => {
  * @param {Object} props - Contains lobbyCode and gameInfo
  * @param {string} props.lobbyCode - Unique identifier for the game
  * @param {Object} props.gameInfo - Game configuration including players, difficulty, and board settings
+ * @param {boolean} props.isTutorial - Whether the game is a tutorial
  */
 const initiateGame = (props) => {
   const lobbyCode = props.lobbyCode;
@@ -126,11 +135,105 @@ const initiateGame = (props) => {
   const mode = gameInfo.mode; // 'words', 'points', or 'time'
   const numPlayers = Object.keys(players).length;
 
-  board = gameLogic.randomlyGenerateBoard({
-    difficulty: gameInfo.difficulty,
-    sameBoard: sameBoard,
-    playerCount: numPlayers,
-  });
+  if (props.isTutorial) {
+    const letterValues = {
+      A: 1,
+      B: 3,
+      C: 3,
+      D: 2,
+      E: 1,
+      F: 4,
+      G: 2,
+      H: 4,
+      I: 1,
+      J: 7,
+      K: 5,
+      L: 1,
+      M: 3,
+      N: 1,
+      O: 1,
+      P: 3,
+      Q: 9,
+      R: 1,
+      S: 1,
+      T: 1,
+      U: 1,
+      V: 6,
+      W: 4,
+      X: 8,
+      Y: 5,
+      Z: 9,
+    };
+    const cropValues = {
+      cherry: 2,
+      grape: 5,
+      orange: 10,
+      crate: 20,
+    };
+    board = Array(15)
+      .fill()
+      .map(() =>
+        Array(15).fill({
+          letter: null,
+          crop: null,
+          powerUp: null,
+          visited: false,
+          default: false,
+          isSuggestion: false,
+          isSuggestionEnd: false,
+          value: 0,
+        })
+      );
+
+    // Place some letters to form simple words
+    const tutorialLetters = [
+      { x: 0, y: 0, letter: "L", crop: "", powerUp: "" },
+      { x: 1, y: 0, letter: "E", crop: "", powerUp: "" },
+      { x: 2, y: 0, letter: "T", crop: "", powerUp: "" },
+      { x: 3, y: 0, letter: "", crop: "cherry", powerUp: "" },
+      { x: 4, y: 0, letter: "", crop: "grape", powerUp: "" },
+      { x: 5, y: 0, letter: "R", crop: "", powerUp: "" },
+
+      { x: 5, y: 1, letter: "", crop: "crate", powerUp: "" },
+      { x: 5, y: 2, letter: "", crop: "orange", powerUp: "" },
+
+      { x: 4, y: 4, letter: "", crop: "", powerUp: "" },
+      { x: 3, y: 5, letter: "M", crop: "", powerUp: "" },
+      { x: 2, y: 6, letter: "E", crop: "", powerUp: "" },
+
+      { x: 5, y: 3, letter: "G", crop: "", powerUp: "" },
+      { x: 6, y: 4, letter: "", crop: "", powerUp: "twoTimes" },
+      { x: 7, y: 5, letter: "O", crop: "", powerUp: "" },
+      { x: 8, y: 6, letter: "", crop: "", powerUp: "wateringCan" },
+      { x: 9, y: 7, letter: "E", crop: "", powerUp: "" },
+      { x: 10, y: 7, letter: "", crop: "", powerUp: "" },
+
+      { x: 11, y: 7, letter: "D", crop: "", powerUp: "" },
+
+      { x: 14, y: 12, letter: "", crop: null, powerUp: null },
+      { x: 13, y: 11, letter: "", crop: null, powerUp: null },
+      { x: 9, y: 2, letter: "", crop: null, powerUp: null },
+    ];
+
+    tutorialLetters.forEach(({ x, y, letter, crop, powerUp }) => {
+      board[y][x] = {
+        letter: letter,
+        crop: crop,
+        powerUp: powerUp,
+        visited: false,
+        default: letter !== "" ? true : false,
+        isSuggestion: false,
+        isSuggestionEnd: false,
+        value: letter ? letterValues[letter] || 0 : crop ? cropValues[crop] || 0 : 0,
+      };
+    });
+  } else {
+    board = gameLogic.randomlyGenerateBoard({
+      difficulty: gameInfo.difficulty,
+      sameBoard: sameBoard,
+      playerCount: numPlayers,
+    });
+  }
   let turnOrder;
   let turn;
   if (sameBoard) {
@@ -141,6 +244,7 @@ const initiateGame = (props) => {
     turn = turnOrder[0];
   }
   if (sameBoard) {
+    console.log("Same board mode");
     game = {
       mode: mode,
       sameBoard: sameBoard,
@@ -157,6 +261,7 @@ const initiateGame = (props) => {
       difficulty: gameInfo.difficulty,
     };
   } else {
+    console.log("Different board mode");
     game = {
       mode: mode,
       sameBoard: sameBoard,
@@ -170,6 +275,7 @@ const initiateGame = (props) => {
       secondsElapsed: 0,
       difficulty: gameInfo.difficulty,
     };
+    console.log("game:", game);
   }
 
   let startingEndpoints;
@@ -251,6 +357,7 @@ const initiateGame = (props) => {
       score: 0,
     });
   }
+  console.log("game:", game);
   gameLogic.games[lobbyCode] = game;
   gameLogic.games[lobbyCode].gameStatus = "active";
   console.log("Game started:", {
@@ -261,35 +368,34 @@ const initiateGame = (props) => {
   });
   if (mode === "Time") {
     for (const userId of Object.keys(players)) {
-      for (const socket of getSocketsFromLobbyCodeAndUserID(lobbyCode, userId)) {
-        if (socket) {
-          socket.emit("time update", {
-            secondsRemaining: gameInfo.steps,
-          });
-        }
+      const socket = getSocketFromLobbyCodeAndUserID(lobbyCode, userId);
+      if (socket) {
+        socket.emit("time update", {
+          secondsRemaining: gameInfo.steps,
+        });
       }
     }
   }
   if (mode === "Words") {
+    console.log("Players", Object.keys(players));
     for (const userId of Object.keys(players)) {
-      for (const socket of getSocketsFromLobbyCodeAndUserID(lobbyCode, userId)) {
-        if (socket) {
-          socket.emit("words update", {
-            wordsRemaining: gameInfo.steps,
-            wordLimit: gameInfo.steps,
-          });
-        }
+      console.log("user ID", userId);
+      const socket = getSocketFromLobbyCodeAndUserID(lobbyCode, userId);
+      if (socket) {
+        socket.emit("words update", {
+          wordsRemaining: gameInfo.steps,
+          wordLimit: gameInfo.steps,
+        });
       }
     }
   }
   if (mode === "Points") {
     for (const userId of Object.keys(players)) {
-      for (const socket of getSocketsFromLobbyCodeAndUserID(lobbyCode, userId)) {
-        if (socket) {
-          socket.emit("points update", {
-            pointsToWin: gameInfo.steps,
-          });
-        }
+      const socket = getSocketFromLobbyCodeAndUserID(lobbyCode, userId);
+      if (socket) {
+        socket.emit("points update", {
+          pointsToWin: gameInfo.steps,
+        });
       }
     }
   }
@@ -300,15 +406,14 @@ const initiateGame = (props) => {
 
   if (sameBoard) {
     for (const userId of Object.keys(players)) {
-      for (const socket of getSocketsFromLobbyCodeAndUserID(lobbyCode, userId)) {
-        if (socket) {
-          console.log("Turn update emitted");
+      const socket = getSocketFromLobbyCodeAndUserID(lobbyCode, userId);
+      if (socket) {
+        console.log("Turn update emitted");
 
-          socket.emit("turn update", {
-            userId: game.turn,
-            username: players[game.turn],
-          });
-        }
+        socket.emit("turn update", {
+          userId: game.turn,
+          username: players[game.turn],
+        });
       }
     }
   }
@@ -334,10 +439,9 @@ const startTimer = (props) => {
     if (game.mode === "Time") {
       console.log("Time remaining:", game.secondsRemaining);
       for (const userId of Object.keys(game.players)) {
-        for (const socket of getSocketsFromLobbyCodeAndUserID(lobbyCode, userId)) {
-          if (socket) {
-            socket.emit("time update", { secondsRemaining: game.secondsRemaining });
-          }
+        const socket = getSocketFromLobbyCodeAndUserID(lobbyCode, userId);
+        if (socket) {
+          socket.emit("time update", { secondsRemaining: game.secondsRemaining });
         }
       }
     }
@@ -345,6 +449,7 @@ const startTimer = (props) => {
     if (game.secondsRemaining === 0) {
       game.gameStatus = "ended";
       handleEndGame({
+        isTutorial: false,
         lobbyCode: lobbyCode,
         reason:
           "Time's up! " +
@@ -390,139 +495,124 @@ const handleEndGame = (props) => {
   for (const userId in game.players) {
     endpoints[userId] = game.userGameStates[userId].endpoints;
   }
-  const completedGame = new CompletedGame({
-    boards: boards,
-    endpoints: endpoints,
-    players: game.players,
-    words: words,
-    finalRankings: game.rankings,
-    mode: game.mode,
-    sameBoard: game.sameBoard,
-    difficulty: game.difficulty,
-    secondsElapsed: game.secondsElapsed,
-    date: new Date(),
-  });
-  for (const userId in game.players) {
-    const userGameState = game.userGameStates[userId];
-    User.findByIdAndUpdate(
-      userId,
-      {
-        $inc: {
-          games_played: 1,
-          wins: game.rankings[0].score === userGameState.points ? 1 : 0,
-          letters: userGameState.lettersCollected || 0,
-          powerups: userGameState.powerupsUsed || 0,
-          words: userGameState.wordsFormed || 0,
-          points: userGameState.points || 0,
-          timePlayed: game.secondsElapsed || 0,
+  if (!props.isTutorial) {
+    const completedGame = new CompletedGame({
+      boards: boards,
+      players: game.players,
+      words: words,
+      finalRankings: game.rankings,
+      mode: game.mode,
+      sameBoard: game.sameBoard,
+      difficulty: game.difficulty,
+      endpoints: endpoints,
+      secondsElapsed: game.secondsElapsed,
+      date: new Date(),
+    });
+    for (const userId in game.players) {
+      const userGameState = game.userGameStates[userId];
+      User.findByIdAndUpdate(
+        userId,
+        {
+          $inc: {
+            games_played: 1,
+            wins: game.rankings[0].score === userGameState.points ? 1 : 0,
+            letters: userGameState.lettersCollected || 0,
+            powerups: userGameState.powerupsUsed || 0,
+            words: userGameState.wordsFormed || 0,
+            points: userGameState.points || 0,
+            timePlayed: game.secondsElapsed || 0,
+          },
         },
-      },
-      { new: true }
-    )
-      .then((user) => {
-        console.log(`Updated stats for user ${user.name}`);
-      })
-      .catch((err) => {
-        console.log(`Error updating user ${userId}:`, err);
-      });
-  }
-  completedGame.save().then((game) => {
-    console.log("Game saved:", game);
-  });
-  for (const userId of Object.keys(game.players)) {
-    for (const socket of getSocketsFromLobbyCodeAndUserID(lobbyCode, userId)) {
-      if (socket) {
-        socket.emit("game over", {
-          results: gameResults,
-          reason: props.reason,
+        { new: true }
+      )
+        .then((user) => {
+          console.log(`Updated stats for user ${user.name}`);
+        })
+        .catch((err) => {
+          console.log(`Error updating user ${userId}:`, err);
         });
-      }
+    }
+    completedGame.save().then((game) => {
+      console.log("Game saved:", game);
+    });
+  }
+  for (const userId of Object.keys(game.players)) {
+    const socket = getSocketFromLobbyCodeAndUserID(lobbyCode, userId);
+    if (socket) {
+      socket.emit("game over", {
+        results: gameResults,
+        reason: props.reason,
+      });
     }
   }
   delete gameLogic.games[lobbyCode];
   delete openLobbies[lobbyCode];
-  delete gameToUserToSocketMap[lobbyCode];
+  delete lobbyAndUserToSocketMap[lobbyCode];
 };
 
-// const deleteDuplicateJoins = (lobbyCode) => {
-//   for (const userId of Object.keys(gameToUserToSocketMap[lobbyCode])) {
-//     for (const socket of gameToUserToSocketMap[lobbyCode][userId]) {
-//       if (!gameToUserToSocketMap[lobbyCode] && !gameToUserToSocketMap[lobbyCode][userId]) {
-//         sockets = gameToUserToSocketMap[lobbyCode][userId];
-//         while (true) {
-//           const socketIndex = sockets.findIndex((s) => s.id === socket.id);
-//           if (socketIndex === -1) {
-//             break;
-//           } else {
-//             sockets.splice(socketIndex, 1);
-//           }
-//         }
-//       }
-//     }
-//   }
-// };
+/**
+ * Disconnects a socket and cleans up all its references
+ * @param {Object} socket - Socket.io socket instance to disconnect
+ * @param {string} userId - ID of the user whose socket to disconnect
+ */
+const disconnectSocket = (socket, userId) => {
+  if (!socket) return;
+
+  // Clean up socket from lobby mappings if it exists
+  if (socketToLobbyMap[socket.id]) {
+    const lobbyCode = socketToLobbyMap[socket.id];
+    if (lobbyAndUserToSocketMap[lobbyCode] && lobbyAndUserToSocketMap[lobbyCode][userId]) {
+      console.log("deleting stuff!!");
+      delete lobbyAndUserToSocketMap[lobbyCode][userId];
+
+      // Clean up if this was the last user in the lobby
+      if (Object.keys(lobbyAndUserToSocketMap[lobbyCode]).length === 0) {
+        delete lobbyAndUserToSocketMap[lobbyCode];
+      }
+    }
+    delete socketToLobbyMap[socket.id];
+  }
+
+  // Clean up user-socket mappings
+  const user = getUserFromSocketID(socket.id);
+  if (user) {
+    delete userToSocketMap[user._id];
+  }
+  delete socketToUserMap[socket.id];
+};
 
 /**
  * Adds a user to a game room (socket.io room)
  * Verifies user is authorized to join the specified lobby
  * @param {Object} props - Contains lobbyCode, socketid, and userId
  */
+
 const joinSocket = (props) => {
   const lobbyCode = props.lobbyCode;
   const userId = props.userId;
-  console.log("gameToUserToSocketMap: ", gameToUserToSocketMap);
-  console.log("gameToUserToSocketMap[lobbyCode]: ", gameToUserToSocketMap[lobbyCode]);
-  if (gameToUserToSocketMap[lobbyCode] && gameToUserToSocketMap[lobbyCode][userId]) {
-    for (const otherSocket of gameToUserToSocketMap[lobbyCode][userId]) {
-      if (otherSocket.id === props.socket.id) {
-        props.socket.emit("socket joined");
-        return;
-      }
-    }
+  if (!lobbyAndUserToSocketMap[lobbyCode]) {
+    lobbyAndUserToSocketMap[lobbyCode] = {};
   }
-  for (let tempLobbyCode of Object.keys(gameToUserToSocketMap)) {
-    for (let tempUserId of Object.keys(gameToUserToSocketMap[tempLobbyCode])) {
-      for (let i = 0; i < gameToUserToSocketMap[tempLobbyCode][tempUserId].length; i++) {
-        let tempSocket = gameToUserToSocketMap[tempLobbyCode][tempUserId][i];
-        if (tempSocket.id === props.socket.id) {
-          console.log("SOCKET REMOVED");
-          gameToUserToSocketMap[tempLobbyCode][tempUserId].splice(i, 1);
-          break;
-        }
-      }
-    }
+  console.log("as of right now, Object.keys(lobbyAndUserToSocketMap[lobbyCode]) = ", Object.keys(lobbyAndUserToSocketMap[lobbyCode]));
+  if (!lobbyAndUserToSocketMap[lobbyCode][userId]) {
+    lobbyAndUserToSocketMap[lobbyCode][userId] = props.socket;
   }
-  if (gameToUserToSocketMap[lobbyCode] && gameToUserToSocketMap[lobbyCode][userId]) {
-    gameToUserToSocketMap[lobbyCode][userId].add(props.socket);
-  } else {
-    if (!gameToUserToSocketMap[lobbyCode]) {
-      gameToUserToSocketMap[lobbyCode] = {};
-    }
-    if (!gameToUserToSocketMap[lobbyCode][userId]) {
-      gameToUserToSocketMap[lobbyCode][userId] = new Set();
-    }
-    for (const otherSocket of gameToUserToSocketMap[lobbyCode][userId]) {
-      if (otherSocket.id === props.socket.id) {
-        props.socket.emit("socket joined");
-        return;
-      }
-    }
-    if (!(props.socket in gameToUserToSocketMap[lobbyCode][userId])) {
-      gameToUserToSocketMap[lobbyCode][userId].add(props.socket);
-    }
+  if (lobbyAndUserToSocketMap[lobbyCode][userId].id !== props.socket.id) {
+    // Disconnect the old socket
+    lobbyAndUserToSocketMap[lobbyCode][userId].emit("you have been disconnected");
+    console.log("disconnecting old socket?");
+    lobbyAndUserToSocketMap[lobbyCode][userId].disconnect(true);
   }
-  props.socket.emit("socket joined");
-
-  if (openLobbies[props.lobbyCode] && !openLobbies[props.lobbyCode].gameStarted) {
+  lobbyAndUserToSocketMap[lobbyCode][userId] = props.socket;
+  socketToLobbyMap[props.socket.id] = props.lobbyCode;
+  if (openLobbies[lobbyCode] && !openLobbies[lobbyCode].gameStarted) {
     updateLobbyUserList({
       lobbyCode: props.lobbyCode,
       userId: props.userId,
       socket: props.socket,
     });
   }
-  // setTimeout(() => {
-  // }, 50);
-
+  props.socket.emit("socket joined game");
   setTimeout(() => {
     if (openLobbies[props.lobbyCode] && !openLobbies[props.lobbyCode].gameStarted) {
       updateLobbyUserList({
@@ -531,9 +621,29 @@ const joinSocket = (props) => {
         socket: props.socket,
       });
     }
+    props.socket.emit("socket joined game");
+  }, 50);
+  setTimeout(() => {
+    if (openLobbies[props.lobbyCode] && !openLobbies[props.lobbyCode].gameStarted) {
+      updateLobbyUserList({
+        lobbyCode: props.lobbyCode,
+        userId: props.userId,
+        socket: props.socket,
+      });
+    }
+    props.socket.emit("socket joined game");
+  }, 250);
+  setTimeout(() => {
+    if (openLobbies[props.lobbyCode] && !openLobbies[props.lobbyCode].gameStarted) {
+      updateLobbyUserList({
+        lobbyCode: props.lobbyCode,
+        userId: props.userId,
+        socket: props.socket,
+      });
+    }
+    props.socket.emit("socket joined game");
   }, 500);
-  //test
-};
+}
 
 /**
  * Notifies all players in a lobby that the game is transitioning from lobby to active state
@@ -541,10 +651,9 @@ const joinSocket = (props) => {
  */
 const lobbyToGameTransition = (props) => {
   for (const userId of Object.keys(openLobbies[props.lobbyCode].players)) {
-    for (const socket of getSocketsFromLobbyCodeAndUserID(props.lobbyCode, userId)) {
-      if (socket) {
-        socket.emit("lobby to game transition");
-      }
+    const socket = getSocketFromLobbyCodeAndUserID(props.lobbyCode, userId);
+    if (socket) {
+      socket.emit("lobby to game transition");
     }
   }
   console.log("lobby game transition emitted");
@@ -556,14 +665,16 @@ const lobbyToGameTransition = (props) => {
  * @param {Object} props - Contains lobbyCode
  */
 const updateLobbyUserList = (props) => {
-  for (const userId of Object.keys(gameToUserToSocketMap[props.lobbyCode])) {
-    for (const socket of getSocketsFromLobbyCodeAndUserID(props.lobbyCode, userId)) {
-      if (socket) {
-        socket.emit("update lobby user list", openLobbies[props.lobbyCode].players);
-      }
+  for (const userId of Object.keys(lobbyAndUserToSocketMap[props.lobbyCode] || {})) {
+    const socket = getSocketFromLobbyCodeAndUserID(props.lobbyCode, userId);
+    if (socket) {
+      console.log(openLobbies[props.lobbyCode].players);
+      console.log(userId);
+      console.log("keys: " + Object.keys(lobbyAndUserToSocketMap[props.lobbyCode]));
+      console.log("emitting update lobby user list to ", openLobbies[props.lobbyCode].players[userId]);
+      socket.emit("update lobby user list", openLobbies[props.lobbyCode].players);
     }
   }
-  console.log("update lobby user list emitted");
 };
 
 /**
@@ -573,9 +684,9 @@ const updateLobbyUserList = (props) => {
  * @param {string} lobbyCode - Code of the game
  */
 const sendBoardState = (lobbyCode, userId, letterUpdates, cropUpdates) => {
-  for (const socket of getSocketsFromLobbyCodeAndUserID(lobbyCode, userId)) {
-    if (socket)
-      socket.emit("board update", { letterUpdates: letterUpdates, cropUpdates: cropUpdates });
+  const socket = getSocketFromLobbyCodeAndUserID(lobbyCode, userId);
+  if (socket) {
+    socket.emit("board update", { letterUpdates: letterUpdates, cropUpdates: cropUpdates });
   }
 };
 
@@ -588,16 +699,14 @@ const passTurn = (lobbyCode) => {
   const game = gameLogic.games[lobbyCode];
   game.turn = game.turnOrder[(game.turnOrder.indexOf(game.turn) + 1) % game.turnOrder.length];
   for (const userId of Object.keys(game.players)) {
-    console.log("HIHIHI" + getSocketsFromLobbyCodeAndUserID(lobbyCode, userId));
-    for (const socket of getSocketsFromLobbyCodeAndUserID(lobbyCode, userId)) {
-      if (socket) {
-        console.log("Turn update emitted");
+    const socket = getSocketFromLobbyCodeAndUserID(lobbyCode, userId);
+    if (socket) {
+      console.log("Turn update emitted");
 
-        socket.emit("turn update", {
-          userId: game.turn,
-          username: game.players[game.turn],
-        });
-      }
+      socket.emit("turn update", {
+        userId: game.turn,
+        username: game.players[game.turn],
+      });
     }
   }
 };
@@ -614,13 +723,17 @@ module.exports = {
       console.log(`socket has connected ${socket.id}`);
       socket.on("disconnect", (reason) => {
         const user = getUserFromSocketID(socket.id);
+        if (!user) return;
         removeUser(user, socket);
+        disconnectSocket(socket, user._id);
       });
       socket.on("join socket", (props) => {
+        console.log("join socket");
         joinSocket({
           lobbyCode: props.lobbyCode,
           socket: socket,
           userId: props.userId,
+          location: props.location,
         });
       });
       socket.on("enter word", (props) => {
@@ -647,10 +760,9 @@ module.exports = {
         if (user && game.players[user._id]) {
           console.log("User is a valid player, getting suggestions");
           suggestions = gameLogic.enterWord(user._id, props);
-          for (const socket of getSocketsFromLobbyCodeAndUserID(props.lobbyCode, user._id)) {
-            if (socket) {
-              socket.emit("suggestions", suggestions);
-            }
+          const socket = getSocketFromLobbyCodeAndUserID(props.lobbyCode, user._id);
+          if (socket) {
+            socket.emit("suggestions", suggestions);
           }
           console.log("Emitted suggestions:", suggestions);
         } else {
@@ -662,6 +774,14 @@ module.exports = {
       socket.on("confirm word", (props) => {
         // deleteDuplicateJoins(props.lobbyCode);
         console.log("confirm word");
+        console.log("Word:", props.word);
+        if (props.isTutorial) {
+          const tutorial_words = ["LETTER", "GROVE", "END", "GAME", "RANG", "RUNG"];
+          if (!tutorial_words.includes(props.word)) {
+            console.log("Word not in tutorial words list");
+            return;
+          }
+        }
         const user = getUserFromSocketID(socket.id);
         const game = gameLogic.games[props.lobbyCode];
         // check if there are still words remaining
@@ -684,10 +804,9 @@ module.exports = {
           output = gameLogic.confirmWord(user._id, props);
           if (output.error === "Word too short" || output.error === "Not a valid word") {
             console.log(output.error);
-            for (const socket of getSocketsFromLobbyCodeAndUserID(props.lobbyCode, user._id)) {
-              if (socket) {
-                socket.emit("invalid word", { error: output.error });
-              }
+            const socket = getSocketFromLobbyCodeAndUserID(props.lobbyCode, user._id);
+            if (socket) {
+              socket.emit("invalid word", { error: output.error });
             }
             return;
           }
@@ -702,26 +821,23 @@ module.exports = {
            * @param {Array} localUpdate.endpoints - Updated valid endpoints for next word
            * @param {number} localUpdate.wordsRemaining - Updated number of words remaining
            */
-          for (const socket of getSocketsFromLobbyCodeAndUserID(props.lobbyCode, user._id)) {
-            if (socket) {
-              socket.emit("user update", output.localUpdate);
-            }
+          const socket = getSocketFromLobbyCodeAndUserID(props.lobbyCode, user._id);
+          if (socket) {
+            socket.emit("user update", output.localUpdate);
           }
           if (game.mode === "Words") {
-            for (const socket of getSocketsFromLobbyCodeAndUserID(props.lobbyCode, user._id)) {
-              if (socket) {
-                socket.emit("words update", {
-                  wordsRemaining: output.localUpdate.wordsRemaining,
-                  wordLimit: game.userGameStates[user._id].wordLimit,
-                });
-              }
+            const socket = getSocketFromLobbyCodeAndUserID(props.lobbyCode, user._id);
+            if (socket) {
+              socket.emit("words update", {
+                wordsRemaining: output.localUpdate.wordsRemaining,
+                wordLimit: game.userGameStates[user._id].wordLimit,
+              });
             }
           }
           if (game.mode === "Points") {
-            for (const socket of getSocketsFromLobbyCodeAndUserID(props.lobbyCode, user._id)) {
-              if (socket) {
-                socket.emit("points update", { pointsToWin: game.pointsToWin });
-              }
+            const socket = getSocketFromLobbyCodeAndUserID(props.lobbyCode, user._id);
+            if (socket) {
+              socket.emit("points update", { pointsToWin: game.pointsToWin });
             }
           }
           if (game.sameBoard) {
@@ -743,12 +859,9 @@ module.exports = {
            * @param {Array<{playerId: string, username: string, score: number}>} globalUpdate.updatedRankings - Current rankings sorted by score
            */
           for (const userId of Object.keys(game.players)) {
-            for (const socket of getSocketsFromLobbyCodeAndUserID(props.lobbyCode, userId)) {
-              console.log("socketid: " + socket.id);
-              console.log("userid: " + userId);
-              if (socket) {
-                socket.emit("global update", output.globalUpdate);
-              }
+            const socket = getSocketFromLobbyCodeAndUserID(props.lobbyCode, userId);
+            if (socket) {
+              socket.emit("global update", output.globalUpdate);
             }
           }
           if (game.sameBoard) {
@@ -771,7 +884,11 @@ module.exports = {
           // check if game is over
           if (gameLogic.games[props.lobbyCode].gameStatus === "ended") {
             let winnerMessage = output.globalUpdate.updatedRankings[0].username + " wins!";
-            handleEndGame({ lobbyCode: props.lobbyCode, reason: winnerMessage });
+            handleEndGame({
+              lobbyCode: props.lobbyCode,
+              reason: winnerMessage,
+              isTutorial: props.isTutorial,
+            });
           }
         }
       });
@@ -791,6 +908,8 @@ module.exports = {
   handleEndGame: handleEndGame,
   startTimer: startTimer,
   joinSocket: joinSocket,
+  disconnectSocket: disconnectSocket,
+  passTurn: passTurn,
+  sendBoardState: sendBoardState,
   lobbyToGameTransition: lobbyToGameTransition,
-  updateLobbyUserList: updateLobbyUserList,
 };

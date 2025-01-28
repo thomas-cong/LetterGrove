@@ -11,6 +11,9 @@ import "./GameComponent.css";
 import AlertBox from "../AlertBox/AlertBox";
 import TurnDisplay from "./TurnDisplay";
 import GameEndPopup from "./GameEndPopup/GameEndPopup.jsx";
+import DisconnectModal from "../DisconnectModal/DisconnectModal";
+
+// @props isTutorial: boolean
 
 const GameComponent = (props) => {
   console.log("GameComponent mounted", { props });
@@ -21,9 +24,9 @@ const GameComponent = (props) => {
   const [alertMessage, setAlertMessage] = useState("");
   const [turnUsername, setTurnUsername] = useState("");
   const [showEndGamePopup, setShowEndGamePopup] = useState(false);
-  const [endGameInfo, setEndGameInfo] = useState({});
-
-  // Game state management
+  const [endGameInfo, setEndGameInfo] = useState(null);
+  const [showDisconnectModal, setShowDisconnectModal] = useState(false);
+  const [disconnectMessage, setDisconnectMessage] = useState("");
   const [endPointSelected, setEndPointSelected] = useState(true);
   const [endpoints, setEndpoints] = useState([[0, 0]]);
   const [selectedX, setSelectedX] = useState(0);
@@ -114,99 +117,114 @@ const GameComponent = (props) => {
   // Set up socket listeners
   useEffect(() => {
     console.log("useEffect called");
-    socket.emit("join socket", { lobbyCode: props.lobbyCode, userId: props.userId });
-    socket.on("socket joined", () => {
-      get("/api/currentGame", { lobbyCode: props.lobbyCode, userId: props.userId });
-      // Initial game state
-      const handleInitialGame = (game) => {
-        setGameState(game);
-        setEndpoints(game.endpoints);
-        setSelectedX(game.endpoints[game.endpoints.length - 1][0]);
-        setSelectedY(game.endpoints[game.endpoints.length - 1][1]);
-        console.log("GAME ENDPOINTS" + game.endpoints);
-      };
+    
+    // Initial game state
+    const handleInitialGame = (game) => {
+      setGameState(game);
+      setEndpoints(game.endpoints);
+      setSelectedX(game.endpoints[game.endpoints.length - 1][0]);
+      setSelectedY(game.endpoints[game.endpoints.length - 1][1]);
+      console.log("GAME ENDPOINTS" + game.endpoints);
+    };
 
-      // User-specific updates (letters, points, endpoints)
-      const handleUserUpdate = (info) => {
-        // Reset the suggestions since this only plays on user update
-        setSuggestions([]);
+    // User-specific updates (letters, points, endpoints)
+    const handleUserUpdate = (info) => {
+      // Reset the suggestions since this only plays on user update
+      setSuggestions([]);
 
-        console.log("User update:", info);
-        setGameState((prevState) => ({
-          ...prevState,
-          points: info.totalPoints,
-        }));
-        setLettersUpdated(info.letterUpdates);
-        setEndpoints(info.endpoints);
-        if (info.cropUpdates) {
-          console.log("Updated crops: " + info.cropUpdates);
-          setCropsUpdated(info.cropUpdates);
-        }
-      };
-
-      // Global game updates (rankings, log messages)
-      const handleGlobalUpdate = (info) => {
-        console.log("Global update:", info);
-        let logMessages = [];
-        for (const message of info.logMessages) {
-          let { userId, username, pointsGained } = message;
-          logMessages.push({
-            userId: userId,
-            username: username,
-            pointsGained: pointsGained,
-          });
-        }
-        setGameState((prevState) => ({
-          ...prevState,
-          rankings: info.updatedRankings,
-          log: [...prevState.log, ...logMessages],
-        }));
-      };
-
-      const handleTurnUpdate = (info) => {
-        console.log("Turn update:", info);
-        setTurnUsername(info.username); // Set username first
-        (() => {
-          if (info.userId === props.userId) {
-            console.log("emitted username: " + info.username);
-            setIsTurn(true);
-          } else {
-            console.log("emitted id: " + info.userId);
-            console.log("props id: " + props.userId);
-            setIsTurn(false);
-          }
-        }, 300);
-      };
-      // Letter updates
-      const handleBoardUpdate = (info) => {
-        console.log("Board update:", info);
-        setLettersUpdated(info.letterUpdates);
+      console.log("User update:", info);
+      setGameState((prevState) => ({
+        ...prevState,
+        points: info.totalPoints,
+      }));
+      setLettersUpdated(info.letterUpdates);
+      setEndpoints(info.endpoints);
+      if (info.cropUpdates) {
+        console.log("Updated crops: " + info.cropUpdates);
         setCropsUpdated(info.cropUpdates);
-      };
-      const handleGameOver = (info) => {
-        console.log("Game over:", info);
-        setShowEndGamePopup(true);
-        setEndGameInfo(info);
-      };
+      }
+    };
 
-      // Set up listeners
-      socket.on("initial game", handleInitialGame);
-      socket.on("user update", handleUserUpdate);
-      socket.on("global update", handleGlobalUpdate);
-      socket.on("turn update", handleTurnUpdate);
-      socket.on("board update", handleBoardUpdate);
-      socket.on("game over", handleGameOver);
-      // Cleanup listeners on unmount
-      return () => {
-        socket.off("initial game", handleInitialGame);
-        socket.off("user update", handleUserUpdate);
-        socket.off("global update", handleGlobalUpdate);
-        socket.off("turn update", handleTurnUpdate);
-        socket.off("board update", handleBoardUpdate);
-        socket.off("game over", handleGameOver);
-      };
-    });
-  }, []);
+    // Global game updates (rankings, log messages)
+    const handleGlobalUpdate = (info) => {
+      console.log("Global update:", info);
+      let logMessages = [];
+      for (const message of info.logMessages) {
+        let { userId, username, pointsGained } = message;
+        logMessages.push({
+          userId: userId,
+          username: username,
+          pointsGained: pointsGained,
+        });
+      }
+      setGameState((prevState) => ({
+        ...prevState,
+        rankings: info.updatedRankings,
+        log: [...prevState.log, ...logMessages],
+      }));
+    };
+
+    const handleTurnUpdate = (info) => {
+      console.log("Turn update:", info);
+      setTurnUsername(info.username); // Set username first
+      setTimeout(() => {
+        if (info.userId === props.userId) {
+          console.log("emitted username: " + info.username);
+          setIsTurn(true);
+        } else {
+          console.log("emitted id: " + info.userId);
+          console.log("props id: " + props.userId);
+          setIsTurn(false);
+        }
+      }, 300);
+    };
+
+    const handleBoardUpdate = (info) => {
+      console.log("Board update:", info);
+      setLettersUpdated(info.letterUpdates);
+      setCropsUpdated(info.cropUpdates);
+    };
+
+    const handleGameOver = (info) => {
+      console.log("Game over:", info);
+      setShowEndGamePopup(true);
+      setEndGameInfo(info);
+    };
+
+    const handleSocketJoinedGame = () => {
+      get("/api/currentGame", { lobbyCode: props.lobbyCode, userId: props.userId });
+    }
+
+    const handleDisconnect = () => {
+      setShowDisconnectModal(true);
+      setDisconnectMessage("You have been disconnected. Please refresh the page to reconnect.");
+    }
+
+    // Set up socket connection
+    socket.emit("join socket", { lobbyCode: props.lobbyCode, userId: props.userId });
+    
+    // Set up socket event handlers
+    socket.on("socket joined game", handleSocketJoinedGame);
+    socket.on("initial game", handleInitialGame);
+    socket.on("user update", handleUserUpdate);
+    socket.on("global update", handleGlobalUpdate);
+    socket.on("turn update", handleTurnUpdate);
+    socket.on("board update", handleBoardUpdate);
+    socket.on("game over", handleGameOver);
+    socket.on("you have been disconnected", handleDisconnect);
+
+    // Cleanup listeners on unmount
+    return () => {
+      socket.off("socket joined game");
+      socket.off("initial game", handleInitialGame);
+      socket.off("user update", handleUserUpdate);
+      socket.off("global update", handleGlobalUpdate);
+      socket.off("turn update", handleTurnUpdate);
+      socket.off("board update", handleBoardUpdate);
+      socket.off("game over", handleGameOver);
+      socket.off("you have been disconnected", handleDisconnect);
+    };
+  }, [props.lobbyCode, props.userId]);
 
   useEffect(() => {
     updateBoard({
@@ -255,18 +273,19 @@ const GameComponent = (props) => {
 
   return (
     <>
-      {showAlert && (
-        <AlertBox
-          message={alertMessage}
-          setShowAlert={setShowAlert}
-          timeout={1500}
-          className="word-input-alert"
+      {showDisconnectModal && (
+        <DisconnectModal 
+          show={showDisconnectModal} 
+          message={disconnectMessage}
         />
       )}
-
       {showEndGamePopup && <GameEndPopup endGameInfo={endGameInfo} currentUserId={props.userId} />}
 
-      <div className="gamecompcontainer">
+      <div
+        className={`gamecompcontainer ${
+          props.isTutorial ? "tutorialbackground" : "gamebackground"
+        }`}
+      >
         <div className="gamecompleftcontainer">
           <div className="gamecompboardcontainer">
             <div className="gamecompboard">
@@ -289,6 +308,8 @@ const GameComponent = (props) => {
                 setWord={setWord}
                 word={word}
                 isTurn={isTurn}
+                lobbyCode={props.lobbyCode}
+                isTutorial={props.isTutorial}
               />
             </div>
             {/* <div className="gamecompbottominfo"> */}

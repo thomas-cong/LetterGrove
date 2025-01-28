@@ -81,6 +81,17 @@ const MatchHistory = ({ matches }) => {
     }
   };
 
+  const openBoard = () => {
+    document.body.classList.add('no-scroll');
+  };
+
+  const closeBoard = () => {
+    document.body.classList.remove('no-scroll');
+    setSelectedBoard(null);
+    setSelectedPlayerId(null);
+    setSelectedEndpoints(null);
+  };
+
   const renderMatch = (match, index) => {
     console.log(`Rendering match ${index}:`, match);
     return (
@@ -111,7 +122,7 @@ const MatchHistory = ({ matches }) => {
           </div>
           <div className="match-stat">
             <label>Words</label>
-            <span>{match.words?.length || 0}</span>
+            <span>{match.words || 0}</span>
           </div>
           <div className="match-stat">
             <label>Time</label>
@@ -138,8 +149,9 @@ const MatchHistory = ({ matches }) => {
                   >
                     {player.username}
                   </Link>
-                  <div className="player-score-container">
-                    <span className="player-score">{player.score}</span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ flexGrow: 1 }}></span>
+                    <span className="player-score" style={{ marginRight: '10px' }}>{player.score}</span>
                     {match.boards && 
                      match.boards[player.playerId] && 
                      Array.isArray(match.boards[player.playerId]) && 
@@ -151,8 +163,9 @@ const MatchHistory = ({ matches }) => {
                           handleBoardClick(match, player.playerId);
                         }}
                         title="View final board"
+                        style={{ marginTop: '-3px' }}
                       >
-                        <BoardIcon />
+                        <BoardIcon style={{ width: '30px', height: '30px', filter: 'drop-shadow(0 0 5px rgba(0, 0, 0, 0.5))' }} />
                       </button>
                     )}
                   </div>
@@ -178,11 +191,11 @@ const MatchHistory = ({ matches }) => {
       </div>
       
       {selectedBoard && (
-        <div className="board-overlay" onClick={() => setSelectedBoard(null)}>
+        <div className="board-overlay" onClick={closeBoard}>
           <div className="board-modal" onClick={(e) => e.stopPropagation()}>
             <div className="board-modal-header">
               <h4>Final Board State</h4>
-              <button className="close-button" onClick={() => setSelectedBoard(null)}>×</button>
+              <button className="close-button" onClick={closeBoard}>×</button>
             </div>
             <Board 
               board={selectedBoard}

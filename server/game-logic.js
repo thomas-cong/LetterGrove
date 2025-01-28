@@ -591,6 +591,7 @@ const confirmWord = (userId, props) => {
 
   // Apply Two Times powerup effect
   for (i = 0; i < powerupsCollected.twoTimes; i++) {
+    userGameState.powerupsUsed += 1;
     pointsGained *= 2;
   }
   userGameState.points += pointsGained;
@@ -598,14 +599,17 @@ const confirmWord = (userId, props) => {
   // Apply Watering Can powerup effect
   let cropUpdates = [];
   for (i = 0; i < powerupsCollected.wateringCan; i++) {
-    let randomPositionGenerator = createRandomPositionGenerator(ARRAY_SIZE);
+    userGameState.powerupsUsed += 1;
+    let randomPositionGenerator = createRandomPositionGenerator(15);
+    console.log("randomPositionGenerator: ", randomPositionGenerator());
 
     // Place each crop type once
     const cropTypes = ["cherry", "grape", "orange"];
     for (const cropType of cropTypes) {
       while (true) {
         let [randomX, randomY] = randomPositionGenerator();
-        if (isEmptyTile(randomY, randomX, board, ARRAY_SIZE)) {
+        console.log("randomX: ", randomX, " randomY: ", randomY);
+        if (isEmptyTile(randomY, randomX, board, 15)) {
           cropUpdates.push({
             x: randomX,
             y: randomY,

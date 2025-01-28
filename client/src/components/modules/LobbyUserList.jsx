@@ -16,10 +16,11 @@ const LobbyUserList = (props) => {
   useEffect(() => {
     get("/api/isGameStarted", { lobbyCode: props.lobbyCode}).then((res) => {
       if (!res.gameStarted) {
+        console.log("no, from lobbyuserlist");
         socket.emit("join socket", { lobbyCode: props.lobbyCode, userId: props.userId });
       }
     })
-    socket.on("socket joined", () => {
+    socket.on("socket joined game", () => {
       const handleUpdateLobbyUserList = (players) => {
         let tempUsernameList = [];
         for (let userId in players) {
