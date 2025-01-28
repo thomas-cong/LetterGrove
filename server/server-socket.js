@@ -134,6 +134,7 @@ const initiateGame = (props) => {
   const sameBoard = gameInfo.sameBoard;
   const mode = gameInfo.mode; // 'words', 'points', or 'time'
   const numPlayers = Object.keys(players).length;
+  const minWordLength = gameInfo.minWordLength;
 
   if (props.isTutorial) {
     const letterValues = {
@@ -246,6 +247,7 @@ const initiateGame = (props) => {
   if (sameBoard) {
     console.log("Same board mode");
     game = {
+      minWordLength: minWordLength,
       mode: mode,
       sameBoard: sameBoard,
       userGameStates: {},
@@ -263,6 +265,7 @@ const initiateGame = (props) => {
   } else {
     console.log("Different board mode");
     game = {
+      minWordLength: minWordLength,
       mode: mode,
       sameBoard: sameBoard,
       userGameStates: {},
