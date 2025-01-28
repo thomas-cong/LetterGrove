@@ -20,6 +20,7 @@ const GameComponent = (props) => {
   const [alertMessage, setAlertMessage] = useState("");
   const [turnUsername, setTurnUsername] = useState("");
   const [showEndGamePopup, setShowEndGamePopup] = useState(false);
+  const [endGameInfo, setEndGameInfo] = useState({});
 
   // Game state management
   const [endPointSelected, setEndPointSelected] = useState(true);
@@ -168,8 +169,10 @@ const GameComponent = (props) => {
         setLettersUpdated(info.letterUpdates);
         setCropsUpdated(info.cropUpdates);
       };
-      const handleGameOver = () => {
+      const handleGameOver = (info) => {
+        console.log("Game over:", info);
         setShowEndGamePopup(true);
+        setEndGameInfo(info);
       };
 
       // Set up listeners
@@ -178,7 +181,7 @@ const GameComponent = (props) => {
       socket.on("global update", handleGlobalUpdate);
       socket.on("turn update", handleTurnUpdate);
       socket.on("board update", handleBoardUpdate);
-      socket.on("end game", handleEndGame);
+      socket.on("game over", handleGameOver);
       // Cleanup listeners on unmount
       return () => {
         socket.off("initial game", handleInitialGame);
@@ -247,7 +250,7 @@ const GameComponent = (props) => {
         />
       )}
 
-      {showEndGamePopup && <GameEndPopup />}
+      {showEndGamePopup && <GameEndPopup endGameInfo={endGameInfo} currentUserId={props.userId} />}
 
       <div className="gamecompcontainer">
         <div className="gamecompleftcontainer">
