@@ -26,10 +26,10 @@ const getSocketFromSocketID = (socketid) => io.sockets.sockets.get(socketid);
 // Socket operations
 const getSocketFromLobbyCodeAndUserID = (lobbyCode, userid) => {
   return lobbyAndUserToSocketMap[lobbyCode][userid];
-}
+};
 const getLobbyCodeFromSocketID = (socketid) => {
   return socketToLobbyMap[socketid];
-}
+};
 
 const getGameFromSocketID = (socketid) => socketToLobbyMap[socketid];
 
@@ -192,8 +192,8 @@ const initiateGame = (props) => {
       { x: 1, y: 0, letter: "E", crop: "", powerUp: "" },
       { x: 2, y: 0, letter: "T", crop: "", powerUp: "" },
       { x: 3, y: 0, letter: "", crop: "cherry", powerUp: "" },
-      { x: 4, y: 0, letter: "", crop: "grape", powerUp: "" },
-      { x: 5, y: 0, letter: "R", crop: "", powerUp: "" },
+      { x: 4, y: 0, letter: "E", crop: "", powerUp: "" },
+      { x: 5, y: 0, letter: "", crop: "grape", powerUp: "" },
 
       { x: 5, y: 1, letter: "", crop: "crate", powerUp: "" },
       { x: 5, y: 2, letter: "", crop: "orange", powerUp: "" },
@@ -596,7 +596,10 @@ const joinSocket = (props) => {
   if (!lobbyAndUserToSocketMap[lobbyCode]) {
     lobbyAndUserToSocketMap[lobbyCode] = {};
   }
-  console.log("as of right now, Object.keys(lobbyAndUserToSocketMap[lobbyCode]) = ", Object.keys(lobbyAndUserToSocketMap[lobbyCode]));
+  console.log(
+    "as of right now, Object.keys(lobbyAndUserToSocketMap[lobbyCode]) = ",
+    Object.keys(lobbyAndUserToSocketMap[lobbyCode])
+  );
   if (!lobbyAndUserToSocketMap[lobbyCode][userId]) {
     lobbyAndUserToSocketMap[lobbyCode][userId] = props.socket;
   }
@@ -646,7 +649,7 @@ const joinSocket = (props) => {
     }
     props.socket.emit("socket joined game");
   }, 500);
-}
+};
 
 /**
  * Notifies all players in a lobby that the game is transitioning from lobby to active state
@@ -674,7 +677,10 @@ const updateLobbyUserList = (props) => {
       console.log(openLobbies[props.lobbyCode].players);
       console.log(userId);
       console.log("keys: " + Object.keys(lobbyAndUserToSocketMap[props.lobbyCode]));
-      console.log("emitting update lobby user list to ", openLobbies[props.lobbyCode].players[userId]);
+      console.log(
+        "emitting update lobby user list to ",
+        openLobbies[props.lobbyCode].players[userId]
+      );
       socket.emit("update lobby user list", openLobbies[props.lobbyCode].players);
     }
   }
