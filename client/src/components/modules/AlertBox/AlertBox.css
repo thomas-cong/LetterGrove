@@ -61,12 +61,12 @@
 
 .alert-box p {
   position: relative;
-  color: rgb(255, 185, 138);
-  text-align: center;
+  font-size: 1.2rem;
   margin: 0;
-  padding: 20px 40px;
+  color: rgb(255, 185, 138);
+  font-weight: bold;
+  text-align: center;
   z-index: 2;
-  font-size: 26px;
   max-width: 80%;
   word-wrap: break-word;
   opacity: 0;
@@ -78,7 +78,6 @@
 .word-input-alert {
   left: 25% !important;
   transform: translateX(-50%) scale(1) !important;
-  text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4);
 }
 
 @keyframes slideDown {

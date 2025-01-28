@@ -66,7 +66,7 @@ const JoinLobbyPopup = (props) => {
                   setAlertMessage("An error has occurred while joining the lobby!");
                   setShowAlert(true);
                 });
-            })
+            });
           }}
         >
           <img src={shortSign} alt="Start Lobby" style={{ cursor: "pointer" }} />
