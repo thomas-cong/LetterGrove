@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./GameEndPopup.css";
 import PlayerDisplay from "../../PlayerDisplay";
 import PlayerStats from "./PlayerStats";
@@ -30,7 +30,6 @@ const GameEndPopup = (props) => {
   const [selectedPlayer, setSelectedPlayer] = useState(null);
   const [showCloud, setShowCloud] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
-  const [reverseAnimation, setReverseAnimation] = useState(false);
 
   const navigate = useNavigate();
 
@@ -40,18 +39,22 @@ const GameEndPopup = (props) => {
     setTimeout(() => {
       // After fade out, show cloud animation
       setShowCloud(true);
-      // After cloud animation, navigate
+      // After cloud animation, navigate with state
       setTimeout(() => {
-        setReverseAnimation(true);
-        navigate("/");
-      }, 1500); // Increased time to ensure cloud animation completes
+        navigate("/", {
+          state: {
+            showCloudAnimation: true,
+            reverse: true,
+          },
+        });
+      }, 1500);
     }, 500);
   };
 
   return (
     <>
-      <div className={`game-end-overlay ${isClosing ? "fade-out" : ""}`}>
-        <div className={`game-end-popup ${isClosing ? "fade-out" : ""}`}>
+      <div className={`game-end-overlay`}>
+        <div className={`game-end-popup `}>
           <img src={closeButton} alt="Close" className="close-button" onClick={handleClose} />
           <div className="game-end-content">
             <div className="final-rankings-box">
@@ -93,7 +96,7 @@ const GameEndPopup = (props) => {
             zIndex: 9999, // Increased z-index to be above everything
           }}
         >
-          <CloudAnimation isActive={true} reverse={reverseAnimation} cloudImages={cloudImages} />
+          <CloudAnimation isActive={true} reverse={false} cloudImages={cloudImages} />
         </div>
       )}
     </>
