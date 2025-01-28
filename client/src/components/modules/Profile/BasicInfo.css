@@ -8,7 +8,7 @@
 }
 
 .profile-header {
-    transform: translateY(0%);
+  transform: translateY(0%);
 }
 
 .profile-name {
@@ -16,4 +16,13 @@
   margin: 0;
   font-size: 1.5rem;
   text-align: center;
+}
+
+.basic-info {
+  background-color: rgba(255, 255, 255, 0.3);
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  flex: 1;
+  min-width: 300px;
 }

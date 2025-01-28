@@ -23,8 +23,7 @@
   left: 0;
   object-fit: contain;
   z-index: 2;
-  /* filter: drop-shadow(0 0.5px 1px rgba(0, 0, 0, 1)); */
-
+  filter: drop-shadow(0 0.5px 1px rgba(0, 0, 0, 1));
 }
 
 .alert-box img.confusion-shiba {
@@ -37,8 +36,7 @@
   z-index: 2;
   opacity: 1;
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  /* filter: drop-shadow(0 0.5px 1px rgba(0, 0, 0, 1)); */
-
+  filter: drop-shadow(0 0.5px 1px rgba(0, 0, 0, 1));
 }
 
 /* .alert-box:hover img.confusion-shiba {
@@ -63,26 +61,23 @@
 
 .alert-box p {
   position: relative;
-  color: rgb(255, 185, 138);
-  text-align: center;
+  font-size: 1.2rem;
   margin: 0;
-  padding: 20px 40px;
+  color: rgb(255, 185, 138);
+  font-weight: bold;
+  text-align: center;
   z-index: 2;
-  font-size: 26px;
   max-width: 80%;
   word-wrap: break-word;
   opacity: 0;
   animation: fadeIn 0.4s ease-out 0.4s forwards;
   transform: translateX(0%) scale(1) !important;
-  /* text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4); */
-
+  text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4);
 }
 
 .word-input-alert {
   left: 25% !important;
-  transform: translateX(-50%) scale(1) !important;
-  /* text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4); */
-
+  transform: translateX(-35%) scale(1) !important;
 }
 
 @keyframes slideDown {
