@@ -5,6 +5,7 @@ import lettergrovelogo from "../../assets/lettergrovelogo.gif";
 import cloudanimation from "../../assets/cloudanimation000.png";
 import SummonJoinPopup from "../modules/JoinLobby/SummonJoinPopup";
 import SummonCreditsPopup from "../modules/Credits/SummonCreditsPopup";
+import SummonHowToPlayPopup from "../modules/HowToPlay/SummonHowToPlayPopup";
 import ProfileButton from "../modules/Profile/ProfileButton.jsx";
 
 import "../../utilities.css";
@@ -40,6 +41,12 @@ const Home = () => {
             popupShowing={popupShowing}
             setPopupShowing={setPopupShowing}
           />
+          <SummonHowToPlayPopup
+            onShowHowToPlay={() => setShowLogo(false)}
+            onHideHowToPlay={() => setShowLogo(true)}
+            popupShowing={popupShowing}
+            setPopupShowing={setPopupShowing}
+          />
           <SummonCreditsPopup
             onShowCredits={() => setShowLogo(false)}
             onHideCredits={() => setShowLogo(true)}
@@ -52,25 +59,23 @@ const Home = () => {
           />
         </div>
       )}
-      <div>
-        {userId && !popupShowing ? (
-          <div
-            className="home-logoutbutton-container"
-            onClick={() => {
-              googleLogout();
-              handleLogout();
-            }}
-          >
-            <div className="home-logoutButton">
-              <div className="logouttext">Logout</div>
-            </div>
+      {userId && !popupShowing ? (
+        <div
+          className="home-logoutbutton-container"
+          onClick={() => {
+            googleLogout();
+            handleLogout();
+          }}
+        >
+          <div className="home-logoutButton">
+            <div className="logouttext">Logout</div>
           </div>
-        ) : !userId ? (
-          <div className="google-login-container">
-            <GoogleLogin onSuccess={handleLogin} />
-          </div>
-        ) : null}
-      </div>
+        </div>
+      ) : !userId ? (
+        <div className="google-login-container">
+          <GoogleLogin onSuccess={handleLogin} />
+        </div>
+      ) : null}
     </div>
   );
 };
