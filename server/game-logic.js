@@ -26,12 +26,12 @@ const letterDistribution = {
   M: 6,
 
   // Medium consonants
-  B: 3,
-  C: 3,
-  F: 3,
-  G: 3,
-  H: 3,
-  P: 3,
+  B: 5,
+  C: 5,
+  F: 4,
+  G: 4,
+  H: 4,
+  P: 4,
 
   // Vowels (balanced)
   E: 6,
@@ -41,16 +41,16 @@ const letterDistribution = {
   U: 2,
 
   // Less common consonants
-  V: 3,
-  W: 3,
-  Y: 3,
+  V: 2,
+  W: 2,
+  Y: 2,
 
   // Rare letters (minimal)
   K: 1,
   J: 1,
   X: 1,
-  Q: 2,
-  Z: 2,
+  Q: 1,
+  Z: 1,
 };
 
 // Point values for each letter
@@ -86,9 +86,9 @@ const letterValues = {
 // Point values for crop items
 const cropValues = {
   cherry: 2,
-  grape: 5,
-  orange: 10,
-  crate: 20,
+  grape: 3,
+  orange: 5,
+  crate: 10,
 };
 
 /*
@@ -211,37 +211,37 @@ const randomlyGenerateBoard = (props) => {
   if (DIFFICULTY === "Easy") {
     LETTER_COUNT = 25;
     CROP_COUNTS = {
-      cherry: 2,
-      grape: 2,
+      cherry: 10,
+      grape: 7,
+      orange: 3,
+      crate: 2,
+    };
+    POWERUP_COUNTS = {
+      wateringCan: 2,
+      twoTimes: 3,
+    };
+  } else if (DIFFICULTY === "Medium") {
+    LETTER_COUNT = 35;
+    CROP_COUNTS = {
+      cherry: 8,
+      grape: 5,
       orange: 2,
       crate: 2,
     };
     POWERUP_COUNTS = {
-      wateringCan: 1,
-      twoTimes: 1,
-    };
-  } else if (DIFFICULTY === "Medium") {
-    LETTER_COUNT = 25;
-    CROP_COUNTS = {
-      cherry: 1,
-      grape: 1,
-      orange: 1,
-      crate: 1,
-    };
-    POWERUP_COUNTS = {
-      wateringCan: 1,
-      twoTimes: 1,
+      wateringCan: 2,
+      twoTimes: 2,
     };
   } else if (DIFFICULTY === "Hard") {
-    LETTER_COUNT = 35;
+    LETTER_COUNT = 45;
     CROP_COUNTS = {
-      cherry: 1,
-      grape: 1,
-      orange: 1,
+      cherry: 5,
+      grape: 3,
+      orange: 2,
       crate: 1,
     };
     POWERUP_COUNTS = {
-      wateringCan: 1,
+      wateringCan: 2,
       twoTimes: 1,
     };
   }

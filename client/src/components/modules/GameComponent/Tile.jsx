@@ -359,7 +359,13 @@ const Tile = (props) => {
           <img
             src={EndPointHighLightTop}
             alt="endpoint-top"
-            className="endpoint-highlight-top"
+            className={`endpoint-highlight-top ${
+              props.selectedX === props.tileX &&
+              props.selectedY === props.tileY &&
+              (!props.suggestedWord || props.suggestedWord.length === 0)
+                ? "endpoint-highlight-pulse"
+                : ""
+            }`}
             style={{
               position: "absolute",
               top: 0,
@@ -374,7 +380,13 @@ const Tile = (props) => {
           <img
             src={EndPointHighlightBottom}
             alt="endpoint-bottom"
-            className="endpoint-highlight-bottom"
+            className={`endpoint-highlight-bottom ${
+              props.selectedX === props.tileX &&
+              props.selectedY === props.tileY &&
+              (!props.suggestedWord || props.suggestedWord.length === 0)
+                ? "endpoint-highlight-pulse"
+                : ""
+            }`}
             style={{
               position: "absolute",
               top: 0,

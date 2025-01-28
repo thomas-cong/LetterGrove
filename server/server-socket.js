@@ -167,9 +167,9 @@ const initiateGame = (props) => {
     };
     const cropValues = {
       cherry: 2,
-      grape: 5,
-      orange: 10,
-      crate: 20,
+      grape: 3,
+      orange: 5,
+      crate: 10,
     };
     board = Array(15)
       .fill()
@@ -567,9 +567,7 @@ const disconnectSocket = (socket, userId) => {
     if (lobbyAndUserToSocketMap[lobbyCode] && lobbyAndUserToSocketMap[lobbyCode][userId]) {
       console.log("deleting stuff!!");
       delete lobbyAndUserToSocketMap[lobbyCode][userId];
-
-      // Clean up if this was the last user in the lobby
-      if (Object.keys(lobbyAndUserToSocketMap[lobbyCode]).length === 0) {
+      if (gameLogic.games[lobbyCode].gameStatus === "ended") {
         delete lobbyAndUserToSocketMap[lobbyCode];
       }
     }
