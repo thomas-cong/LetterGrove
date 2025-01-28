@@ -1,10 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { useParams, Link } from "react-router-dom";
-import Board from "../GameComponent/Board.jsx";
 
 const MatchHistory = ({ matches }) => {
   const { identifier } = useParams();
-  const [selectedBoard, setSelectedBoard] = useState(null);
   
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
@@ -44,7 +42,7 @@ const MatchHistory = ({ matches }) => {
         </div>
         <div className="match-stat">
           <label>Words</label>
-          <span>{match.words.length}</span>
+          <span>{match.words}</span>
         </div>
         <div className="match-stat">
           <label>Time</label>
@@ -64,18 +62,7 @@ const MatchHistory = ({ matches }) => {
               >
                 {player.username}
               </Link>
-              <div className="score-container">
-                <span className="player-score">{player.score}</span>
-                {match.board && (
-                  <button 
-                    className="board-view-button"
-                    onClick={() => setSelectedBoard(match.board)}
-                    title="View final board"
-                  >
-                    🎲
-                  </button>
-                )}
-              </div>
+              <span className="player-score">{player.score}</span>
             </div>
           ))}
         </div>
@@ -94,36 +81,6 @@ const MatchHistory = ({ matches }) => {
           {rightColumnMatches.map(renderMatch)}
         </div>
       </div>
-
-      {selectedBoard && (
-        <div className="board-popup-overlay" onClick={() => setSelectedBoard(null)}>
-          <div className="board-popup" onClick={(e) => e.stopPropagation()}>
-            <button className="close-button" onClick={() => setSelectedBoard(null)}>×</button>
-            <div className="board-container">
-              <Board 
-                board={selectedBoard.map(row => 
-                  row.map(cell => ({
-                    ...cell,
-                    default: false // This ensures letters are colored
-                  }))
-                )}
-                endpoints={[]}
-                endPointSelected={false}
-                setEndPointSelected={() => {}}
-                selectedX={-1}
-                selectedY={-1}
-                setSelectedX={() => {}}
-                setSelectedY={() => {}}
-                isTurn={true}
-                suggestions={[]}
-                setSuggestions={() => {}}
-                setWord={() => {}}
-                word=""
-              />
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
