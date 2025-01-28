@@ -98,6 +98,8 @@ const Lobby = () => {
         post("/api/startGame", { lobbyCode: lobbyId });
       }, 0);
 
+      // socket.on("game started", )
+
       setTimeout(() => {
         setLobbyState("game");
       }, 1000);

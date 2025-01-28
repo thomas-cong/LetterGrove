@@ -97,6 +97,18 @@ const GameComponent = (props) => {
     }));
   };
 
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (gameState.board.length > 0) {
+        console.log("exited");
+        get("/api/currentGame", { lobbyCode: props.lobbyCode, userId: props.userId });
+        clearInterval(intervalId); // Stop polling once we have a board
+      }
+    }, 250);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
   // Set up socket listeners
   useEffect(() => {
     console.log("useEffect called");
@@ -152,7 +164,7 @@ const GameComponent = (props) => {
       const handleTurnUpdate = (info) => {
         console.log("Turn update:", info);
         setTurnUsername(info.username); // Set username first
-        setTimeout(() => {
+        (() => {
           if (info.userId === props.userId) {
             console.log("emitted username: " + info.username);
             setIsTurn(true);

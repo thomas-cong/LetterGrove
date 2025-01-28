@@ -1,6 +1,6 @@
 import React from "react";
 import "./HowToPlayPopup.css";
-import CloseButton from "../../../assets/CloseButton.png";
+import closeButton from "../../../assets/closeButton.png";
 
 const HowToPlayPopup = ({ hideHowToPlay, setPopupShowing }) => {
   const handleClose = () => {
@@ -11,7 +11,7 @@ const HowToPlayPopup = ({ hideHowToPlay, setPopupShowing }) => {
   return (
     <div className="howtoplay-overlay">
       <div className="howtoplay-popup">
-        <img src={CloseButton} alt="Close" className="createdcloseButton" onClick={handleClose} />
+        <img src={closeButton} alt="Close" className="createdcloseButton" onClick={handleClose} />
         <div className="howtoplay-content">
           <h1>How to Play</h1>
 

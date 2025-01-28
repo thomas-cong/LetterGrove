@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const CompletedGameSchema = new mongoose.Schema({
   boards: Object,
+  endpoints: Object,
   players: Object,
   finalRankings: Array,
   mode: String,

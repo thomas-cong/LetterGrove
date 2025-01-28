@@ -386,8 +386,13 @@ const handleEndGame = (props) => {
   for (const userId in game.players) {
     words[userId] = game.userGameStates[userId].wordsFormed;
   }
+  let endpoints = {};
+  for (const userId in game.players) {
+    endpoints[userId] = game.userGameStates[userId].endpoints;
+  }
   const completedGame = new CompletedGame({
     boards: boards,
+    endpoints: endpoints,
     players: game.players,
     words: words,
     finalRankings: game.rankings,
@@ -507,7 +512,18 @@ const joinSocket = (props) => {
     }
   }
   props.socket.emit("socket joined");
-  setInterval(() => {
+
+  if (openLobbies[props.lobbyCode] && !openLobbies[props.lobbyCode].gameStarted) {
+    updateLobbyUserList({
+      lobbyCode: props.lobbyCode,
+      userId: props.userId,
+      socket: props.socket,
+    });
+  }
+  // setTimeout(() => {
+  // }, 50);
+
+  setTimeout(() => {
     if (openLobbies[props.lobbyCode] && !openLobbies[props.lobbyCode].gameStarted) {
       updateLobbyUserList({
         lobbyCode: props.lobbyCode,
@@ -515,7 +531,7 @@ const joinSocket = (props) => {
         socket: props.socket,
       });
     }
-  }, 100);
+  }, 500);
   //test
 };
 
@@ -541,11 +557,6 @@ const lobbyToGameTransition = (props) => {
  */
 const updateLobbyUserList = (props) => {
   for (const userId of Object.keys(gameToUserToSocketMap[props.lobbyCode])) {
-    console.log(props.lobbyCode);
-    console.log(userId);
-    console.log(gameToUserToSocketMap);
-    console.log(props.socket.id);
-    console.log("HIHIHI" + getSocketsFromLobbyCodeAndUserID(props.lobbyCode, userId));
     for (const socket of getSocketsFromLobbyCodeAndUserID(props.lobbyCode, userId)) {
       if (socket) {
         socket.emit("update lobby user list", openLobbies[props.lobbyCode].players);
