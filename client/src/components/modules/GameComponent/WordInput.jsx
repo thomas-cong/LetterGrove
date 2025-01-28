@@ -31,7 +31,7 @@ const WordInput = (props) => {
   const handleKeyPress = () => {
     console.log(props.endpointSelected);
     if (!props.endpointSelected) {
-      setAlertMessage("Select an endpoint first...");
+      setAlertMessage("Select a golden tile first...");
       setShowAlert(true);
       return;
     }
@@ -56,7 +56,7 @@ const WordInput = (props) => {
     if (props.endpointSelected) {
       setPlaceholder("Enter a word");
     } else {
-      setPlaceholder("Select an endpoint first...");
+      setPlaceholder("Select a golden tile first...");
     }
   }, [props.endpointSelected]);
 
@@ -132,7 +132,7 @@ const WordInput = (props) => {
               props.setWord(lettersOnly.toUpperCase());
               console.log(props.endpointSelected);
               if (!props.endpointSelected) {
-                props.setAlertMessage("Select an endpoint first...");
+                props.setAlertMessage("Select a golden tile first...");
                 props.setShowAlert(true);
                 return;
               }
