@@ -29,6 +29,12 @@ const Home = () => {
       )}
       {userId && (
         <div className="buttonscontainer">
+          <SummonHowToPlayPopup
+            onShowHowToPlay={() => setShowLogo(false)}
+            onHideHowToPlay={() => setShowLogo(true)}
+            popupShowing={popupShowing}
+            setPopupShowing={setPopupShowing}
+          />
           <SummonLobbyPopup
             onShowLobby={() => setShowLogo(false)}
             onHideLobby={() => setShowLogo(true)}
@@ -41,19 +47,11 @@ const Home = () => {
             popupShowing={popupShowing}
             setPopupShowing={setPopupShowing}
           />
-          <SummonHowToPlayPopup
-            onShowHowToPlay={() => setShowLogo(false)}
-            onHideHowToPlay={() => setShowLogo(true)}
-            popupShowing={popupShowing}
-            setPopupShowing={setPopupShowing}
-          />
+
+          <ProfileButton popupShowing={popupShowing} setPopupShowing={setPopupShowing} />
           <SummonCreditsPopup
             onShowCredits={() => setShowLogo(false)}
             onHideCredits={() => setShowLogo(true)}
-            popupShowing={popupShowing}
-            setPopupShowing={setPopupShowing}
-          />
-          <ProfileButton
             popupShowing={popupShowing}
             setPopupShowing={setPopupShowing}
           />

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import buttonImage from "../../../assets/640signs_4.png";
+import buttonImage from "../../../assets/640signs_2.png";
 import "../../../assets/font.css";
 import HowToPlayPopup from "./HowToPlayPopup";
 import "../JoinLobby/SummonJoinPopup.css";
