@@ -16,7 +16,6 @@ import DisconnectModal from "../DisconnectModal/DisconnectModal";
 // @props isTutorial: boolean
 
 const GameComponent = (props) => {
-  console.log("GameComponent mounted", { props });
   const [word, setWord] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [isTurn, setIsTurn] = useState(true);
@@ -101,18 +100,18 @@ const GameComponent = (props) => {
     }));
   };
 
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      console.log("gameState.board.length: " + gameState.board.length);
-      if (gameState.board.length > 0) {
-        console.log("exited");
-        get("/api/currentGame", { lobbyCode: props.lobbyCode, userId: props.userId });
-        clearInterval(intervalId); // Stop polling once we have a board
-      }
-    }, 250);
+  // useEffect(() => {
+  //   const intervalId = setInterval(() => {
+  //     console.log("gameState.board.length: " + gameState.board.length);
+  //     if (gameState.board.length > 0) {
+  //       console.log("exited");
+  //       get("/api/currentGame", { lobbyCode: props.lobbyCode, userId: props.userId });
+  //       clearInterval(intervalId); // Stop polling once we have a board
+  //     }
+  //   }, 250);
 
-    return () => clearInterval(intervalId);
-  }, []);
+  //   return () => clearInterval(intervalId);
+  // }, []);
 
   // Set up socket listeners
   useEffect(() => {
@@ -273,6 +272,7 @@ const GameComponent = (props) => {
 
   return (
     <>
+      {showAlert && <AlertBox message={alertMessage} className="word-input-alert" />}
       {showDisconnectModal && (
         <DisconnectModal show={showDisconnectModal} message={disconnectMessage} />
       )}
