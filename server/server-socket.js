@@ -69,6 +69,8 @@ const removeUser = (user, socket) => {
  * @param {string} lobbyCode - Code of the lobby/game to get state from
  */
 const sendUserInitialGame = (userId, lobbyCode) => {
+  console.log("sending user initial game");
+  console.log(gameLogic.games[lobbyCode]);
   let game = {
     sameBoard: gameLogic.games[lobbyCode].sameBoard,
     mode: gameLogic.games[lobbyCode].mode,

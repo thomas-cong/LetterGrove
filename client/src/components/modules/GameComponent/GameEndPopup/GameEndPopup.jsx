@@ -29,12 +29,14 @@ const cloudImages = [
 const GameEndPopup = (props) => {
   const [selectedPlayer, setSelectedPlayer] = useState(null);
   const [showCloud, setShowCloud] = useState(false);
-  const [isClosing, setIsClosing] = useState(false);
 
   const navigate = useNavigate();
 
   const handleClose = () => {
-    setIsClosing(true);
+    if (props.isTutorial) {
+      props.closeTutorial();
+      return;
+    }
     // Start fade out
     setTimeout(() => {
       // After fade out, show cloud animation
@@ -48,7 +50,7 @@ const GameEndPopup = (props) => {
           },
         });
       }, 1500);
-    }, 500);
+    }, 250);
   };
 
   return (

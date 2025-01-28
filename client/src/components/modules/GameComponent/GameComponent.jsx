@@ -16,7 +16,6 @@ import DisconnectModal from "../DisconnectModal/DisconnectModal";
 // @props isTutorial: boolean
 
 const GameComponent = (props) => {
-  console.log("GameComponent mounted", { props });
   const [word, setWord] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [isTurn, setIsTurn] = useState(true);
@@ -101,23 +100,23 @@ const GameComponent = (props) => {
     }));
   };
 
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      console.log("gameState.board.length: " + gameState.board.length);
-      if (gameState.board.length > 0) {
-        console.log("exited");
-        get("/api/currentGame", { lobbyCode: props.lobbyCode, userId: props.userId });
-        clearInterval(intervalId); // Stop polling once we have a board
-      }
-    }, 250);
+  // useEffect(() => {
+  //   const intervalId = setInterval(() => {
+  //     console.log("gameState.board.length: " + gameState.board.length);
+  //     if (gameState.board.length > 0) {
+  //       console.log("exited");
+  //       get("/api/currentGame", { lobbyCode: props.lobbyCode, userId: props.userId });
+  //       clearInterval(intervalId); // Stop polling once we have a board
+  //     }
+  //   }, 250);
 
-    return () => clearInterval(intervalId);
-  }, []);
+  //   return () => clearInterval(intervalId);
+  // }, []);
 
   // Set up socket listeners
   useEffect(() => {
     console.log("useEffect called");
-    
+
     // Initial game state
     const handleInitialGame = (game) => {
       setGameState(game);
@@ -193,16 +192,16 @@ const GameComponent = (props) => {
 
     const handleSocketJoinedGame = () => {
       get("/api/currentGame", { lobbyCode: props.lobbyCode, userId: props.userId });
-    }
+    };
 
     const handleDisconnect = () => {
       setShowDisconnectModal(true);
       setDisconnectMessage("You have been disconnected. Please refresh the page to reconnect.");
-    }
+    };
 
     // Set up socket connection
     socket.emit("join socket", { lobbyCode: props.lobbyCode, userId: props.userId });
-    
+
     // Set up socket event handlers
     socket.on("socket joined game", handleSocketJoinedGame);
     socket.on("initial game", handleInitialGame);
@@ -273,13 +272,18 @@ const GameComponent = (props) => {
 
   return (
     <>
+      {showAlert && <AlertBox message={alertMessage} className="word-input-alert" />}
       {showDisconnectModal && (
-        <DisconnectModal 
-          show={showDisconnectModal} 
-          message={disconnectMessage}
+        <DisconnectModal show={showDisconnectModal} message={disconnectMessage} />
+      )}
+      {showEndGamePopup && (
+        <GameEndPopup
+          endGameInfo={endGameInfo}
+          currentUserId={props.userId}
+          isTutorial={props.isTutorial}
+          closeTutorial={props.closeTutorial}
         />
       )}
-      {showEndGamePopup && <GameEndPopup endGameInfo={endGameInfo} currentUserId={props.userId} />}
 
       <div
         className={`gamecompcontainer ${
