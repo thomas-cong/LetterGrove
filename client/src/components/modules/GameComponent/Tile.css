@@ -116,6 +116,19 @@
   }
 }
 
+@keyframes pulseBlue {
+  0% {
+    filter: drop-shadow(0 0 0px rgba(255, 215, 0, 0));
+  }
+  50% {
+    filter: drop-shadow(0 0 2px rgb(255, 215, 0)) 
+           drop-shadow(0 0 2px rgb(255, 187, 0));
+  }
+  100% {
+    filter: drop-shadow(0 0 0px rgba(255, 215, 0, 0.352));
+  }
+}
+
 .tile.visited {
   opacity: 1;
 }
@@ -219,6 +232,10 @@
 
 .tile:hover .endpoint-highlight-top {
   transform: scale(1.1);
+}
+
+.endpoint-highlight-pulse {
+  animation: pulseBlue 1.5s ease-in-out infinite !important;
 }
 
 .confirm-suggestion {
