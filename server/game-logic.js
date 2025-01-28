@@ -86,9 +86,9 @@ const letterValues = {
 // Point values for crop items
 const cropValues = {
   cherry: 2,
-  grape: 5,
-  orange: 10,
-  crate: 20,
+  grape: 3,
+  orange: 5,
+  crate: 10,
 };
 
 /*

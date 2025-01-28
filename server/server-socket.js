@@ -167,9 +167,9 @@ const initiateGame = (props) => {
     };
     const cropValues = {
       cherry: 2,
-      grape: 5,
-      orange: 10,
-      crate: 20,
+      grape: 3,
+      orange: 5,
+      crate: 10,
     };
     board = Array(15)
       .fill()
