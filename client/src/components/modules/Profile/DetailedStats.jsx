@@ -3,7 +3,7 @@ import React from "react";
 const DetailedStats = ({ userStats }) => {
   return (
     <div className="profile-detailed">
-      <h3>Player Stats</h3>
+      <h3 style={{ textAlign: "center" }}>Player Stats</h3>
       <div className="detailed-stats">
         <div className="stat-row">
           <div className="stat-box">

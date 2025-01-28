@@ -103,7 +103,8 @@
   width: auto;
   height: auto;
   gap: 2vw;
-  margin-top: 7vw;
+  margin-top: max(4vw, 100px);
+  margin-bottom: 4vw;
 }
 
 .buttonscontainer {
@@ -120,7 +121,7 @@
   order: -1;
   position: relative;
   width: 40vw;
-  max-width: 600px;
+  /* max-width: 600px; */
   min-width: 300px;
   height: auto;
   z-index: 1;

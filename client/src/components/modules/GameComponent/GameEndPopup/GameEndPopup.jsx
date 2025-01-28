@@ -3,7 +3,7 @@ import "./GameEndPopup.css";
 import PlayerDisplay from "../../PlayerDisplay";
 import PlayerStats from "./PlayerStats";
 import testProfilePicture from "../../../../assets/TestingPFP.png";
-import closeButton from "../../../../assets/Closebutton.png";
+import homebutton from "../../../../assets/homebutton.png";
 import { useNavigate } from "react-router-dom";
 import CloudAnimation from "../../CloudAnimation.jsx";
 
@@ -55,7 +55,7 @@ const GameEndPopup = (props) => {
     <>
       <div className={`game-end-overlay`}>
         <div className={`game-end-popup `}>
-          <img src={closeButton} alt="Close" className="close-button" onClick={handleClose} />
+          <img src={homebutton} alt="Home" className="homebutton" onClick={handleClose} />
           <div className="game-end-content">
             <div className="final-rankings-box">
               <h3 style={{ color: "var(--primary)" }}>Final Rankings</h3>

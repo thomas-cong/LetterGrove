@@ -485,6 +485,22 @@ form {
   background-color: rgba(0, 0, 0, 0.05);
 }
 
+.homebutton {
+  border: none;
+  scale: 2;
+  cursor: pointer;
+  line-height: 1;
+  border-radius: 4px;
+  top: 50px;
+  left: 50px;
+  position: absolute;
+}
+
+.homebutton:hover {
+  transform: scale(1.05);
+  transition: all 0.2s ease;
+}
+
 @media (max-width: 768px) {
   .match-list {
     flex-direction: column;

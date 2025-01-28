@@ -6,9 +6,9 @@ const BasicInfo = ({ userStats }) => {
   return (
     <div className="profile-basic">
       <div className="profile-header">
-        <img 
-          src={userStats.profilePicture || testProfilePicture} 
-          alt="Profile" 
+        <img
+          src={userStats.profilePicture || testProfilePicture}
+          alt="Profile"
           className="profile-picture"
         />
         <h2 className="profile-name">{userStats.name}</h2>

@@ -18,7 +18,7 @@ const MatchHistory = ({ matches }) => {
   const [selectedBoard, setSelectedBoard] = useState(null);
   const [selectedPlayerId, setSelectedPlayerId] = useState(null);
   const [selectedEndpoints, setSelectedEndpoints] = useState(null);
-  
+
   useEffect(() => {
     console.log("MatchHistory mounted with matches:", matches);
     if (matches && matches.length > 0) {
@@ -51,7 +51,7 @@ const MatchHistory = ({ matches }) => {
     const boardState = match.boards?.[playerId];
     const endpointState = match.endpoints?.[playerId];
     console.log("Raw endpoint state:", endpointState);
-    
+
     if (boardState && Array.isArray(boardState) && boardState.length > 0) {
       console.log("Found board state:", boardState);
       if (endpointState && Array.isArray(endpointState)) {
@@ -114,7 +114,7 @@ const MatchHistory = ({ matches }) => {
             {new Date(match.date).toLocaleDateString()}
           </span>
         </div>
-        
+
         <div className="match-stats">
           <div className="match-stat">
             <label>Score</label>
@@ -143,7 +143,7 @@ const MatchHistory = ({ matches }) => {
               return (
                 <div key={idx} className="ranking-row">
                   <span className="rank">#{idx + 1}</span>
-                  <Link 
+                  <Link
                     to={`/profile/${player.playerId}`}
                     className={`player-name ${player.playerId === identifier ? 'profile-user' : ''}`}
                   >
@@ -152,9 +152,9 @@ const MatchHistory = ({ matches }) => {
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <span style={{ flexGrow: 1 }}></span>
                     <span className="player-score" style={{ marginRight: '10px' }}>{player.score}</span>
-                    {match.boards && 
-                     match.boards[player.playerId] && 
-                     Array.isArray(match.boards[player.playerId]) && 
+                    {match.boards &&
+                     match.boards[player.playerId] &&
+                     Array.isArray(match.boards[player.playerId]) &&
                      match.boards[player.playerId].length > 0 && (
                       <button
                         className="board-icon-button"
@@ -180,7 +180,7 @@ const MatchHistory = ({ matches }) => {
 
   return (
     <div className="match-history">
-      <h3>Recent Matches</h3>
+      <h3 style={{ textAlign: "center" }}>Recent Matches</h3>
       <div className="match-list">
         <div className="match-column">
           {leftColumnMatches.map(renderMatch)}
@@ -189,7 +189,7 @@ const MatchHistory = ({ matches }) => {
           {rightColumnMatches.map(renderMatch)}
         </div>
       </div>
-      
+
       {selectedBoard && (
         <div className="board-overlay" onClick={closeBoard}>
           <div className="board-modal" onClick={(e) => e.stopPropagation()}>
@@ -197,7 +197,7 @@ const MatchHistory = ({ matches }) => {
               <h4>Final Board State</h4>
               <button className="close-button" onClick={closeBoard}>×</button>
             </div>
-            <Board 
+            <Board
               board={selectedBoard}
               endpoints={selectedEndpoints ? selectedEndpoints : []}
               endPointSelected={false}
