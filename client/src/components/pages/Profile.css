@@ -128,7 +128,7 @@
 
 .stat-box {
   flex: 1;
-  background: var(--primary--dim, 0.1);
+  background: rgba(255, 255, 255, 0.5);
   padding: 1.5rem;
   border-radius: 8px;
   text-align: center;
