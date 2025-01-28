@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import BasicInfo from "../modules/Profile/BasicInfo";
 import DetailedStats from "../modules/Profile/DetailedStats";
 import MatchHistory from "../modules/Profile/MatchHistory";
+import ProfileBackground from "../../assets/ProfileBackground.png";
 import "./Profile.css";
 
 const Profile = () => {
@@ -19,7 +20,7 @@ const Profile = () => {
         setUserStats(stats);
         setLoading(false);
       });
-      
+
       get("/api/completedGames", { userId: identifier }).then((matches) => {
         setMatchHistory(matches);
       });
@@ -30,11 +31,13 @@ const Profile = () => {
 
   return (
     <div className="profile-container">
-      <div className="profile-top">
-        <BasicInfo userStats={userStats} />
-        <DetailedStats userStats={userStats} />
+      <div className="profile-content">
+        <div className="profile-top">
+          <BasicInfo userStats={userStats} />
+          <DetailedStats userStats={userStats} />
+        </div>
+        <MatchHistory matches={matchHistory} />
       </div>
-      <MatchHistory matches={matchHistory} />
     </div>
   );
 };
