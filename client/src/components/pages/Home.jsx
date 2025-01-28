@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import { GoogleLogin, googleLogout } from "@react-oauth/google";
 import { useLocation } from "react-router-dom";
 import SummonLobbyPopup from "../modules/LobbyCreation/SummonLobbyPopup";
@@ -34,22 +34,8 @@ const cloudImages = [
 
 const Home = () => {
   const location = useLocation();
-  const [showCloud, setShowCloud] = useState(false);
-  const [isReverse, setIsReverse] = useState(false);
-  
-  useEffect(() => {
-    if (location.state?.showCloudAnimation) {
-      setShowCloud(true);
-      setIsReverse(location.state.reverse);
-      
-      // Remove cloud animation after it completes
-      const timer = setTimeout(() => {
-        setShowCloud(false);
-      }, 1500);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [location.state]);
+  const { showCloudAnimation, reverse } = location.state || {};
+  console.log("Navigation state:", location.state);
 
   const { userId, handleLogin, handleLogout } = useContext(UserContext);
   const [showLogo, setShowLogo] = useState(true);
@@ -115,21 +101,8 @@ const Home = () => {
           </div>
         ) : null}
       </div>
-      {showCloud && (
-        <div style={{ 
-          position: "fixed", 
-          top: 0, 
-          left: 0, 
-          width: "100%", 
-          height: "100%", 
-          zIndex: 9999
-        }}>
-          <CloudAnimation
-            isActive={true}
-            reverse={isReverse}
-            cloudImages={cloudImages}
-          />
-        </div>
+      {showCloudAnimation && (
+        <CloudAnimation isActive={true} reverse={reverse} cloudImages={cloudImages} />
       )}
     </>
   );

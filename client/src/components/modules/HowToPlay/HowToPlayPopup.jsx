@@ -3,7 +3,7 @@ import "./HowToPlayPopup.css";
 import GameComponent from "../GameComponent/GameComponent";
 import InstructionPopup from "./InstructionPopup/InstructionPopup";
 
-const HowToPlayPopup = ({ lobbyCode, userId }) => {
+const HowToPlayPopup = ({ lobbyCode, userId, closeTutorial }) => {
   const [instructionStep, setInstructionStep] = React.useState(0);
   return (
     <div className="howtoplay-container">
@@ -28,7 +28,8 @@ const HowToPlayPopup = ({ lobbyCode, userId }) => {
             message={
               <>
                 Notice the tile with the <span className="highlight-gold">golden outline</span>.
-                This is a <span className="highlight-goldtile">golden tile</span>. You can only form words beginning from 
+                This is a <span className="highlight-goldtile">golden tile</span>. You can only form
+                words beginning from
                 <span className="highlight-goldtile"> golden tiles</span>. Try{" "}
                 <span className="highlight-warning">typing</span> the word{" "}
                 <span className="highlight-success">"letter"</span>!
@@ -142,7 +143,8 @@ const HowToPlayPopup = ({ lobbyCode, userId }) => {
               <span className="highlight-warning">Click</span> on the{" "}
               <span className="highlight-primary">G</span> with the{" "}
               <span className="highlight-gold">golden outline</span>. This takes you to another
-              <span className="highlight-goldtile"> golden tile</span>. Now, <span className="highlight-warning">type and place</span> the word{" "}
+              <span className="highlight-goldtile"> golden tile</span>. Now,{" "}
+              <span className="highlight-warning">type and place</span> the word{" "}
               <span className="highlight-success">"game"</span>.
             </>
           }
@@ -158,7 +160,8 @@ const HowToPlayPopup = ({ lobbyCode, userId }) => {
             <>
               Great! Now, click on the golden <span className="highlight-primary">E</span> and
               <span className="highlight-warning"> type and place</span> the word{" "}
-              <span className="highlight-success">"end"</span>. This completes the tutorial. Have fun playing LetterGrove!
+              <span className="highlight-success">"end"</span>. This completes the tutorial. Have
+              fun playing LetterGrove!
             </>
           }
           title="Ending Tutorial"
@@ -167,7 +170,12 @@ const HowToPlayPopup = ({ lobbyCode, userId }) => {
           instructionStep={instructionStep}
         />
       )}
-      <GameComponent lobbyCode={lobbyCode} userId={userId} isTutorial={true} />
+      <GameComponent
+        lobbyCode={lobbyCode}
+        userId={userId}
+        isTutorial={true}
+        closeTutorial={closeTutorial}
+      />
     </div>
   );
 };

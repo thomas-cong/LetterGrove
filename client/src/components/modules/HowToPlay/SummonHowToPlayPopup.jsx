@@ -58,6 +58,12 @@ const SummonHowToPlayPopup = (props) => {
     };
   }, []);
 
+  const closeTutorial = () => {
+    props.setPopupShowing(false);
+    setShowTutorialGame(false);
+    props.onHideHowToPlay();
+  };
+
   const handleClick = (event) => {
     get("/api/generateLobbyCode", { isTutorial: true })
       .then((code) => {
@@ -93,7 +99,9 @@ const SummonHowToPlayPopup = (props) => {
           <h2 className="homepagesigntext">How To Play</h2>
         </div>
       )}
-      {showTutorialGame && <HowToPlayPopup lobbyCode={lobbyCode} userId={u_id} />}
+      {showTutorialGame && (
+        <HowToPlayPopup lobbyCode={lobbyCode} userId={u_id} closeTutorial={closeTutorial} />
+      )}
     </div>
   );
 };

@@ -117,7 +117,7 @@ const GameComponent = (props) => {
   // Set up socket listeners
   useEffect(() => {
     console.log("useEffect called");
-    
+
     // Initial game state
     const handleInitialGame = (game) => {
       setGameState(game);
@@ -193,16 +193,16 @@ const GameComponent = (props) => {
 
     const handleSocketJoinedGame = () => {
       get("/api/currentGame", { lobbyCode: props.lobbyCode, userId: props.userId });
-    }
+    };
 
     const handleDisconnect = () => {
       setShowDisconnectModal(true);
       setDisconnectMessage("You have been disconnected. Please refresh the page to reconnect.");
-    }
+    };
 
     // Set up socket connection
     socket.emit("join socket", { lobbyCode: props.lobbyCode, userId: props.userId });
-    
+
     // Set up socket event handlers
     socket.on("socket joined game", handleSocketJoinedGame);
     socket.on("initial game", handleInitialGame);
@@ -274,12 +274,16 @@ const GameComponent = (props) => {
   return (
     <>
       {showDisconnectModal && (
-        <DisconnectModal 
-          show={showDisconnectModal} 
-          message={disconnectMessage}
+        <DisconnectModal show={showDisconnectModal} message={disconnectMessage} />
+      )}
+      {showEndGamePopup && (
+        <GameEndPopup
+          endGameInfo={endGameInfo}
+          currentUserId={props.userId}
+          isTutorial={props.isTutorial}
+          closeTutorial={props.closeTutorial}
         />
       )}
-      {showEndGamePopup && <GameEndPopup endGameInfo={endGameInfo} currentUserId={props.userId} />}
 
       <div
         className={`gamecompcontainer ${

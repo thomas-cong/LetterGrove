@@ -260,6 +260,7 @@ router.get("/players", (req, res) => {
 });
 
 router.get("/currentGame", (req, res) => {
+  console.log("CurrentGame Request Body", req.query);
   socketManager.sendUserInitialGame(req.user._id, req.query.lobbyCode);
   res.send({});
 });
@@ -332,7 +333,7 @@ router.get("/playerStats", (req, res) => {
 router.get("/completedGames", (req, res) => {
   const CompletedGame = require("./models/completed-game");
   console.log("Getting completed games for user:", req.query.userId);
-  
+
   // Find games where the player's ID exists in the players object
   CompletedGame.find({ [`players.${req.query.userId}`]: { $exists: true } })
     .sort({ date: -1 }) // Sort by date, newest first
@@ -342,7 +343,7 @@ router.get("/completedGames", (req, res) => {
         console.log("First game boards:", completedGames[0].boards);
         console.log("First game endpoints:", completedGames[0].endpoints);
       }
-      
+
       let matches = [];
       for (const game of completedGames) {
         // Find player's rank and score
@@ -367,7 +368,7 @@ router.get("/completedGames", (req, res) => {
           boardKeys: game.boards ? Object.keys(game.boards) : [],
           hasEndpoints: !!game.endpoints,
           endpointKeys: game.endpoints ? Object.keys(game.endpoints) : [],
-          finalRankings: match.finalRankings
+          finalRankings: match.finalRankings,
         });
         matches.push(match);
       }
