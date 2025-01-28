@@ -27,7 +27,7 @@
   text-align: center;
   margin-bottom: 20px;
   cursor: default;
-  
+
 }
 
 .board-options {
@@ -39,6 +39,7 @@
   gap: 80px;
   padding: 0 20px 20px;
   flex: 1;
+  margin-top: 4%;
 }
 
 .board-option {

@@ -174,11 +174,11 @@ const Lobby = () => {
             </div>
             <div className="lobby-sections">
               <div className="lobby-section">
-                <div style={{ color: "var(--primary)", fontSize: "40px", alignSelf: "center" }}>PLAYERS</div>
+                <div style={{ color: "var(--primary)", fontSize: "40px", alignSelf: "center" }}>Players</div>
                 <LobbyUserList lobbyCode={lobbyId} userId={u_id} />
               </div>
               <div className="lobby-section">
-                <div style={{ color: "var(--primary)", fontSize: "40px", alignSelf: "center" }}>GAME SETTINGS</div>
+                <div style={{ color: "var(--primary)", fontSize: "40px", alignSelf: "center" }}>Game Settings</div>
                 <SettingsDisplay lobbyCode={lobbyId} />
               </div>
             </div>
