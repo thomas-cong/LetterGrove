@@ -228,7 +228,6 @@ const getCropImage = (cropType) => {
 const Tile = (props) => {
   const isSelected =
     props.tileX === props.selectedX && props.tileY === props.selectedY && props.isEndpoint;
-  let { lobbyId } = useParams();
   // Animation state for letter appearance
   const [isAnimating, setIsAnimating] = useState(true);
 
@@ -270,7 +269,7 @@ const Tile = (props) => {
 
       if (socket) {
         socket.emit("enter word", {
-          lobbyCode: lobbyId,
+          lobbyCode: props.lobbyCode,
           x: params.tileX,
           y: params.tileY,
           word: props.word,
@@ -294,12 +293,13 @@ const Tile = (props) => {
       // Emit console signal to confirm word.
       if (socket) {
         socket.emit("confirm word", {
-          lobbyCode: lobbyId,
+          lobbyCode: props.lobbyCode,
           x: props.selectedX,
           y: props.selectedY,
           x_one_step: x_diff,
           y_one_step: y_diff,
           word: props.suggestedWord,
+          isTutorial: props.isTutorial,
         });
       }
     }

@@ -117,6 +117,7 @@ const sendUserInitialGame = (userId, lobbyCode) => {
  * @param {Object} props - Contains lobbyCode and gameInfo
  * @param {string} props.lobbyCode - Unique identifier for the game
  * @param {Object} props.gameInfo - Game configuration including players, difficulty, and board settings
+ * @param {boolean} props.isTutorial - Whether the game is a tutorial
  */
 const initiateGame = (props) => {
   const lobbyCode = props.lobbyCode;
@@ -126,11 +127,105 @@ const initiateGame = (props) => {
   const mode = gameInfo.mode; // 'words', 'points', or 'time'
   const numPlayers = Object.keys(players).length;
 
-  board = gameLogic.randomlyGenerateBoard({
-    difficulty: gameInfo.difficulty,
-    sameBoard: sameBoard,
-    playerCount: numPlayers,
-  });
+  if (props.isTutorial) {
+    const letterValues = {
+      A: 1,
+      B: 3,
+      C: 3,
+      D: 2,
+      E: 1,
+      F: 4,
+      G: 2,
+      H: 4,
+      I: 1,
+      J: 7,
+      K: 5,
+      L: 1,
+      M: 3,
+      N: 1,
+      O: 1,
+      P: 3,
+      Q: 9,
+      R: 1,
+      S: 1,
+      T: 1,
+      U: 1,
+      V: 6,
+      W: 4,
+      X: 8,
+      Y: 5,
+      Z: 9,
+    };
+    const cropValues = {
+      cherry: 2,
+      grape: 5,
+      orange: 10,
+      crate: 20,
+    };
+    board = Array(15)
+      .fill()
+      .map(() =>
+        Array(15).fill({
+          letter: null,
+          crop: null,
+          powerUp: null,
+          visited: false,
+          default: false,
+          isSuggestion: false,
+          isSuggestionEnd: false,
+          value: 0,
+        })
+      );
+
+    // Place some letters to form simple words
+    const tutorialLetters = [
+      { x: 0, y: 0, letter: "L", crop: "", powerUp: "" },
+      { x: 1, y: 0, letter: "E", crop: "", powerUp: "" },
+      { x: 2, y: 0, letter: "T", crop: "", powerUp: "" },
+      { x: 3, y: 0, letter: "", crop: "cherry", powerUp: "" },
+      { x: 4, y: 0, letter: "", crop: "grape", powerUp: "" },
+      { x: 5, y: 0, letter: "R", crop: "", powerUp: "" },
+
+      { x: 5, y: 1, letter: "", crop: "crate", powerUp: "" },
+      { x: 5, y: 2, letter: "", crop: "orange", powerUp: "" },
+
+      { x: 4, y: 4, letter: "", crop: "", powerUp: "" },
+      { x: 3, y: 5, letter: "M", crop: "", powerUp: "" },
+      { x: 2, y: 6, letter: "E", crop: "", powerUp: "" },
+
+      { x: 5, y: 3, letter: "G", crop: "", powerUp: "" },
+      { x: 6, y: 4, letter: "", crop: "", powerUp: "twoTimes" },
+      { x: 7, y: 5, letter: "O", crop: "", powerUp: "" },
+      { x: 8, y: 6, letter: "", crop: "", powerUp: "wateringCan" },
+      { x: 9, y: 7, letter: "E", crop: "", powerUp: "" },
+      { x: 10, y: 7, letter: "", crop: "", powerUp: "" },
+
+      { x: 11, y: 7, letter: "D", crop: "", powerUp: "" },
+
+      { x: 14, y: 12, letter: "", crop: null, powerUp: null },
+      { x: 13, y: 11, letter: "", crop: null, powerUp: null },
+      { x: 9, y: 2, letter: "", crop: null, powerUp: null },
+    ];
+
+    tutorialLetters.forEach(({ x, y, letter, crop, powerUp }) => {
+      board[y][x] = {
+        letter: letter,
+        crop: crop,
+        powerUp: powerUp,
+        visited: false,
+        default: letter !== "" ? true : false,
+        isSuggestion: false,
+        isSuggestionEnd: false,
+        value: letter ? letterValues[letter] || 0 : crop ? cropValues[crop] || 0 : 0,
+      };
+    });
+  } else {
+    board = gameLogic.randomlyGenerateBoard({
+      difficulty: gameInfo.difficulty,
+      sameBoard: sameBoard,
+      playerCount: numPlayers,
+    });
+  }
   let turnOrder;
   let turn;
   if (sameBoard) {
@@ -141,6 +236,7 @@ const initiateGame = (props) => {
     turn = turnOrder[0];
   }
   if (sameBoard) {
+    console.log("Same board mode");
     game = {
       mode: mode,
       sameBoard: sameBoard,
@@ -157,6 +253,7 @@ const initiateGame = (props) => {
       difficulty: gameInfo.difficulty,
     };
   } else {
+    console.log("Different board mode");
     game = {
       mode: mode,
       sameBoard: sameBoard,
@@ -170,6 +267,7 @@ const initiateGame = (props) => {
       secondsElapsed: 0,
       difficulty: gameInfo.difficulty,
     };
+    console.log("game:", game);
   }
 
   let startingEndpoints;
@@ -251,6 +349,7 @@ const initiateGame = (props) => {
       score: 0,
     });
   }
+  console.log("game:", game);
   gameLogic.games[lobbyCode] = game;
   gameLogic.games[lobbyCode].gameStatus = "active";
   console.log("Game started:", {
@@ -271,7 +370,10 @@ const initiateGame = (props) => {
     }
   }
   if (mode === "Words") {
+    console.log(gameToUserToSocketMap);
+    console.log("Players", Object.keys(players));
     for (const userId of Object.keys(players)) {
+      console.log("user ID", userId);
       for (const socket of getSocketsFromLobbyCodeAndUserID(lobbyCode, userId)) {
         if (socket) {
           socket.emit("words update", {
@@ -345,6 +447,7 @@ const startTimer = (props) => {
     if (game.secondsRemaining === 0) {
       game.gameStatus = "ended";
       handleEndGame({
+        isTutorial: false,
         lobbyCode: lobbyCode,
         reason:
           "Time's up! " +
@@ -386,44 +489,46 @@ const handleEndGame = (props) => {
   for (const userId in game.players) {
     words[userId] = game.userGameStates[userId].wordsFormed;
   }
-  const completedGame = new CompletedGame({
-    boards: boards,
-    players: game.players,
-    words: words,
-    finalRankings: game.rankings,
-    mode: game.mode,
-    sameBoard: game.sameBoard,
-    difficulty: game.difficulty,
-    secondsElapsed: game.secondsElapsed,
-    date: new Date(),
-  });
-  for (const userId in game.players) {
-    const userGameState = game.userGameStates[userId];
-    User.findByIdAndUpdate(
-      userId,
-      {
-        $inc: {
-          games_played: 1,
-          wins: game.rankings[0].score === userGameState.points ? 1 : 0,
-          letters: userGameState.lettersCollected || 0,
-          powerups: userGameState.powerupsUsed || 0,
-          words: userGameState.wordsFormed || 0,
-          points: userGameState.points || 0,
-          timePlayed: game.secondsElapsed || 0,
+  if (!props.isTutorial) {
+    const completedGame = new CompletedGame({
+      boards: boards,
+      players: game.players,
+      words: words,
+      finalRankings: game.rankings,
+      mode: game.mode,
+      sameBoard: game.sameBoard,
+      difficulty: game.difficulty,
+      secondsElapsed: game.secondsElapsed,
+      date: new Date(),
+    });
+    for (const userId in game.players) {
+      const userGameState = game.userGameStates[userId];
+      User.findByIdAndUpdate(
+        userId,
+        {
+          $inc: {
+            games_played: 1,
+            wins: game.rankings[0].score === userGameState.points ? 1 : 0,
+            letters: userGameState.lettersCollected || 0,
+            powerups: userGameState.powerupsUsed || 0,
+            words: userGameState.wordsFormed || 0,
+            points: userGameState.points || 0,
+            timePlayed: game.secondsElapsed || 0,
+          },
         },
-      },
-      { new: true }
-    )
-      .then((user) => {
-        console.log(`Updated stats for user ${user.name}`);
-      })
-      .catch((err) => {
-        console.log(`Error updating user ${userId}:`, err);
-      });
+        { new: true }
+      )
+        .then((user) => {
+          console.log(`Updated stats for user ${user.name}`);
+        })
+        .catch((err) => {
+          console.log(`Error updating user ${userId}:`, err);
+        });
+    }
+    completedGame.save().then((game) => {
+      console.log("Game saved:", game);
+    });
   }
-  completedGame.save().then((game) => {
-    console.log("Game saved:", game);
-  });
   for (const userId of Object.keys(game.players)) {
     for (const socket of getSocketsFromLobbyCodeAndUserID(lobbyCode, userId)) {
       if (socket) {
@@ -541,18 +646,12 @@ const lobbyToGameTransition = (props) => {
  */
 const updateLobbyUserList = (props) => {
   for (const userId of Object.keys(gameToUserToSocketMap[props.lobbyCode])) {
-    console.log(props.lobbyCode);
-    console.log(userId);
-    console.log(gameToUserToSocketMap);
-    console.log(props.socket.id);
-    console.log("HIHIHI" + getSocketsFromLobbyCodeAndUserID(props.lobbyCode, userId));
     for (const socket of getSocketsFromLobbyCodeAndUserID(props.lobbyCode, userId)) {
       if (socket) {
         socket.emit("update lobby user list", openLobbies[props.lobbyCode].players);
       }
     }
   }
-  console.log("update lobby user list emitted");
 };
 
 /**
@@ -651,6 +750,14 @@ module.exports = {
       socket.on("confirm word", (props) => {
         // deleteDuplicateJoins(props.lobbyCode);
         console.log("confirm word");
+        console.log("Word:", props.word);
+        if (props.isTutorial) {
+          const tutorial_words = ["LETTER", "GROVE", "END", "GAME", "RANG", "RUNG"];
+          if (!tutorial_words.includes(props.word)) {
+            console.log("Word not in tutorial words list");
+            return;
+          }
+        }
         const user = getUserFromSocketID(socket.id);
         const game = gameLogic.games[props.lobbyCode];
         // check if there are still words remaining
@@ -760,7 +867,11 @@ module.exports = {
           // check if game is over
           if (gameLogic.games[props.lobbyCode].gameStatus === "ended") {
             let winnerMessage = output.globalUpdate.updatedRankings[0].username + " wins!";
-            handleEndGame({ lobbyCode: props.lobbyCode, reason: winnerMessage });
+            handleEndGame({
+              lobbyCode: props.lobbyCode,
+              reason: winnerMessage,
+              isTutorial: props.isTutorial,
+            });
           }
         }
       });

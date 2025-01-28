@@ -598,14 +598,16 @@ const confirmWord = (userId, props) => {
   // Apply Watering Can powerup effect
   let cropUpdates = [];
   for (i = 0; i < powerupsCollected.wateringCan; i++) {
-    let randomPositionGenerator = createRandomPositionGenerator(ARRAY_SIZE);
+    let randomPositionGenerator = createRandomPositionGenerator(15);
+    console.log("randomPositionGenerator: ", randomPositionGenerator());
 
     // Place each crop type once
     const cropTypes = ["cherry", "grape", "orange"];
     for (const cropType of cropTypes) {
       while (true) {
         let [randomX, randomY] = randomPositionGenerator();
-        if (isEmptyTile(randomY, randomX, board, ARRAY_SIZE)) {
+        console.log("randomX: ", randomX, " randomY: ", randomY);
+        if (isEmptyTile(randomY, randomX, board, 15)) {
           cropUpdates.push({
             x: randomX,
             y: randomY,

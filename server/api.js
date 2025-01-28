@@ -221,6 +221,19 @@ router.post("/startGame", (req, res) => {
   });
 });
 
+router.post("/startTutorial", (req, res) => {
+  const gameInfo = openLobbies[req.body.lobbyCode];
+  if (!gameInfo) {
+    return res.status(404).send({ error: "Lobby not found" });
+  }
+  console.log(gameInfo);
+  socketManager.initiateGame({
+    gameInfo: gameInfo,
+    lobbyCode: req.body.lobbyCode,
+    isTutorial: true,
+  });
+});
+
 router.post("/deleteLobby", (req, res) => {
   const lobbyCode = req.body.lobbyCode;
   if (openLobbies[lobbyCode].lobbyOwner != req.user._id) {

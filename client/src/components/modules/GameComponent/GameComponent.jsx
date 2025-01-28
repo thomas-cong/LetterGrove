@@ -12,6 +12,8 @@ import AlertBox from "../AlertBox/AlertBox";
 import TurnDisplay from "./TurnDisplay";
 import GameEndPopup from "./GameEndPopup/GameEndPopup.jsx";
 
+// @props isTutorial: boolean
+
 const GameComponent = (props) => {
   const [word, setWord] = useState("");
   const [suggestions, setSuggestions] = useState([]);
@@ -252,7 +254,11 @@ const GameComponent = (props) => {
 
       {showEndGamePopup && <GameEndPopup endGameInfo={endGameInfo} currentUserId={props.userId} />}
 
-      <div className="gamecompcontainer">
+      <div
+        className={`gamecompcontainer ${
+          props.isTutorial ? "tutorialbackground" : "gamebackground"
+        }`}
+      >
         <div className="gamecompleftcontainer">
           <div className="gamecompboardcontainer">
             <div className="gamecompboard">
@@ -275,6 +281,8 @@ const GameComponent = (props) => {
                 setWord={setWord}
                 word={word}
                 isTurn={isTurn}
+                lobbyCode={props.lobbyCode}
+                isTutorial={props.isTutorial}
               />
             </div>
             {/* <div className="gamecompbottominfo"> */}
