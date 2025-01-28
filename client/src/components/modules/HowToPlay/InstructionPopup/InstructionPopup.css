@@ -1,0 +1,120 @@
+.instruction-popup {
+  position: absolute;
+  background-color: white;
+  border-radius: 10px;
+  padding: 12px 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  max-width: 20%;
+  max-height: fit-content;
+  overflow-y: auto;
+}
+
+.instruction-content {
+  font-size: 14px;
+  line-height: 1.4;
+  color: #333;
+}
+
+.instruction-title {
+  color: var(--primary);
+  margin-bottom: 8px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.instruction-step1 {
+  padding: 6px;
+  background-color: rgba(var(--primary-rgb), 0.05);
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.instruction-step1 span {
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.instruction-step:last-child {
+  margin-bottom: 0;
+}
+
+.tutorial-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(var(--primary-rgb), 0.1);
+}
+
+.tutorial-nav img {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.tutorial-nav img:hover {
+  opacity: 1;
+}
+
+/* Highlight classes */
+.highlight-primary {
+  color: #00008b;
+  font-size: 14px;
+}
+
+.highlight-gold {
+  color: #eac500;
+  font-size: 14px;
+}
+.highlight-goldtile {
+  color: #eac500;
+  font-size: 14px;
+}
+
+.highlight-success {
+  color: #4caf50;
+  font-size: 14px;
+}
+
+.highlight-warning {
+  color: #ff9800;
+  font-size: 14px;
+}
+
+.highlight-fruit {
+  color: #e91e63;
+  font-size: 14px;
+}
+
+.highlight-powerup {
+  color: #9c27b0;
+  font-size: 14px;
+}
+
+/* Points highlights */
+.highlight-points-2 {
+  color: #ff5722;
+  font-size: 14px;
+}
+
+.highlight-points-5 {
+  color: #673ab7;
+  font-size: 14px;
+}
+
+.highlight-points-10 {
+  color: #51e703;
+  font-size: 14px;
+}
+.highlight-gray {
+  color: #757575;
+  font-size: 14px;
+}
+.highlight-points-20 {
+  color: #ffc107;
+  font-size: 14px;
+}

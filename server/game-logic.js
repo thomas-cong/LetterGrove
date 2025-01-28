@@ -591,6 +591,7 @@ const confirmWord = (userId, props) => {
 
   // Apply Two Times powerup effect
   for (i = 0; i < powerupsCollected.twoTimes; i++) {
+    userGameState.powerupsUsed += 1;
     pointsGained *= 2;
   }
   userGameState.points += pointsGained;
@@ -598,6 +599,7 @@ const confirmWord = (userId, props) => {
   // Apply Watering Can powerup effect
   let cropUpdates = [];
   for (i = 0; i < powerupsCollected.wateringCan; i++) {
+    userGameState.powerupsUsed += 1;
     let randomPositionGenerator = createRandomPositionGenerator(15);
     console.log("randomPositionGenerator: ", randomPositionGenerator());
 

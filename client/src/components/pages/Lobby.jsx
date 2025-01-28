@@ -53,6 +53,8 @@ const Lobby = () => {
       // Join the socket room for this lobby
       get("/api/isGameStarted", { lobbyCode: lobbyId }).then((res) => {
         if (!res.gameStarted) {
+          console.log("from here");
+
           socket.emit("join socket", { lobbyCode: lobbyId, userId: user._id });
         }
       });
@@ -97,6 +99,8 @@ const Lobby = () => {
       setTimeout(() => {
         post("/api/startGame", { lobbyCode: lobbyId });
       }, 0);
+
+      // socket.on("game started", )
 
       setTimeout(() => {
         setLobbyState("game");
@@ -175,7 +179,7 @@ const Lobby = () => {
                 <div style={{ color: "var(--primary)", fontSize: "40px", alignSelf: "center" }}>
                   Players
                 </div>
-                <LobbyUserList lobbyCode={lobbyId} userId={u_id} />
+                {u_id !== "" && <LobbyUserList lobbyCode={lobbyId} userId={u_id} />}
               </div>
               <div className="lobby-section">
                 <div style={{ color: "var(--primary)", fontSize: "40px", alignSelf: "center" }}>

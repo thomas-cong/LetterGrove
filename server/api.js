@@ -168,6 +168,7 @@ router.post("/joinLobby", (req, res) => {
 
   if (lobbyCode in openLobbies) {
     openLobbies[lobbyCode].players[req.user._id] = username;
+    console.log("Lobby Joined");
     // socketManager.joinSocket({ lobbyCode: lobbyCode });
     res.send({ message: "Lobby Joined" });
   } else {
@@ -330,17 +331,25 @@ router.get("/playerStats", (req, res) => {
 
 router.get("/completedGames", (req, res) => {
   const CompletedGame = require("./models/completed-game");
+  console.log("Getting completed games for user:", req.query.userId);
+  
   // Find games where the player's ID exists in the players object
   CompletedGame.find({ [`players.${req.query.userId}`]: { $exists: true } })
     .sort({ date: -1 }) // Sort by date, newest first
     .then((completedGames) => {
+      console.log("Found completed games:", completedGames.length);
+      if (completedGames.length > 0) {
+        console.log("First game boards:", completedGames[0].boards);
+        console.log("First game endpoints:", completedGames[0].endpoints);
+      }
+      
       let matches = [];
       for (const game of completedGames) {
         // Find player's rank and score
         const playerRank = game.finalRankings.find((r) => r.playerId === req.query.userId);
         const topScore = Math.max(...game.finalRankings.map((r) => r.score));
 
-        matches.push({
+        const match = {
           date: game.date,
           score: playerRank.score,
           duration: game.secondsElapsed,
@@ -348,9 +357,19 @@ router.get("/completedGames", (req, res) => {
           words: game.words?.[req.query.userId] ?? [],
           won: playerRank.score === topScore,
           mode: game.mode,
-          board: game.boards?.[req.query.userId] ?? [],
+          boards: game.boards ?? {}, // Send the entire boards object
+          endpoints: game.endpoints ?? {}, // Send the entire endpoints object
           finalRankings: game.finalRankings,
+        };
+        console.log("Processing match:", {
+          date: match.date,
+          hasBoards: !!game.boards,
+          boardKeys: game.boards ? Object.keys(game.boards) : [],
+          hasEndpoints: !!game.endpoints,
+          endpointKeys: game.endpoints ? Object.keys(game.endpoints) : [],
+          finalRankings: match.finalRankings
         });
+        matches.push(match);
       }
       res.send(matches);
     })
