@@ -13,6 +13,7 @@ import TurnDisplay from "./TurnDisplay";
 import GameEndPopup from "./GameEndPopup/GameEndPopup.jsx";
 
 const GameComponent = (props) => {
+  console.log("GameComponent mounted", { props });
   const [word, setWord] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [isTurn, setIsTurn] = useState(true);
@@ -99,6 +100,7 @@ const GameComponent = (props) => {
 
   useEffect(() => {
     const intervalId = setInterval(() => {
+      console.log("gameState.board.length: " + gameState.board.length);
       if (gameState.board.length > 0) {
         console.log("exited");
         get("/api/currentGame", { lobbyCode: props.lobbyCode, userId: props.userId });
