@@ -4,7 +4,6 @@ import "./JoinLobbyPopup.css";
 import { post } from "../../../utilities";
 import { useNavigate } from "react-router-dom";
 import shortSign from "../../../assets/320signs_0.png";
-import { socket } from "../../../client-socket";
 
 /**
  * JoinLobbyPopup is a component that represents username input and lobby code input
@@ -51,22 +50,19 @@ const JoinLobbyPopup = (props) => {
               setShowAlert(true);
               return;
             }
-            socket.emit("join socket", { lobbyCode: props.lobbyCode, userId: props.currentUserId });
-            socket.on("socket joined", () => {
-              post("/api/joinLobby", {
-                lobbyCode: props.lobbyCode,
-                username: props.username,
+            post("/api/joinLobby", {
+              lobbyCode: props.lobbyCode,
+              username: props.username,
+            })
+              .then((result) => {
+                setShowAlert(false);
+                console.log("Joining lobby:", props.lobbyCode, "as", props.username);
+                navigate(`/${props.lobbyCode}`);
               })
-                .then((result) => {
-                  setShowAlert(false);
-                  console.log("Joining lobby:", props.lobbyCode, "as", props.username);
-                  navigate(`/${props.lobbyCode}`);
-                })
-                .catch((error) => {
-                  setAlertMessage("An error has occurred while joining the lobby!");
-                  setShowAlert(true);
-                });
-            });
+              .catch((error) => {
+                setAlertMessage("An error has occurred while joining the lobby!");
+                setShowAlert(true);
+              });
           }}
         >
           <img src={shortSign} alt="Start Lobby" style={{ cursor: "pointer" }} />

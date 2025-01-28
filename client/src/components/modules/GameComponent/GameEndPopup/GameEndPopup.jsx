@@ -21,7 +21,7 @@ const GameEndPopup = (props) => {
     <div className="game-end-overlay">
       <div className="game-end-popup">
         <div className="game-end-content">
-          <div className="rankings-box">
+          <div className="final-rankings-box">
             <h3>Final Rankings</h3>
             <div className="final-rankings-list">
               {props.endGameInfo?.results?.finalRankings?.map((player, index) => (
