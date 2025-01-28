@@ -657,7 +657,7 @@ const confirmWord = (userId, props) => {
       game.gameStatus = "ended";
     }
   }
-  userGameState.lettersCollected += letterUpdates.length;
+  userGameState.lettersCollected += word.length;
   userGameState.wordsFormed += 1;
   if (mode === "Words") userGameState.wordsRemaining -= 1;
   userGameState.endpoints.push([currentX - dx, currentY - dy]);
