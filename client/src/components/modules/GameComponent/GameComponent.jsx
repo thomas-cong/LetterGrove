@@ -191,6 +191,7 @@ const GameComponent = (props) => {
     };
 
     const handleSocketJoinedGame = () => {
+      console.log("HandleSocketJoinedGame  " + props.lobbyCode);
       get("/api/currentGame", { lobbyCode: props.lobbyCode, userId: props.userId });
     };
 
@@ -214,7 +215,7 @@ const GameComponent = (props) => {
 
     // Cleanup listeners on unmount
     return () => {
-      socket.off("socket joined game");
+      socket.off("socket joined game", handleSocketJoinedGame);
       socket.off("initial game", handleInitialGame);
       socket.off("user update", handleUserUpdate);
       socket.off("global update", handleGlobalUpdate);

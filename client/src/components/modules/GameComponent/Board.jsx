@@ -122,6 +122,7 @@ const logBoardState = (board) => {
     }
     output += row + "\n";
   }
+  console.log(board);
   console.log(output);
 };
 

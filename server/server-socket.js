@@ -569,7 +569,10 @@ const disconnectSocket = (socket, userId) => {
     if (lobbyAndUserToSocketMap[lobbyCode] && lobbyAndUserToSocketMap[lobbyCode][userId]) {
       console.log("deleting stuff!!");
       delete lobbyAndUserToSocketMap[lobbyCode][userId];
-      if (gameLogic.games[lobbyCode].gameStatus === "ended") {
+      if (!gameLogic.games[lobbyCode]) {
+        delete lobbyAndUserToSocketMap[lobbyCode];
+      }
+      if (gameLogic.games[lobbyCode] && gameLogic.games[lobbyCode].gameStatus === "ended") {
         delete lobbyAndUserToSocketMap[lobbyCode];
       }
     }
@@ -731,6 +734,7 @@ module.exports = {
     io.on("connection", (socket) => {
       console.log(`socket has connected ${socket.id}`);
       socket.on("disconnect", (reason) => {
+        console.log(`socket has disconnected ${socket.id}`);
         const user = getUserFromSocketID(socket.id);
         if (!user) return;
         removeUser(user, socket);
