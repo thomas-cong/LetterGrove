@@ -175,6 +175,8 @@ router.post("/joinLobby", (req, res) => {
     console.log("Lobby with ID " + lobbyCode + " not found");
     res.status(404).send({ error: "Lobby not found" });
   }
+
+  res.send({ message: "Lobby Joined" });
 });
 
 router.get("/isLobbyOwner", (req, res) => {
@@ -206,6 +208,7 @@ router.post("/lobbyToGameTransition", (req, res) => {
   socketManager.lobbyToGameTransition({
     lobbyCode: req.body.lobbyCode,
   });
+  res.send({ message: "Lobby Transitioned" });
 });
 
 router.post("/startGame", (req, res) => {
@@ -223,6 +226,7 @@ router.post("/startGame", (req, res) => {
     gameInfo: gameInfo,
     lobbyCode: req.body.lobbyCode,
   });
+  res.send({ message: "Game Started" });
 });
 
 router.post("/startTutorial", (req, res) => {
@@ -236,6 +240,7 @@ router.post("/startTutorial", (req, res) => {
     lobbyCode: req.body.lobbyCode,
     isTutorial: true,
   });
+  res.send({ message: "Game Started" });
 });
 
 router.post("/deleteLobby", (req, res) => {
@@ -260,6 +265,7 @@ router.get("/players", (req, res) => {
 });
 
 router.get("/currentGame", (req, res) => {
+  console.log("currentGame notification");
   console.log("CurrentGame Request Body", req.query);
   socketManager.sendUserInitialGame(req.user._id, req.query.lobbyCode);
   res.send({});
@@ -328,6 +334,7 @@ router.get("/playerStats", (req, res) => {
       console.log(`Failed to get user stats: ${err}`);
       res.status(500).send({ error: "Failed to get user stats" });
     });
+  res.send({ message: "Got user stats" });
 });
 
 router.get("/completedGames", (req, res) => {
@@ -378,6 +385,7 @@ router.get("/completedGames", (req, res) => {
       console.log(`Failed to get completed games: ${err}`);
       res.status(500).send({ error: "Failed to get completed games" });
     });
+  res.send({ message: "Got completed games" });
 });
 
 /**
@@ -405,6 +413,7 @@ router.get("/user", (req, res) => {
       console.log(`Error getting user data: ${err}`);
       res.status(500).send({ error: "Error getting user data" });
     });
+  res.send({ message: "Got user data" });
 });
 
 /**

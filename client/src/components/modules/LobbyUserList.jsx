@@ -20,22 +20,25 @@ const LobbyUserList = (props) => {
         socket.emit("join socket", { lobbyCode: props.lobbyCode, userId: props.userId });
       }
     })
-    socket.on("socket joined game", () => {
-      const handleUpdateLobbyUserList = (players) => {
-        let tempUsernameList = [];
-        for (let userId in players) {
-          tempUsernameList.push({
-            playerId: userId,
-            username: players[userId],
-          });
-        }
-        setUsernameList(tempUsernameList);
-      };
-      socket.on("update lobby user list", handleUpdateLobbyUserList);
-      return () => {
-        socket.off("update lobby user list", handleUpdateLobbyUserList);
-      };
-    });
+    const handleSocketJoinedGame = () => {
+
+    }
+    socket.on("socket joined game", handleSocketJoinedGame);
+    const handleUpdateLobbyUserList = (players) => {
+      let tempUsernameList = [];
+      for (let userId in players) {
+        tempUsernameList.push({
+          playerId: userId,
+          username: players[userId],
+        });
+      }
+      setUsernameList(tempUsernameList);
+    };
+    socket.on("update lobby user list", handleUpdateLobbyUserList);
+    return () => {
+      socket.off("update lobby user list", handleUpdateLobbyUserList);
+      socket.off("socket joined game", handleSocketJoinedGame);
+    };
   }, []);
 
   return (
