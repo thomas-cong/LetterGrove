@@ -11,7 +11,6 @@ import "./GameComponent.css";
 import AlertBox from "../AlertBox/AlertBox";
 import TurnDisplay from "./TurnDisplay";
 import GameEndPopup from "./GameEndPopup/GameEndPopup.jsx";
-import DisconnectModal from "../DisconnectModal/DisconnectModal";
 import Legend from "./Legend";
 
 // @props isTutorial: boolean
@@ -25,8 +24,6 @@ const GameComponent = (props) => {
   const [turnUsername, setTurnUsername] = useState("");
   const [showEndGamePopup, setShowEndGamePopup] = useState(false);
   const [endGameInfo, setEndGameInfo] = useState(null);
-  const [showDisconnectModal, setShowDisconnectModal] = useState(false);
-  const [disconnectMessage, setDisconnectMessage] = useState("");
   const [endPointSelected, setEndPointSelected] = useState(true);
   const [endpoints, setEndpoints] = useState([[0, 0]]);
   const [selectedX, setSelectedX] = useState(0);
@@ -196,11 +193,6 @@ const GameComponent = (props) => {
       get("/api/currentGame", { lobbyCode: props.lobbyCode, userId: props.userId });
     };
 
-    const handleDisconnect = () => {
-      setShowDisconnectModal(true);
-      setDisconnectMessage("You have been disconnected. Please refresh the page to reconnect.");
-    };
-
     // Set up socket connection
     socket.emit("join socket", { lobbyCode: props.lobbyCode, userId: props.userId });
 
@@ -212,7 +204,6 @@ const GameComponent = (props) => {
     socket.on("turn update", handleTurnUpdate);
     socket.on("board update", handleBoardUpdate);
     socket.on("game over", handleGameOver);
-    socket.on("you have been disconnected", handleDisconnect);
 
     // Cleanup listeners on unmount
     return () => {
@@ -223,7 +214,6 @@ const GameComponent = (props) => {
       socket.off("turn update", handleTurnUpdate);
       socket.off("board update", handleBoardUpdate);
       socket.off("game over", handleGameOver);
-      socket.off("you have been disconnected", handleDisconnect);
     };
   }, [props.lobbyCode, props.userId]);
 
@@ -275,9 +265,6 @@ const GameComponent = (props) => {
   return (
     <>
       {showAlert && <AlertBox message={alertMessage} className="word-input-alert" />}
-      {showDisconnectModal && (
-        <DisconnectModal show={showDisconnectModal} message={disconnectMessage} />
-      )}
       {showEndGamePopup && (
         <GameEndPopup
           endGameInfo={endGameInfo}

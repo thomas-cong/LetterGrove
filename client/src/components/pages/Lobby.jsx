@@ -11,6 +11,7 @@ import StartGameButton from "../modules/StartGameButton.jsx";
 import GameComponent from "../modules/GameComponent/GameComponent.jsx";
 import GameEndPopup from "../modules/GameComponent/GameEndPopup/GameEndPopup.jsx";
 import CloudAnimation from "../modules/CloudAnimation.jsx";
+import DisconnectModal from "../modules/DisconnectModal/DisconnectModal";
 import { get, post } from "../../utilities.js";
 import { socket } from "../../client-socket.js";
 
@@ -34,6 +35,8 @@ const Lobby = () => {
   const [showButton, setShowButton] = useState(false);
   const [tooltipText, setTooltipText] = useState("Click to Copy!");
   const [socketJoined, setSocketJoined] = useState(false);
+  const [showDisconnectModal, setShowDisconnectModal] = useState(false);
+  const [disconnectMessage, setDisconnectMessage] = useState("");
 
   const cloudImages = [
     { bottom: firstBottomLeft, top: firstTopRight },
@@ -117,6 +120,19 @@ const Lobby = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const handleYouHaveBeenDisconnected = () => {
+      setShowDisconnectModal(true);
+      setDisconnectMessage("You have been disconnected. Please refresh the page to reconnect.");
+    };
+
+    socket.on("you have been disconnected", handleYouHaveBeenDisconnected);
+
+    return () => {
+      socket.off("you have been disconnected", handleYouHaveBeenDisconnected);
+    };
+  }, []);
+
   const startGameRequest = () => {
     // setShowAnimation(true);
     // setReverseAnimation(false);
@@ -157,6 +173,9 @@ const Lobby = () => {
 
   return (
     <>
+      {showDisconnectModal && (
+        <DisconnectModal show={showDisconnectModal} message={disconnectMessage} />
+      )}
       {lobbyState === "lobby" && (
         <div className="lobby-container">
           <div className="lobby-content">

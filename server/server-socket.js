@@ -569,12 +569,6 @@ const disconnectSocket = (socket, userId) => {
     if (lobbyAndUserToSocketMap[lobbyCode] && lobbyAndUserToSocketMap[lobbyCode][userId]) {
       console.log("deleting stuff!!");
       delete lobbyAndUserToSocketMap[lobbyCode][userId];
-      if (!gameLogic.games[lobbyCode]) {
-        delete lobbyAndUserToSocketMap[lobbyCode];
-      }
-      if (gameLogic.games[lobbyCode] && gameLogic.games[lobbyCode].gameStatus === "ended") {
-        delete lobbyAndUserToSocketMap[lobbyCode];
-      }
     }
     delete socketToLobbyMap[socket.id];
   }
