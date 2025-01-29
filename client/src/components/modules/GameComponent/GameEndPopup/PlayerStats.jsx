@@ -11,7 +11,7 @@ const PlayerStats = ({ selectedPlayer, gameResults }) => {
 
   console.log("selectedPlayer:", selectedPlayer);
   console.log("gameResults:", gameResults);
-  
+
   const selectedPlayerData = gameResults?.finalRankings?.find((p) => p.playerId === selectedPlayer);
   console.log("selectedPlayerData:", selectedPlayerData);
 
@@ -29,7 +29,7 @@ const PlayerStats = ({ selectedPlayer, gameResults }) => {
                 textUnderlineOffset: "2px",
               }}
             >
-              {selectedPlayerData?.username}
+              <div className="playerlink">{selectedPlayerData?.username}</div>
             </Link>
           </h4>
           <div className="stats-content">

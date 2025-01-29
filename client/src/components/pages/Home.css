@@ -102,9 +102,9 @@
   /* justify-content: center; */
   width: auto;
   height: auto;
-  gap: 2vw;
+  gap: 3vw;
   margin-top: max(4vw, 100px);
-  margin-bottom: 4vw;
+  margin-bottom: 3vw;
 }
 
 .buttonscontainer {
