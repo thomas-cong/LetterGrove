@@ -12,6 +12,7 @@ import AlertBox from "../AlertBox/AlertBox";
 import TurnDisplay from "./TurnDisplay";
 import GameEndPopup from "./GameEndPopup/GameEndPopup.jsx";
 import DisconnectModal from "../DisconnectModal/DisconnectModal";
+import Legend from "./Legend";
 
 // @props isTutorial: boolean
 
@@ -343,6 +344,7 @@ const GameComponent = (props) => {
                 <Counter />
               </div>
             </div>
+            {!props.isTutorial && <Legend />}
           </div>
         </div>
         <div className="gamecomprightcontainer">

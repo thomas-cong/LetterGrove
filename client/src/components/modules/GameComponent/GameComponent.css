@@ -12,6 +12,9 @@
   background-repeat: no-repeat;
   background-position-y: top;
   flex-wrap: wrap;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  -ms-interpolation-mode: nearest-neighbor;
 }
 .tutorialbackground {
   overflow: hidden;

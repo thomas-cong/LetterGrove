@@ -190,40 +190,40 @@ const initiateGame = (props) => {
 
     // Place some letters to form simple words
     const tutorialLetters = [
-      { x: 0, y: 0, letter: "L", crop: "", powerUp: "" },
-      { x: 1, y: 0, letter: "E", crop: "", powerUp: "" },
-      { x: 2, y: 0, letter: "T", crop: "", powerUp: "" },
-      { x: 3, y: 0, letter: "", crop: "cherry", powerUp: "" },
-      { x: 4, y: 0, letter: "E", crop: "", powerUp: "" },
-      { x: 5, y: 0, letter: "", crop: "grape", powerUp: "" },
+      { x: 0, y: 0, letter: "L", crop: "", powerUp: "", visited: true },
+      { x: 1, y: 0, letter: "E", crop: "", powerUp: "", visited: false },
+      { x: 2, y: 0, letter: "T", crop: "", powerUp: "", visited: false },
+      { x: 3, y: 0, letter: "", crop: "cherry", powerUp: "", visited: false },
+      { x: 4, y: 0, letter: "E", crop: "", powerUp: "", visited: false },
+      { x: 5, y: 0, letter: "", crop: "grape", powerUp: "", visited: false },
 
-      { x: 5, y: 1, letter: "", crop: "crate", powerUp: "" },
-      { x: 5, y: 2, letter: "", crop: "orange", powerUp: "" },
+      { x: 5, y: 1, letter: "", crop: "crate", powerUp: "", visited: false },
+      { x: 5, y: 2, letter: "", crop: "orange", powerUp: "", visited: false },
 
-      { x: 4, y: 4, letter: "", crop: "", powerUp: "" },
-      { x: 3, y: 5, letter: "M", crop: "", powerUp: "" },
-      { x: 2, y: 6, letter: "E", crop: "", powerUp: "" },
+      { x: 4, y: 4, letter: "", crop: "", powerUp: "", visited: false },
+      { x: 3, y: 5, letter: "M", crop: "", powerUp: "", visited: false },
+      { x: 2, y: 6, letter: "E", crop: "", powerUp: "", visited: false },
 
-      { x: 5, y: 3, letter: "G", crop: "", powerUp: "" },
-      { x: 6, y: 4, letter: "", crop: "", powerUp: "twoTimes" },
-      { x: 7, y: 5, letter: "O", crop: "", powerUp: "" },
-      { x: 8, y: 6, letter: "", crop: "", powerUp: "wateringCan" },
-      { x: 9, y: 7, letter: "E", crop: "", powerUp: "" },
-      { x: 10, y: 7, letter: "", crop: "", powerUp: "" },
+      { x: 5, y: 3, letter: "G", crop: "", powerUp: "", visited: false },
+      { x: 6, y: 4, letter: "", crop: "", powerUp: "twoTimes", visited: false },
+      { x: 7, y: 5, letter: "O", crop: "", powerUp: "", visited: false },
+      { x: 8, y: 6, letter: "", crop: "", powerUp: "wateringCan", visited: false },
+      { x: 9, y: 7, letter: "E", crop: "", powerUp: "", visited: false },
+      { x: 10, y: 7, letter: "", crop: "", powerUp: "", visited: false },
 
-      { x: 11, y: 7, letter: "D", crop: "", powerUp: "" },
+      { x: 11, y: 7, letter: "D", crop: "", powerUp: "", visited: false },
 
-      { x: 14, y: 12, letter: "", crop: null, powerUp: null },
-      { x: 13, y: 11, letter: "", crop: null, powerUp: null },
-      { x: 9, y: 2, letter: "", crop: null, powerUp: null },
+      { x: 14, y: 12, letter: "", crop: null, powerUp: null, visited: false },
+      { x: 13, y: 11, letter: "", crop: null, powerUp: null, visited: false },
+      { x: 9, y: 2, letter: "", crop: null, powerUp: null, visited: false },
     ];
 
-    tutorialLetters.forEach(({ x, y, letter, crop, powerUp }) => {
+    tutorialLetters.forEach(({ x, y, letter, crop, powerUp, visited }) => {
       board[y][x] = {
         letter: letter,
         crop: crop,
         powerUp: powerUp,
-        visited: false,
+        visited: visited,
         default: letter !== "" ? true : false,
         isSuggestion: false,
         isSuggestionEnd: false,
