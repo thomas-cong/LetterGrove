@@ -19,6 +19,9 @@
   background-position: center;
   background-repeat: repeat;
   z-index: -1;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  -ms-interpolation-mode: nearest-neighbor;
 }
 
 .google-login-container {
@@ -77,7 +80,6 @@
   image-rendering: pixelated;
   image-rendering: crisp-edges;
   -ms-interpolation-mode: nearest-neighbor;
-
 }
 
 .logouttext {
@@ -126,5 +128,4 @@
   height: auto;
   z-index: 1;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 1));
-
 }

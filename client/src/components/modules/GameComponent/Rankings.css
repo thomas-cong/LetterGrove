@@ -13,8 +13,9 @@
   left: 50%;
   /* transform: translate(-5%, -5%); */
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 1));
-
-
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  -ms-interpolation-mode: nearest-neighbor;
 }
 
 .rankings-title {
@@ -36,7 +37,6 @@
   color: white;
   font-size: 32px;
   text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4);
-
 }
 
 /* Container for player slips */
@@ -63,6 +63,9 @@
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  -ms-interpolation-mode: nearest-neighbor;
 }
 
 /* Hide empty player slots */
