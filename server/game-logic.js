@@ -619,7 +619,7 @@ const confirmWord = (userId, props) => {
     for (const cropType of cropTypes) {
       while (true) {
         let [randomX, randomY] = randomPositionGenerator();
-        console.log("randomX: ", randomX, " randomY: ", randomY);
+        // console.log("randomX: ", randomX, " randomY: ", randomY);
         if (isEmptyTile(randomY, randomX, board, 15)) {
           cropUpdates.push({
             x: randomX,

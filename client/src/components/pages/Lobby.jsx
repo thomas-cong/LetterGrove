@@ -56,7 +56,7 @@ const Lobby = () => {
       get("/api/players", { lobbyCode: lobbyId }).then((players) => {
         let found = false;
         for (const value of players) {
-          if (value == user._id) {
+          if (value === user._id) {
             // console.log("found it");
             found = true;
           }
