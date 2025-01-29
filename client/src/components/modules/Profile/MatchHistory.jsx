@@ -145,6 +145,8 @@ const MatchHistory = ({ matches }) => {
                   <span className="rank">#{idx + 1}</span>
                   <Link
                     to={`/profile/${player.playerId}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className={`player-name ${player.playerId === identifier ? 'profile-user' : ''}`}
                   >
                     {player.username}
@@ -194,7 +196,9 @@ const MatchHistory = ({ matches }) => {
         <div className="board-overlay" onClick={closeBoard}>
           <div className="board-modal" onClick={(e) => e.stopPropagation()}>
             <div className="board-modal-header">
-              <h4>Final Board State</h4>
+              <h4>Final Board State <span style={{ color: "var(--primary)", fontSize: "inherit" }}>({matches.find(m => 
+                m.finalRankings.some(p => p.playerId === selectedPlayerId))
+                ?.finalRankings.find(p => p.playerId === selectedPlayerId)?.username})</span></h4>
               <button className="close-button" onClick={closeBoard}>×</button>
             </div>
             <Board

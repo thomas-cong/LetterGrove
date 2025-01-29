@@ -175,8 +175,6 @@ router.post("/joinLobby", (req, res) => {
     console.log("Lobby with ID " + lobbyCode + " not found");
     res.status(404).send({ error: "Lobby not found" });
   }
-
-  res.send({ message: "Lobby Joined" });
 });
 
 router.get("/isLobbyOwner", (req, res) => {
@@ -334,7 +332,6 @@ router.get("/playerStats", (req, res) => {
       console.log(`Failed to get user stats: ${err}`);
       res.status(500).send({ error: "Failed to get user stats" });
     });
-  res.send({ message: "Got user stats" });
 });
 
 router.get("/completedGames", (req, res) => {
@@ -385,7 +382,6 @@ router.get("/completedGames", (req, res) => {
       console.log(`Failed to get completed games: ${err}`);
       res.status(500).send({ error: "Failed to get completed games" });
     });
-  res.send({ message: "Got completed games" });
 });
 
 /**
@@ -413,7 +409,6 @@ router.get("/user", (req, res) => {
       console.log(`Error getting user data: ${err}`);
       res.status(500).send({ error: "Error getting user data" });
     });
-  res.send({ message: "Got user data" });
 });
 
 /**
