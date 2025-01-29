@@ -11,7 +11,7 @@ const BasicInfo = ({ userStats }) => {
           alt="Profile"
           className="profile-picture"
         />
-        <h2 className="profile-name">{userStats.name}</h2>
+        <div className="profile-name">{userStats.name}</div>
       </div>
       <div className="profile-stats-basic">
         <div className="stat-item">
