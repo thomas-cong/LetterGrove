@@ -10,11 +10,16 @@ const IntInput = (props) => {
     props.setGameSettings({ ...props.gameSettings, [props.id]: text });
   }, []);
 
+  useEffect(() => {
+    setText("");
+  }, [props.gameSettings.mode]);
+
   return (
     <div className="settings-row">
       <span className="settings-label">{props.text}</span>
       <input
         type="number"
+        value={text}
         placeholder={props.placeholder}
         className={props.className}
         onChange={(event) => {

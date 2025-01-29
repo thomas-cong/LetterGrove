@@ -11,17 +11,17 @@ const DifficultySlider = (props) => {
     {
       label: "Easy",
       icon: easyShiba,
-      description: "More crops, fewer default letters"
+      description: "More fruits, fewer default letters for a smoother experience"
     },
     {
       label: "Medium",
       icon: mediumShiba,
-      description: "Fewer crops, fewer default letters"
+      description: "Fewer fruits, moderate default letters for balanced gameplay"
     },
     {
       label: "Hard",
       icon: hardShiba,
-      description: "Fewer crops, more default letters"
+      description: "Fewest fruits, most default letters for a real challenge"
     }
   ];
 

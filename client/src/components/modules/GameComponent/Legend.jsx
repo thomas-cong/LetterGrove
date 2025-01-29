@@ -17,7 +17,7 @@ const Legend = () => {
     { img: orange, name: "+5pts" },
     { img: fruitcrate, name: "+10pts" },
     { img: wateringCan, name: "Spawns 3 fruits" },
-    { img: twoTimes, name: "Doubles points from this word" },
+    { img: twoTimes, name: "Doubles points from placed word" },
   ];
 
   return (
