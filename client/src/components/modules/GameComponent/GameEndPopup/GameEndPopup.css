@@ -87,8 +87,8 @@
 }
 
 .final-ranking-item.selected {
-  background-color: rgba(255, 185, 138, 0.3);
-  border: 1px solid rgb(255, 185, 138);
+  background-color: rgba(255, 236, 172, 0.3);
+  border: 1px solid rgb(255, 236, 172);
 }
 
 .rank {
@@ -100,7 +100,7 @@
 .score {
   margin-left: auto;
   font-weight: bold;
-  color: rgb(255, 185, 138);
+  color: rgb(255, 236, 172);
 }
 
 .no-player-selected {

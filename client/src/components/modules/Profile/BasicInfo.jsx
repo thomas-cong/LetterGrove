@@ -1,17 +1,31 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { get } from "../../../utilities";
 import "./BasicInfo.css";
-import testProfilePicture from "../../../assets/TestingPFP.png";
+import ProfilePicture from "./ProfilePicture";
 
 const BasicInfo = ({ userStats }) => {
+  const [profilePicture, setProfilePicture] = useState(null);
+
+  useEffect(() => {
+    setProfilePicture({
+      Accessory: 0,
+      Hair: 0,
+      Eyes: 0,
+      Face: 0,
+      Shirt: 0
+    })
+    // if (userStats._id) {
+    //   get("/api/userProfilePicture", { userId: userStats._id }).then((pfp) => {
+    //     setProfilePicture(pfp);
+    //   });
+    // }
+  }, [userStats._id]);
+
   return (
     <div className="profile-basic">
       <div className="profile-header">
-        <img
-          src={userStats.profilePicture || testProfilePicture}
-          alt="Profile"
-          className="profile-picture"
-        />
-        <h2 className="profile-name">{userStats.name}</h2>
+        <ProfilePicture profilePicture={profilePicture} className="profile-picture" />
+        {/* <h2 className="profile-name">{userStats.name}</h2> */}
       </div>
       <div className="profile-stats-basic">
         <div className="stat-item">

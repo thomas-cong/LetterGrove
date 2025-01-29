@@ -3,6 +3,13 @@ const mongoose = require("mongoose");
 const UserSchema = new mongoose.Schema({
   name: String,
   googleid: String,
+  profilePicture: {
+    Accessory: { type: Number, default: 0 },
+    Hair: { type: Number, default: 0 },
+    Eyes: { type: Number, default: 0 },
+    Face: { type: Number, default: 0 },
+    Shirt: { type: Number, default: 0 },
+  },
   games_played: {
     type: Number,
     default: 0

@@ -387,6 +387,27 @@ router.get("/completedGames", (req, res) => {
 /**
  * Get user data
  */
+router.get("/userProfilePicture", (req, res) => {
+  User.findById(req.query.userId)
+    .then((user) => {
+      if (!user) {
+        res.status(404).send({ error: "User not found" });
+        return;
+      }
+      res.send(user.profilePicture || {
+        Accessory: 0,
+        Hair: 0,
+        Eyes: 0,
+        Face: 0,
+        Shirt: 0,
+      });
+    })
+    .catch((err) => {
+      console.log(`Error getting user data: ${err}`);
+      res.status(500).send({ error: "Error getting user data" });
+    });
+})
+
 router.get("/user", (req, res) => {
   User.findById(req.query.userId)
     .then((user) => {
