@@ -16,6 +16,7 @@ import Legend from "./Legend";
 // @props isTutorial: boolean
 
 const GameComponent = (props) => {
+  const [sameBoard, setSameBoard] = useState(false);
   const [word, setWord] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [isTurn, setIsTurn] = useState(true);
@@ -73,12 +74,16 @@ const GameComponent = (props) => {
         isSuggestion: false,
         isSuggestionEnd: false,
       };
-      if (i === updatedLetters.length - 1) {
-        setEndPointSelected(true);
-        setSelectedX(x);
-        setSelectedY(y);
-        setWord("");
-      }
+      // if (i === updatedLetters.length - 1) {
+      //   if (!sameBoard) {
+      //     setEndPointSelected(true);
+      //     setSelectedX(x);
+      //     setSelectedY(y);
+      //     setWord("");
+      //   } else {
+      //     console.log()
+      //   }
+      // }
     }
     for (let i = 0; i < updatedCrops.length; i++) {
       let x = updatedCrops[i].x;
@@ -136,6 +141,11 @@ const GameComponent = (props) => {
       }));
       setLettersUpdated(info.letterUpdates);
       setEndpoints(info.endpoints);
+
+      setEndPointSelected(true);
+      setSelectedX(info.endpoints[info.endpoints.length - 1][0]);
+      setSelectedY(info.endpoints[info.endpoints.length - 1][1]);
+      setWord("");
       if (info.cropUpdates) {
         console.log("Updated crops: " + info.cropUpdates);
         setCropsUpdated(info.cropUpdates);
@@ -162,6 +172,7 @@ const GameComponent = (props) => {
     };
 
     const handleTurnUpdate = (info) => {
+      setSameBoard(true);
       console.log("Turn update:", info);
       setTurnUsername(info.username); // Set username first
       setTimeout(() => {
@@ -222,6 +233,7 @@ const GameComponent = (props) => {
       cropsUpdated: cropsUpdated,
       lettersUpdated: lettersUpdated,
       board: gameState.board,
+      sameBoard: gameState.board.sameBoard,
     });
   }, [lettersUpdated, cropsUpdated]);
   // Add resize handler for board scaling
