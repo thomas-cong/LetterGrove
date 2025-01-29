@@ -143,14 +143,14 @@ const MatchHistory = ({ matches }) => {
               return (
                 <div key={idx} className="ranking-row">
                   <span className="rank">#{idx + 1}</span>
-                  <Link
-                    to={`/profile/${player.playerId}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`player-name ${player.playerId === identifier ? 'profile-user' : ''}`}
-                  >
-                    {player.username}
-                  </Link>
+                    <Link
+                      to={`/profile/${player.playerId}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`player-name ${player.playerId === identifier ? 'profile-user' : ''}`}
+                    >
+                      {player.username}
+                    </Link>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <span style={{ flexGrow: 1 }}></span>
                     <span className="player-score" style={{ marginRight: '10px' }}>{player.score}</span>

@@ -435,6 +435,21 @@ router.get("/matches", (req, res) => {
   res.send(mockMatches);
 });
 
+router.get("/profilePicture", (req, res) => {
+  const userId = req.query.userId;
+  User.findById(userId)
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send({ error: "User not found" });
+      }
+      res.send(user.profilePicture);
+    })
+    .catch((err) => {
+      console.log(`Failed to get user profile picture: ${err}`);
+      res.status(500).send({ error: "Failed to get user profile picture" });
+    });
+});
+
 // anything else falls to this "not found" case
 
 router.all("*", (req, res) => {

@@ -408,7 +408,7 @@ form {
   border: none;
   padding: 4px;
   cursor: pointer;
-  color: var(--darkgrey);
+  color: rgb(91, 91, 91);
   display: flex;
   right: 0;
   justify-content: center;
