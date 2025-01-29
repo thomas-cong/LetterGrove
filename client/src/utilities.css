@@ -495,11 +495,12 @@ form {
   left: 50px;
   position: absolute;
   z-index: 99999;
+  transition: all 0.3s ease;
+
 }
 
 .homebutton:hover {
   transform: scale(1.05);
-  transition: all 0.2s ease;
 }
 
 @media (max-width: 768px) {

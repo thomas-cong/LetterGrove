@@ -21,20 +21,22 @@ const Log = ({ log = [], userId }) => {
   return (
     <div className="log-container">
       <h3 className="log-title">Game Log</h3>
-      <div className="log-messages" ref={logContainerRef}>
-        {log.map((message, index) => (
-          <div key={index} className="log-message">
-            {(message.userId === userId) ? (
-              <div style={{ color: "rgb(147, 149, 151)" }}>
-                <span style={{ color: "var(--primary--dim)" }}>{message.username}</span> collected <span style={{ color: "rgb(220,20,60)"}}>{message.pointsGained}</span> {message.pointsGained === 1 ? "point" : "points"}
-              </div>
-            ) : (
-              <div style={{ color: "rgb(147, 149, 151)" }}>
-                <span style={{ color: "black" }}>{message.username}</span> collected <span style={{ color: "rgb(220,20,60)"}}>{message.pointsGained}</span> {message.pointsGained === 1 ? "point" : "points"}
-              </div>
-            )}
-          </div>
-        ))}
+      <div className="log-messages-container">
+        <div className="log-messages" ref={logContainerRef}>
+          {log.map((message, index) => (
+            <div key={index} className="log-message">
+              {(message.userId === userId) ? (
+                <div style={{ color: "#d6d6d6" }}>
+                  <span style={{ color: "var(--primary--dim)" }}>{message.username}</span> collected <span style={{ color: "rgb(220,20,60)"}}>{message.pointsGained}</span> {message.pointsGained === 1 ? "point" : "points"}
+                </div>
+              ) : (
+                <div style={{ color: "#d6d6d6" }}>
+                  <span style={{ color: "black" }}>{message.username}</span> collected <span style={{ color: "rgb(220,20,60)"}}>{message.pointsGained}</span> {message.pointsGained === 1 ? "point" : "points"}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

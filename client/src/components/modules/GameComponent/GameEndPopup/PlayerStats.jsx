@@ -26,7 +26,7 @@ const PlayerStats = ({ selectedPlayer, gameResults }) => {
               target="_blank"
               rel="noopener noreferrer"
               style={{
-                color: "black",
+                color: "var(--primary--dim)",
                 textDecoration: "underline",
                 textUnderlineOffset: "2px",
               }}
