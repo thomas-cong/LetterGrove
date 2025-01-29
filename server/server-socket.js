@@ -744,6 +744,10 @@ module.exports = {
         });
       });
       socket.on("enter word", (props) => {
+        if (!(props.lobbyCode in gameLogic.games)) {
+          console.log("get blocked");
+          return;
+        }
         const user = getUserFromSocketID(socket.id);
         const game = gameLogic.games[props.lobbyCode];
 
@@ -780,6 +784,10 @@ module.exports = {
       });
       socket.on("confirm word", (props) => {
         // deleteDuplicateJoins(props.lobbyCode);
+        if (!(props.lobbyCode in gameLogic.games)) {
+          console.log("get blocked");
+          return;
+        }
         console.log("confirm word");
         console.log("Word:", props.word);
         if (props.isTutorial) {
