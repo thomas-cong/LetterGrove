@@ -49,7 +49,7 @@ const BasicInfo = ({ userStats, identifier, currentUserId }) => {
         </div>
         <div className="stat-item">
           <label>Win Rate</label>
-          <span>{((userStats.wins / userStats.games_played) * 100).toFixed(1)}%</span>
+          <span>{userStats.games_played === 0 ? 0 : ((userStats.wins / userStats.games_played) * 100).toFixed(1)}%</span>
         </div>
       </div>
 

@@ -35,6 +35,10 @@ const PlayerStats = ({ selectedPlayer, gameResults }) => {
             </Link>
           </h4>
           <div className="stats-content">
+          <div className="stat-item">
+              <span style={{ color: "#666" }}>Match Time</span>
+              <span style={{ color: "var(--primary--dim)" }}>{formatTime(gameResults?.timeElapsed || 0)}</span>
+            </div>
             <div className="stat-item">
               <span style={{ color: "#666" }}>Words Formed</span>
               <span style={{ color: "var(--primary--dim)" }}>{gameResults?.wordsFormed[selectedPlayer] || 0}</span>
@@ -42,10 +46,6 @@ const PlayerStats = ({ selectedPlayer, gameResults }) => {
             <div className="stat-item">
               <span style={{ color: "#666" }}>Final Score</span>
               <span style={{ color: "var(--primary--dim)" }}>{selectedPlayerData?.score || 0} pts</span>
-            </div>
-            <div className="stat-item">
-              <span style={{ color: "#666" }}>Time Played</span>
-              <span style={{ color: "var(--primary--dim)" }}>{formatTime(gameResults?.timeElapsed || 0)}</span>
             </div>
             <div className="stat-item">
               <span style={{ color: "#666" }}>Score per Word</span>
