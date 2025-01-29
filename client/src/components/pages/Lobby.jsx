@@ -53,21 +53,10 @@ const Lobby = (props) => {
         // console.log("not logged in");
       }
       setU_id(String(user._id));
-      // Join the socket room for this lobby
-      get("/api/isGameStarted", { lobbyCode: lobbyId }).then((res) => {
-        if (!res.gameStarted) {
-          // console.log("from here");
-
-          socket.emit("join socket", { lobbyCode: lobbyId, userId: user._id });
-        }
-      });
-      setSocketJoined(true);
-    });
-    if (props.userId) {
       get("/api/players", { lobbyCode: lobbyId }).then((players) => {
         let found = false;
         for (const value of players) {
-          if (value == props.userId) {
+          if (value == user._id) {
             // console.log("found it");
             found = true;
           }
@@ -76,7 +65,15 @@ const Lobby = (props) => {
           window.location.href = "/";
         }
       });
-    }
+      // Join the socket room for this lobby
+      get("/api/isGameStarted", { lobbyCode: lobbyId }).then((res) => {
+        if (!res.gameStarted) {
+          // console.log("from here");
+          socket.emit("join socket", { lobbyCode: lobbyId, userId: user._id });
+        }
+      });
+      setSocketJoined(true);
+    });
     get("/api/isGameStarted", { lobbyCode: lobbyId }).then((res) => {
       // console.log(res.gameStarted);
       if (res.gameStarted) {
