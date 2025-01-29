@@ -340,6 +340,18 @@ const randomlyGenerateBoard = (props) => {
       }
     }
   }
+  if (board[0][0].letter !== "") {
+    availablePositions.delete("0,0");
+  }
+  if (board[14][14].letter !== "") {
+    availablePositions.delete("14,14");
+  }
+  if (board[14][0].letter !== "") {
+    availablePositions.delete("14,0");
+  }
+  if (board[0][14].letter !== "") {
+    availablePositions.delete("0,14");
+  }
 
   while (remainingLetters > 0 && attempts < MAX_ATTEMPTS) {
     const [row, col] = generatePosition();
