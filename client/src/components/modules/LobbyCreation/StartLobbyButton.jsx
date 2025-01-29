@@ -17,6 +17,24 @@ const StartLobbyButton = (props) => {
       return;
     }
 
+    if (props.gameSettings.steps !== "" && props.gameSettings.steps < 0) {
+      if (props.gameSettings.mode === "Time") {
+        props.setAlertMessage("Time must be a positive number!");
+        props.setShowAlert(true);
+        return;
+      }
+      if (props.gameSettings.mode === "Words") {
+        props.setAlertMessage("Words must be a positive number!");
+        props.setShowAlert(true);
+        return;
+      }
+      if (props.gameSettings.mode === "Points") {
+        props.setAlertMessage("Points must be a positive number!");
+        props.setShowAlert(true);
+        return;
+      }
+    }
+
     console.log("Attempting to create lobby with settings:", props.gameSettings);
     post("/api/openLobby", {
       lobbyCode: props.lobbyCode,

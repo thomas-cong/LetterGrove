@@ -186,7 +186,7 @@ const MatchHistory = ({ matches }) => {
 
   return (
     <div className="match-history">
-      <h3 style={{ textAlign: "center" }}>Recent Matches</h3>
+      <h3 style={{ textAlign: "center" , color: "var(--primary)" }}>Recent Matches</h3>
       <div className="match-list">
         <div className="match-column">
           {leftColumnMatches.map(renderMatch)}

@@ -85,13 +85,13 @@
 .board-option p strong {
   font-size: 26px;
   font-weight: bold;
-  color: pink;
+  color: rgb(255, 203, 212);
 }
 
 .selectheader {
   font-size: 32px;
   font-weight: bold;
-  color: rgb(252, 139, 158);
+  color: #FF899D;
   margin-bottom: 12px;
   text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4);
 }
