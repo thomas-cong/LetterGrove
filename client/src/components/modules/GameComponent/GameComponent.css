@@ -34,7 +34,7 @@
 
 .gamecompleftcontainer {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   /* background-color: blue; */
@@ -43,6 +43,7 @@
   min-height: 100%;
   /* overflow-y: scroll; */
   overflow-x: hidden;
+  gap: 4%;
 }
 
 @media (max-width: 1250px) {
@@ -55,16 +56,25 @@
   }
 }
 
+.gamecomplegendcontainer {
+  order: -1;
+  min-width: 140px;
+  align-self: center;
+}
+
+
 .gamecompboardcontainer {
   /* background-color: red; */
   /* position: relative; */
   /* width: auto; */
+  order: 1;
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
   min-height: min-content;
   overflow: visible;
+
 }
 
 .gamecompwordinput {

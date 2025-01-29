@@ -305,7 +305,6 @@ const GameComponent = (props) => {
                 isTutorial={props.isTutorial}
               />
             </div>
-            {/* <div className="gamecompbottominfo"> */}
             <div className="gamecompwordinput">
               <WordInput
                 word={word}
@@ -322,7 +321,6 @@ const GameComponent = (props) => {
                 setAlertMessage={setAlertMessage}
               />
             </div>
-            {/* </div> */}
             <div className="topinfo">
               <div className="gamecomppoints">
                 <PointsCounter points={gameState.points} />
@@ -331,6 +329,8 @@ const GameComponent = (props) => {
                 <Counter />
               </div>
             </div>
+          </div>
+          <div className="gamecomplegendcontainer">
             {!props.isTutorial && <Legend />}
           </div>
         </div>
