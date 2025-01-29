@@ -487,13 +487,14 @@ form {
 
 .homebutton {
   border: none;
-  scale: 2;
+  scale: 1.5;
   cursor: pointer;
   line-height: 1;
   border-radius: 4px;
   top: 50px;
   left: 50px;
   position: absolute;
+  z-index: 99999;
 }
 
 .homebutton:hover {

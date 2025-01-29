@@ -23,7 +23,7 @@ const SummonJoinPopup = (props) => {
   const openJoin = () => {
     get("/api/userInMatch").then((data) => {
       if (false) {
-      // if (data.isInMatch) {
+        // if (data.isInMatch) {
         setAlertMessage("You are already in lobby: " + data.lobbyCode);
         setShowAlert(true);
       } else {
