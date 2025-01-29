@@ -60,7 +60,7 @@ const JoinLobbyPopup = (props) => {
                 navigate(`/${props.lobbyCode}`);
               })
               .catch((error) => {
-                setAlertMessage("An error has occurred while joining the lobby!");
+                setAlertMessage("Please refresh the page: user not authenticated");
                 setShowAlert(true);
               });
           }}
