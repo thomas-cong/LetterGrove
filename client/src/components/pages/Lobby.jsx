@@ -238,13 +238,13 @@ const Lobby = (props) => {
         cloudImages={cloudImages}
         reverse={reverseAnimation}
       />
-      {lobbyState === "game" && props.userId !== "" && (
+      {lobbyState === "game" && u_id !== "" && (
         <div>
           <GameComponent
             lobbyCode={lobbyId}
             setLobbyState={setLobbyState}
             lobbyState={lobbyState}
-            userId={props.userId}
+            userId={u_id}
           />
         </div>
       )}
