@@ -387,6 +387,27 @@ router.get("/completedGames", (req, res) => {
 /**
  * Get user data
  */
+router.get("/userProfilePicture", (req, res) => {
+  User.findById(req.query.userId)
+    .then((user) => {
+      if (!user) {
+        res.status(404).send({ error: "User not found" });
+        return;
+      }
+      res.send(user.pfp || {
+        Accessory: 0,
+        Hair: 0,
+        Eyes: 0,
+        Face: 0,
+        Shirt: 0,
+      });
+    })
+    .catch((err) => {
+      console.log(`Error getting user data: ${err}`);
+      res.status(500).send({ error: "Error getting user data" });
+    });
+})
+
 router.get("/user", (req, res) => {
   User.findById(req.query.userId)
     .then((user) => {
@@ -435,14 +456,14 @@ router.get("/matches", (req, res) => {
   res.send(mockMatches);
 });
 
-router.get("/profilePicture", (req, res) => {
+router.get("/pfp", (req, res) => {
   const userId = req.query.userId;
   User.findById(userId)
     .then((user) => {
       if (!user) {
         return res.status(404).send({ error: "User not found" });
       }
-      res.send(user.profilePicture);
+      res.send(user.pfp);
     })
     .catch((err) => {
       console.log(`Failed to get user profile picture: ${err}`);
@@ -450,6 +471,25 @@ router.get("/profilePicture", (req, res) => {
     });
 });
 
+router.post("/setPfp", (req, res) => {
+  const userId = req.body.userId;
+  const pfp = req.body.pfp;
+  User.findById(userId)
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send({ error: "User not found" });
+      }
+      user.pfp = pfp;
+      return user.save();
+    })
+    .then((user) => {
+      res.send(user.pfp);
+    })
+    .catch((err) => {
+      console.log(`Failed to set user profile picture: ${err}`);
+      res.status(500).send({ error: "Failed to set user profile picture" });
+    });
+})
 // anything else falls to this "not found" case
 
 router.all("*", (req, res) => {

@@ -79,6 +79,34 @@
   background-color: rgba(255, 255, 255, 0.4);
   cursor: pointer;
   transition: all 0.2s ease;
+  position: relative;
+}
+
+.final-ranking-item .playerDisplay {
+  flex: 1;
+  margin: 0;
+  padding: 0;
+}
+
+.final-ranking-item .playerDisplay .playerInfo {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+  
+}
+
+.final-ranking-item .rank {
+  font-weight: bold;
+  margin-right: 1rem;
+  color: #666;
+  display: flex;
+  align-items: center;
+}
+
+.final-ranking-item .score {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
 }
 
 .final-ranking-item:hover {
@@ -87,20 +115,8 @@
 }
 
 .final-ranking-item.selected {
-  background-color: rgba(255, 185, 138, 0.3);
-  border: 1px solid rgb(255, 185, 138);
-}
-
-.rank {
-  font-weight: bold;
-  margin-right: 1rem;
-  color: #666;
-}
-
-.score {
-  margin-left: auto;
-  font-weight: bold;
-  color: rgb(255, 185, 138);
+  background-color: rgba(255, 236, 172, 0.3);
+  border: 1px solid rgb(255, 236, 172);
 }
 
 .no-player-selected {

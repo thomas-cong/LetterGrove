@@ -9,6 +9,7 @@ import StartLobbyButton from "./StartLobbyButton";
 const LobbyCreationPopup = (props) => {
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
+  const [steps, setSteps] = useState(null);
 
   return (
     <>

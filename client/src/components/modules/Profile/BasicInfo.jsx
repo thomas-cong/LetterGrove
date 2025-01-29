@@ -1,16 +1,37 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { get } from "../../../utilities";
 import "./BasicInfo.css";
-import testProfilePicture from "../../../assets/TestingPFP.png";
+import ProfilePicture from "./ProfilePicture";
+import ProfilePictureEditor from "./ProfilePictureEditor";
+import { useNavigate, useParams } from "react-router-dom";
 
-const BasicInfo = ({ userStats }) => {
+const BasicInfo = ({ userStats, identifier, currentUserId }) => {
+  const [pfp, setPfp] = useState({
+    default: true,
+  });
+  const [showEditor, setShowEditor] = useState(false);
+
+  useEffect(() => {
+    if (identifier) {
+      get("/api/userProfilePicture", { userId: identifier }).then((pfp) => {
+        setPfp(pfp);
+      });
+    }
+  }, [identifier]);
+
+  const handlePfpUpdate = (newPfp) => {
+    setPfp(newPfp);
+  };
+
   return (
     <div className="profile-basic">
       <div className="profile-header">
-        <img
-          src={userStats.profilePicture || testProfilePicture}
-          alt="Profile"
-          className="profile-picture"
-        />
+        <ProfilePicture pfp={pfp} className="profile-picture" />
+        {currentUserId === identifier && (
+          <button className="edit-pfp-button" onClick={() => setShowEditor(true)}>
+            Change Profile Picture
+          </button>
+        )}
         <div className="profile-name">{userStats.name}</div>
       </div>
       <div className="profile-stats-basic">
@@ -31,6 +52,15 @@ const BasicInfo = ({ userStats }) => {
           <span>{((userStats.wins / userStats.games_played) * 100).toFixed(1)}%</span>
         </div>
       </div>
+
+      {showEditor && (
+        <ProfilePictureEditor
+          initialPfp={pfp}
+          userId={identifier}
+          onClose={() => setShowEditor(false)}
+          onUpdate={handlePfpUpdate}
+        />
+      )}
     </div>
   );
 };

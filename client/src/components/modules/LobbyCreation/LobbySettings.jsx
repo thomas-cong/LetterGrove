@@ -28,8 +28,6 @@ const IntInput = (props) => {
 };
 // Dropdown Input for mode selection
 const ModeSelector = (props) => {
-  const [mode, setMode] = useState("Words");
-
   const getDefaultSteps = (selectedMode) => {
     switch (selectedMode) {
       case "Time":
@@ -43,20 +41,33 @@ const ModeSelector = (props) => {
     }
   };
 
+  // If sameboard is enabled and mode is Time, automatically switch to Words
+  const currentMode = props.gameSettings.sameBoard && props.gameSettings.mode === "Time" 
+    ? "Words" 
+    : props.gameSettings.mode;
+
+  // If we had to switch modes, update the game settings
+  if (props.gameSettings.sameBoard && props.gameSettings.mode === "Time") {
+    props.setGameSettings({
+      ...props.gameSettings,
+      mode: "Words",
+      steps: 15,
+    });
+  }
+
   return (
     <div className="settings-row">
       <span className="settings-label">Mode</span>
       <select
         onChange={(event) => {
           const selectedMode = event.target.value;
-          setMode(selectedMode);
           props.setGameSettings({
             ...props.gameSettings,
             mode: selectedMode,
             steps: getDefaultSteps(selectedMode),
           });
         }}
-        defaultValue="Words"
+        value={currentMode}
       >
         <option value="Words">Words</option>
         {!(props.gameSettings.sameBoard) && <option value="Time">Time (s)</option>}

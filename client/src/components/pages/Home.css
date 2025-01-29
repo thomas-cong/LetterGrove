@@ -85,7 +85,7 @@
 .logouttext {
   -webkit-text-stroke: 1px hwb(0 0% 100% / 0.36);
   font-family: "Daydream", sans-serif;
-  color: rgb(255, 185, 138);
+  color: rgb(255, 236, 172);
   font-size: 18px;
   transform: translate(-10px, 19px);
   transition: all 0.3s ease;
@@ -94,7 +94,7 @@
 }
 
 .logouttext:hover {
-  color: rgb(255, 219, 156);
+  color: rgb(255, 240, 214);
 }
 
 .homepagecontent {

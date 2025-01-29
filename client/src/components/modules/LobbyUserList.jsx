@@ -47,7 +47,6 @@ const LobbyUserList = (props) => {
         <PlayerDisplay
           key={index}
           name={player.username}
-          profilePicture={testProfilePicture}
           playerId={player.playerId}
           currentUserId={props.userId}
         />

@@ -20,7 +20,6 @@ const Rankings = ({ rankings = [], currentUserId }) => {
             <div key={index} className="ranking-slip-container">
               <PlayerDisplay
                 name={`${player.username} - ${player.score} pts`}
-                profilePicture={testProfilePicture}
                 playerId={player.playerId}
                 currentUserId={currentUserId}
                 isRankingSlip={true}

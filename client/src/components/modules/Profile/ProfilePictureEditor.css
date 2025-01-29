@@ -1,0 +1,123 @@
+.pfp-editor-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.pfp-editor-content {
+  background: rgb(222, 222, 222);
+  border-radius: 12px;
+  padding: 2rem;
+  position: relative;
+  width: 700px;
+  max-width: 70vw;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.pfp-editor-main {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.pfp-editor-layout {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.pfp-preview {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  transform: translateY(-14%);
+}
+
+.large-preview {
+  width: 300px !important;
+  height: 300px !important;
+  background:rgb(222, 222, 222) !important;
+}
+
+.pfp-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0.5rem;
+}
+
+.pfp-control {
+  display: grid;
+  grid-template-columns: 32px 140px 32px;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.component-label {
+  font-size: 0.95rem;
+  color: var(--primary--dim);
+  text-align: center;
+}
+
+.arrow-btn {
+  background: none;
+  border: 2px solid var(--primary--dim);
+  color: var(--primary--dim);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  transition: all 0.2s;
+}
+
+.arrow-btn:hover {
+  background: var(--primary--dim);
+  color: white;
+}
+
+.close-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--primary--dim);
+  cursor: pointer;
+  padding: 0.5rem;
+  line-height: 1;
+}
+
+.update-button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 0rem;
+}
+
+.update-button {
+  padding: 0.8rem 1.5rem;
+  background-color: var(--primary--dim);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: opacity 0.2s;
+}
+
+.update-button:hover {
+  opacity: 0.9;
+}

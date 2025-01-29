@@ -91,7 +91,7 @@
 .board-option p strong {
   font-size: min(26px, 2.2vw);
   font-weight: bold;
-  color: pink;
+  color: rgb(255, 203, 212);
 }
 
 .selectheader {
