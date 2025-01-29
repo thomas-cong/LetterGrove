@@ -54,7 +54,7 @@ const App = () => {
   return (
     <UserContext.Provider value={authContextValue}>
       <BackgroundMusic />
-      <Outlet />
+      <Outlet userId={userId} />
     </UserContext.Provider>
   );
 };

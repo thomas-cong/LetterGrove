@@ -25,7 +25,7 @@ import thirdTopRight from "../../assets/CLOUDENTERING/THIRD_CLOUDENTERING_TOP_RI
 import lastBottomLeft from "../../assets/CLOUDENTERING/LAST_CLOUDENTERING_BOTTOM_LEFT.png";
 import lastTopRight from "../../assets/CLOUDENTERING/LAST_CLOUDENTERING_TOP_RIGHT.png";
 
-const Lobby = () => {
+const Lobby = (props) => {
   let { lobbyId } = useParams();
 
   const [u_id, setU_id] = useState("");
@@ -63,11 +63,11 @@ const Lobby = () => {
       });
       setSocketJoined(true);
     });
-    if (u_id) {
+    if (props.userId) {
       get("/api/players", { lobbyCode: lobbyId }).then((players) => {
         let found = false;
         for (const value of players) {
-          if (value == u_id) {
+          if (value == props.userId) {
             // console.log("found it");
             found = true;
           }
@@ -238,13 +238,13 @@ const Lobby = () => {
         cloudImages={cloudImages}
         reverse={reverseAnimation}
       />
-      {lobbyState === "game" && u_id !== "" && (
+      {lobbyState === "game" && props.userId !== "" && (
         <div>
           <GameComponent
             lobbyCode={lobbyId}
             setLobbyState={setLobbyState}
             lobbyState={lobbyState}
-            userId={u_id}
+            userId={props.userId}
           />
         </div>
       )}
