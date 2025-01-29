@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import "./GameEndPopup.css";
 import PlayerDisplay from "../../PlayerDisplay";
 import PlayerStats from "./PlayerStats";
-import testProfilePicture from "../../../../assets/TestingPFP.png";
 import homebutton from "../../../../assets/homebutton.png";
 import { useNavigate } from "react-router-dom";
 import CloudAnimation from "../../CloudAnimation.jsx";

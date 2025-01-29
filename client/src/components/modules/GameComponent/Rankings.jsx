@@ -1,6 +1,5 @@
 import React from "react";
 import PlayerDisplay from "../../modules/PlayerDisplay";
-import testProfilePicture from "../../../assets/TestingPFP.png";
 import "./Rankings.css";
 
 /**

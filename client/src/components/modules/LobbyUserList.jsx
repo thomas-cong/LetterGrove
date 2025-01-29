@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { get, post } from "../../utilities";
 import { socket } from "../../client-socket";
 import PlayerDisplay from "../modules/PlayerDisplay.jsx";
-import testProfilePicture from "../../assets/TestingPFP.png";
 
 /**
  * LobbyPlayerList is a component that represents a list of players in a lobby
@@ -14,15 +13,13 @@ import testProfilePicture from "../../assets/TestingPFP.png";
 const LobbyUserList = (props) => {
   const [usernameList, setUsernameList] = useState([]);
   useEffect(() => {
-    get("/api/isGameStarted", { lobbyCode: props.lobbyCode}).then((res) => {
+    get("/api/isGameStarted", { lobbyCode: props.lobbyCode }).then((res) => {
       if (!res.gameStarted) {
         console.log("no, from lobbyuserlist");
         socket.emit("join socket", { lobbyCode: props.lobbyCode, userId: props.userId });
       }
-    })
-    const handleSocketJoinedGame = () => {
-
-    }
+    });
+    const handleSocketJoinedGame = () => {};
     socket.on("socket joined game", handleSocketJoinedGame);
     const handleUpdateLobbyUserList = (players) => {
       let tempUsernameList = [];
