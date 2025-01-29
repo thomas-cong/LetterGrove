@@ -12,7 +12,7 @@ const BoardSelection = ({ onClose, onSelect }) => {
         <div className="board-option" onClick={() => onSelect(true)}>
           <div className="selectheader">Same Board</div>
           <p>All players will share the same board and race to collect fruits!</p>
-          <p style={{ fontWeight: "bold", fontSize: "min(32px, 4vw)", color: "rgb(252, 139, 158)" }}>
+          <p style={{ fontWeight: "bold", fontSize: "min(32px, 4vw)", color: "rgb(255, 165, 180)" }}>
             Modes:
           </p>
           <p style={{ textAlign: "start" }}>
@@ -25,7 +25,7 @@ const BoardSelection = ({ onClose, onSelect }) => {
         <div className="board-option" onClick={() => onSelect(false)}>
           <div className="selectheader">Different Boards</div>
           <p>Everyone gets their own separate but identical board.</p>
-          <p style={{ fontWeight: "bold", fontSize: "min(32px, 4vw)", color: "rgb(252, 139, 158)" }}>
+          <p style={{ fontWeight: "bold", fontSize: "min(32px, 4vw)", color: "rgb(255, 165, 180)" }}>
             Modes:
           </p>
           <p style={{ textAlign: "start" }}>

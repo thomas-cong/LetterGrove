@@ -97,7 +97,7 @@
 .selectheader {
   font-size: min(32px, 4vw);
   font-weight: bold;
-  color: rgb(252, 139, 158);
+  color: rgb(255, 165, 180);
   margin-bottom: min(12px, 1.5vh);
   text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4);
 }

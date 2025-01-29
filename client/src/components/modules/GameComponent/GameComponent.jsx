@@ -264,7 +264,9 @@ const GameComponent = (props) => {
 
   return (
     <>
-      {showAlert && <AlertBox message={alertMessage} className="word-input-alert" />}
+      {showAlert && !props.isTutorial && (
+        <AlertBox message={alertMessage} className="word-input-alert" />
+      )}
       {showEndGamePopup && (
         <GameEndPopup
           endGameInfo={endGameInfo}
@@ -330,8 +332,8 @@ const GameComponent = (props) => {
               </div>
             </div>
           </div>
-          <div className="gamecomplegendcontainer">{!props.isTutorial && <Legend />}</div>
         </div>
+        <div className="gamecomplegendcontainer">{!props.isTutorial && <Legend />}</div>
         <div className="gamecomprightcontainer">
           <div className="gamecomprankings">
             <Rankings rankings={gameState.rankings} currentUserId={props.userId} />
