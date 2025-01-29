@@ -34,7 +34,7 @@ const SummonHowToPlayPopup = (props) => {
     get("/api/whoami").then((user) => {
       if (!user._id) {
         window.location.href = "/";
-        console.log("not logged in");
+        // console.log("not logged in");
       }
       setU_id(String(user._id));
     });
@@ -43,7 +43,7 @@ const SummonHowToPlayPopup = (props) => {
   // Show tutorial game only after we have a lobby code
   useEffect(() => {
     if (lobbyCode && lobbyCode !== "ERROR") {
-      console.log("lobbyCode: ", lobbyCode);
+      // console.log("lobbyCode: ", lobbyCode);
       setShowTutorialGame(true);
       props.setPopupShowing(true);
       props.onShowHowToPlay();
@@ -71,17 +71,17 @@ const SummonHowToPlayPopup = (props) => {
           throw new Error("Failed to generate lobby code");
         }
         setLobbyCode(code.lobbyCodeGenerated);
-        console.log(code);
+        // console.log(code);
         return post("/api/openLobby", {
           lobbyCode: code.lobbyCodeGenerated,
           gameSettings: gameSettings,
           username: "Shiba Inu",
         }).then((info) => {
-          console.log("joining socket");
-          console.log("u_id: ", u_id);
+          // console.log("joining socket");
+          // console.log("u_id: ", u_id);
           socket.emit("join socket", { lobbyCode: code.lobbyCodeGenerated, userId: u_id });
-          console.log(info);
-          console.log("starting tutorial");
+          // console.log(info);
+          // console.log("starting tutorial");
           return post("/api/startTutorial", { lobbyCode: code.lobbyCodeGenerated });
         });
       })

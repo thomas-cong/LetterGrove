@@ -122,8 +122,8 @@ const logBoardState = (board) => {
     }
     output += row + "\n";
   }
-  console.log(board);
-  console.log(output);
+  // console.log(board);
+  // console.log(output);
 };
 
 const Board = (props) => {
@@ -158,7 +158,7 @@ const Board = (props) => {
   // Set up socket listener for suggestions
   useEffect(() => {
     const suggestionModifier = (info) => {
-      console.log("Suggestions:", info.suggestions);
+      // console.log("Suggestions:", info.suggestions);
       props.setSuggestions(info.suggestions);
       setValidWord(info.validWord);
     };

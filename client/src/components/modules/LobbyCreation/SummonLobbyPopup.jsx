@@ -47,7 +47,7 @@ const SummonLobbyPopup = (props) => {
     get("/api/generateLobbyCode")
       .then((code) => {
         setLobbyCode(code.lobbyCodeGenerated);
-        console.log(code);
+        // console.log(code);
       })
       .catch(setLobbyCode("ERROR"));
 

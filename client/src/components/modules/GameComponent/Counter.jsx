@@ -40,7 +40,7 @@ const Counter = () => {
   };
 
   useEffect(() => {
-    console.log("Counter mounted");
+    // console.log("Counter mounted");
     const handleTimeUpdate = (params) => {
       setLeftMessage("Time left:  ");
       setValue(formatTime(params.secondsRemaining));

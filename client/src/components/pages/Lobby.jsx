@@ -50,13 +50,13 @@ const Lobby = () => {
     get("/api/whoami").then((user) => {
       if (!user._id) {
         window.location.href = "/";
-        console.log("not logged in");
+        // console.log("not logged in");
       }
       setU_id(String(user._id));
       // Join the socket room for this lobby
       get("/api/isGameStarted", { lobbyCode: lobbyId }).then((res) => {
         if (!res.gameStarted) {
-          console.log("from here");
+          // console.log("from here");
 
           socket.emit("join socket", { lobbyCode: lobbyId, userId: user._id });
         }
@@ -68,7 +68,7 @@ const Lobby = () => {
         let found = false;
         for (const value of players) {
           if (value == u_id) {
-            console.log("found it");
+            // console.log("found it");
             found = true;
           }
         }
@@ -78,13 +78,13 @@ const Lobby = () => {
       });
     }
     get("/api/isGameStarted", { lobbyCode: lobbyId }).then((res) => {
-      console.log(res.gameStarted);
+      // console.log(res.gameStarted);
       if (res.gameStarted) {
         setLobbyState("game");
       }
     });
     get("/api/isLobbyOwner", { lobbyCode: lobbyId }).then((res) => {
-      console.log(res);
+      // console.log(res);
       setShowButton(res);
     });
   }, []);
@@ -95,7 +95,7 @@ const Lobby = () => {
     });
 
     const handleLobbyToGame = () => {
-      console.log("received lobby to game transition");
+      // console.log("received lobby to game transition");
       setShowAnimation(true);
       setReverseAnimation(false);
 

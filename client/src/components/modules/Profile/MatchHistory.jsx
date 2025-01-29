@@ -20,15 +20,15 @@ const MatchHistory = ({ matches }) => {
   const [selectedEndpoints, setSelectedEndpoints] = useState(null);
 
   useEffect(() => {
-    console.log("MatchHistory mounted with matches:", matches);
+    // console.log("MatchHistory mounted with matches:", matches);
     if (matches && matches.length > 0) {
-      console.log("First match:", matches[0]);
-      console.log("First match boards:", matches[0].boards);
-      console.log("First match final rankings:", matches[0].finalRankings);
+      // console.log("First match:", matches[0]);
+      // console.log("First match boards:", matches[0].boards);
+      // console.log("First match final rankings:", matches[0].finalRankings);
       if (matches[0].finalRankings) {
         const firstPlayer = matches[0].finalRankings[0];
-        console.log("First player:", firstPlayer);
-        console.log("Board for first player:", matches[0].boards?.[firstPlayer.playerId]);
+        // console.log("First player:", firstPlayer);
+        // console.log("Board for first player:", matches[0].boards?.[firstPlayer.playerId]);
       }
     }
   }, [matches]);
@@ -44,18 +44,18 @@ const MatchHistory = ({ matches }) => {
   const rightColumnMatches = matches.filter((_, index) => index % 2 === 1);
 
   const handleBoardClick = (match, playerId) => {
-    console.log("Clicked board for player:", playerId);
-    console.log("Match:", match);
-    console.log("Match boards:", match.boards);
-    console.log("Match endpoints:", match.endpoints);
+    // console.log("Clicked board for player:", playerId);
+    // console.log("Match:", match);
+    // console.log("Match boards:", match.boards);
+    // console.log("Match endpoints:", match.endpoints);
     const boardState = match.boards?.[playerId];
     const endpointState = match.endpoints?.[playerId];
-    console.log("Raw endpoint state:", endpointState);
+    // console.log("Raw endpoint state:", endpointState);
 
     if (boardState && Array.isArray(boardState) && boardState.length > 0) {
-      console.log("Found board state:", boardState);
+      // console.log("Found board state:", boardState);
       if (endpointState && Array.isArray(endpointState)) {
-        console.log("Found endpoint state:", endpointState);
+        // console.log("Found endpoint state:", endpointState);
         // Make sure endpoints are in the correct format: [[x, y], [x, y], ...]
         const formattedEndpoints = endpointState.map(endpoint => {
           // If endpoint is already an array of [x, y], use it as is
@@ -68,16 +68,16 @@ const MatchHistory = ({ matches }) => {
           }
           return null;
         }).filter(Boolean);
-        console.log("Formatted endpoints:", formattedEndpoints);
+        // console.log("Formatted endpoints:", formattedEndpoints);
         setSelectedEndpoints(formattedEndpoints);
       } else {
-        console.log("No valid endpoint state found:", endpointState);
+        // console.log("No valid endpoint state found:", endpointState);
         setSelectedEndpoints([]);
       }
       setSelectedBoard(boardState);
       setSelectedPlayerId(playerId);
     } else {
-      console.log("No valid board state found for player");
+      // console.log("No valid board state found for player");
     }
   };
 
@@ -93,7 +93,7 @@ const MatchHistory = ({ matches }) => {
   };
 
   const renderMatch = (match, index) => {
-    console.log(`Rendering match ${index}:`, match);
+    // console.log(`Rendering match ${index}:`, match);
     return (
       <div key={index} className="match-card">
         <div className="match-header">
@@ -136,12 +136,12 @@ const MatchHistory = ({ matches }) => {
           </div>
           <div className="rankings-list">
             {match.finalRankings.map((player, idx) => {
-              console.log(`Player ${idx} in match ${index}:`, player);
-              console.log(`Checking for board state:`, {
-                hasBoards: !!match.boards,
-                playerBoard: match.boards ? match.boards[player.playerId] : null,
-                playerId: player.playerId
-              });
+              // console.log(`Player ${idx} in match ${index}:`, player);
+              // console.log(`Checking for board state:`, {
+              //   hasBoards: !!match.boards,
+              //   playerBoard: match.boards ? match.boards[player.playerId] : null,
+              //   playerId: player.playerId
+              // });
               return (
                 <div key={idx} className="ranking-row">
                   <span className="rank">#{idx + 1}</span>

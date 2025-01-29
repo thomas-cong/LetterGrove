@@ -126,7 +126,7 @@ const shirts = [
 ];
 
 const ProfilePicture = ({ pfp, className }) => {
-  console.log("ProfilePicture render:", { pfp, className });
+  // console.log("ProfilePicture render:", { pfp, className });
   
   // Default profile picture if none is provided
   const defaultPicture = {

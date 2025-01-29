@@ -9,11 +9,11 @@ const PlayerStats = ({ selectedPlayer, gameResults }) => {
     return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
   };
 
-  console.log("selectedPlayer:", selectedPlayer);
-  console.log("gameResults:", gameResults);
+  // console.log("selectedPlayer:", selectedPlayer);
+  // console.log("gameResults:", gameResults);
 
   const selectedPlayerData = gameResults?.finalRankings?.find((p) => p.playerId === selectedPlayer);
-  console.log("selectedPlayerData:", selectedPlayerData);
+  // console.log("selectedPlayerData:", selectedPlayerData);
 
   return (
     <div className="stats-box">

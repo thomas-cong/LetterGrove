@@ -257,15 +257,15 @@ const Tile = (props) => {
    */
 
   const checkEndpoint = (params) => {
-    console.log("Is Your Turn?", props.isTurn);
-    console.log("Tile properties", props.cell);
+    // console.log("Is Your Turn?", props.isTurn);
+    // console.log("Tile properties", props.cell);
     if (params.isEndpoint) {
-      console.log("Endpoint found at:", params.tileX, params.tileY);
+      // console.log("Endpoint found at:", params.tileX, params.tileY);
       props.setEndPointSelected(true);
       props.setSelectedX(params.tileX);
       props.setSelectedY(params.tileY);
-      console.log("Submitting word:", props.word);
-      console.log(socket);
+      // console.log("Submitting word:", props.word);
+      // console.log(socket);
 
       if (socket) {
         socket.emit("enter word", {
@@ -280,7 +280,7 @@ const Tile = (props) => {
       props.setSuggestions([]);
     } else if (!params.isSuggestionEnd) {
       // Only clear endpoint selection if not clicking a suggestion end
-      console.log("No endpoint found at:", params.tileX, params.tileY);
+      // console.log("No endpoint found at:", params.tileX, params.tileY);
       props.setEndPointSelected(false);
     }
 
@@ -288,7 +288,7 @@ const Tile = (props) => {
       // Calculate the difference between the clicked tile and the selected tile to get direction
       let x_diff = Math.sign(params.tileX - props.selectedX);
       let y_diff = Math.sign(params.tileY - props.selectedY);
-      console.log(x_diff, y_diff);
+      // console.log(x_diff, y_diff);
 
       // Emit console signal to confirm word.
       if (socket) {

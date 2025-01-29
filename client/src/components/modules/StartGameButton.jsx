@@ -9,7 +9,7 @@ const StartGameButton = (props) => {
   const handleClick = () => {
     // Only send the start game request, don't set animation here
     if (buttonClicked) return;
-    console.log("made it here");
+    // console.log("made it here");
     setButtonClicked(true);
     post("/api/lobbyToGameTransition", { lobbyCode: props.lobbyCode });
   };

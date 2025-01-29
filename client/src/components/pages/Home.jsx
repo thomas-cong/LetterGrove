@@ -35,7 +35,7 @@ const cloudImages = [
 const Home = () => {
   const location = useLocation();
   const { showCloudAnimation, reverse } = location.state || {};
-  console.log("Navigation state:", location.state);
+  // console.log("Navigation state:", location.state);
 
   const { userId, handleLogin, handleLogout } = useContext(UserContext);
   const [showLogo, setShowLogo] = useState(true);

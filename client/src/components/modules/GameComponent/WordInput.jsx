@@ -29,14 +29,14 @@ const WordInput = (props) => {
    * Emits the word and coordinates to the server and clears the input
    */
   const handleKeyPress = () => {
-    console.log(props.endpointSelected);
+    // console.log(props.endpointSelected);
     if (!props.endpointSelected) {
       setAlertMessage("Select a golden tile first...");
       setShowAlert(true);
       return;
     }
 
-    console.log("Submitting word:", props.word);
+    // console.log("Submitting word:", props.word);
     if (socket) {
       socket.emit("enter word", {
         lobbyCode: props.lobbyCode,
@@ -100,7 +100,7 @@ const WordInput = (props) => {
 
   useEffect(() => {
     const handleInvalidWord = (info) => {
-      console.log("Invalid word:", info);
+      // console.log("Invalid word:", info);
       props.setAlertMessage(info.error);
       props.setShowAlert(true);
       // Keep focus on input and clear the word
@@ -130,7 +130,7 @@ const WordInput = (props) => {
               }
 
               props.setWord(lettersOnly.toUpperCase());
-              console.log(props.endpointSelected);
+              // console.log(props.endpointSelected);
               if (!props.endpointSelected) {
                 props.setAlertMessage("Select a golden tile first...");
                 props.setShowAlert(true);

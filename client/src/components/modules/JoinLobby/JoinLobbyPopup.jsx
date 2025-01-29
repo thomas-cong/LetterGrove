@@ -56,7 +56,7 @@ const JoinLobbyPopup = (props) => {
             })
               .then((result) => {
                 setShowAlert(false);
-                console.log("Joining lobby:", props.lobbyCode, "as", props.username);
+                // console.log("Joining lobby:", props.lobbyCode, "as", props.username);
                 navigate(`/${props.lobbyCode}`);
               })
               .catch((error) => {

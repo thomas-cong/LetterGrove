@@ -50,17 +50,17 @@ const GameComponent = (props) => {
   //@{params} letters updated
   //@{params} board
   const updateBoard = (params) => {
-    console.log(params);
+    // console.log(params);
     let updatedLetters = params.lettersUpdated;
     let updatedCrops = [];
     if (params.cropsUpdated) {
       updatedCrops = params.cropsUpdated;
     }
 
-    console.log("Updated letters:");
-    console.log(updatedLetters);
-    console.log("Updated crops:");
-    console.log(updatedCrops);
+    // console.log("Updated letters:");
+    // console.log(updatedLetters);
+    // console.log("Updated crops:");
+    // console.log(updatedCrops);
 
     // Create a deep copy of the board
     let newBoard = JSON.parse(JSON.stringify(params.board));
@@ -124,7 +124,7 @@ const GameComponent = (props) => {
 
   // Set up socket listeners
   useEffect(() => {
-    console.log("useEffect called");
+    // console.log("useEffect called");
 
     // Initial game state
     const handleInitialGame = (game) => {
@@ -132,7 +132,7 @@ const GameComponent = (props) => {
       setEndpoints(game.endpoints);
       setSelectedX(game.endpoints[game.endpoints.length - 1][0]);
       setSelectedY(game.endpoints[game.endpoints.length - 1][1]);
-      console.log("GAME ENDPOINTS" + game.endpoints);
+      // console.log("GAME ENDPOINTS" + game.endpoints);
     };
 
     // User-specific updates (letters, points, endpoints)
@@ -140,7 +140,7 @@ const GameComponent = (props) => {
       // Reset the suggestions since this only plays on user update
       setSuggestions([]);
 
-      console.log("User update:", info);
+      // console.log("User update:", info);
       setGameState((prevState) => ({
         ...prevState,
         points: info.totalPoints,
@@ -153,14 +153,14 @@ const GameComponent = (props) => {
       setSelectedY(info.endpoints[info.endpoints.length - 1][1]);
       setWord("");
       if (info.cropUpdates) {
-        console.log("Updated crops: " + info.cropUpdates);
+        // console.log("Updated crops: " + info.cropUpdates);
         setCropsUpdated(info.cropUpdates);
       }
     };
 
     // Global game updates (rankings, log messages)
     const handleGlobalUpdate = (info) => {
-      console.log("Global update:", info);
+      // console.log("Global update:", info);
       let logMessages = [];
       for (const message of info.logMessages) {
         let { userId, username, pointsGained } = message;
@@ -179,34 +179,34 @@ const GameComponent = (props) => {
 
     const handleTurnUpdate = (info) => {
       setSameBoard(true);
-      console.log("Turn update:", info);
+      // console.log("Turn update:", info);
       setTurnUsername(info.username); // Set username first
       setTimeout(() => {
         if (info.userId === props.userId) {
-          console.log("emitted username: " + info.username);
+          // console.log("emitted username: " + info.username);
           setIsTurn(true);
         } else {
-          console.log("emitted id: " + info.userId);
-          console.log("props id: " + props.userId);
+          // console.log("emitted id: " + info.userId);
+          // console.log("props id: " + props.userId);
           setIsTurn(false);
         }
       }, 300);
     };
 
     const handleBoardUpdate = (info) => {
-      console.log("Board update:", info);
+      // console.log("Board update:", info);
       setLettersUpdated(info.letterUpdates);
       setCropsUpdated(info.cropUpdates);
     };
 
     const handleGameOver = (info) => {
-      console.log("Game over:", info);
+      // console.log("Game over:", info);
       setShowEndGamePopup(true);
       setEndGameInfo(info);
     };
 
     const handleSocketJoinedGame = () => {
-      console.log("HandleSocketJoinedGame  " + props.lobbyCode);
+      // console.log("HandleSocketJoinedGame  " + props.lobbyCode);
       get("/api/currentGame", { lobbyCode: props.lobbyCode, userId: props.userId });
     };
 
