@@ -203,8 +203,8 @@ const MatchHistory = ({ matches }) => {
               <h4>Final Board State <span style={{ color: "var(--primary)", fontSize: "inherit" }}>({matches.find(m => 
                 m.finalRankings.some(p => p.playerId === selectedPlayerId))
                 ?.finalRankings.find(p => p.playerId === selectedPlayerId)?.username})</span></h4>
-              <button className="close-button" onClick={closeBoard}>×</button>
             </div>
+            <button className="close-button" onClick={closeBoard}>×</button>
             <Board
               board={selectedBoard}
               endpoints={selectedEndpoints ? selectedEndpoints : []}

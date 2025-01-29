@@ -12,7 +12,7 @@
 }
 
 .pfp-editor-content {
-  background: white;
+  background: rgb(222, 222, 222);
   border-radius: 12px;
   padding: 2rem;
   position: relative;
@@ -39,11 +39,13 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  transform: translateY(-14%);
 }
 
 .large-preview {
   width: 300px !important;
   height: 300px !important;
+  background:rgb(222, 222, 222) !important;
 }
 
 .pfp-controls {
