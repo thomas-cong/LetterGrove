@@ -23,6 +23,8 @@ const PlayerStats = ({ selectedPlayer, gameResults }) => {
           <h4>
             <Link
               to={`/profile/${selectedPlayer}`}
+              target="_blank"
+              rel="noopener noreferrer"
               style={{
                 color: "black",
                 textDecoration: "underline",
