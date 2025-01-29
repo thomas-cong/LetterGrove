@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import { socket } from "../../../client-socket.js";
-import ConfirmImage from "../../../assets/Confirm.png";
-import AlertBox from "../AlertBox/AlertBox";
 import "./WordInput.css";
 
 /**

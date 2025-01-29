@@ -5,7 +5,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import BasicInfo from "../modules/Profile/BasicInfo";
 import DetailedStats from "../modules/Profile/DetailedStats";
 import MatchHistory from "../modules/Profile/MatchHistory";
-import ProfileBackground from "../../assets/ProfileBackground.png";
 import homebutton from "../../assets/homebutton.png";
 import "./Profile.css";
 
@@ -34,19 +33,10 @@ const Profile = () => {
 
   return (
     <div className="profile-container">
-      <img 
-        src={homebutton} 
-        alt="Home" 
-        className="homebutton" 
-        onClick={() => navigate("/")} 
-      />
+      <img src={homebutton} alt="Home" className="homebutton" onClick={() => navigate("/")} />
       <div className="profile-content">
         <div className="profile-top">
-          <BasicInfo 
-            userStats={userStats} 
-            identifier={identifier}
-            currentUserId={userId} 
-          />
+          <BasicInfo userStats={userStats} identifier={identifier} currentUserId={userId} />
           <DetailedStats userStats={userStats} />
         </div>
         <MatchHistory matches={matchHistory} />
