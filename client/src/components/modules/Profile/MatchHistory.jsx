@@ -131,7 +131,9 @@ const MatchHistory = ({ matches }) => {
         </div>
 
         <div className="match-rankings">
-          <div className="rankings-header">Final Rankings</div>
+          <div className="rankings-header">
+            <span style={{ color: '#000' }}>Final Rankings</span>
+          </div>
           <div className="rankings-list">
             {match.finalRankings.map((player, idx) => {
               console.log(`Player ${idx} in match ${index}:`, player);
@@ -143,6 +145,7 @@ const MatchHistory = ({ matches }) => {
               return (
                 <div key={idx} className="ranking-row">
                   <span className="rank">#{idx + 1}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexGrow: 1 }}>
                     <Link
                       to={`/profile/${player.playerId}`}
                       target="_blank"
@@ -151,9 +154,6 @@ const MatchHistory = ({ matches }) => {
                     >
                       {player.username}
                     </Link>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ flexGrow: 1 }}></span>
-                    <span className="player-score" style={{ marginRight: '10px' }}>{player.score}</span>
                     {match.boards &&
                      match.boards[player.playerId] &&
                      Array.isArray(match.boards[player.playerId]) &&
@@ -171,6 +171,10 @@ const MatchHistory = ({ matches }) => {
                       </button>
                     )}
                   </div>
+                  <span className="player-score" style={{ marginRight: '25px', minWidth: '80px', textAlign: 'right', whiteSpace: 'nowrap', display: 'inline-block', color: '#1565C0' }}>
+                    <span style={{ display: 'inline-block', minWidth: '30px', textAlign: 'right', color: '#1565C0' }}>{player.score}</span>
+                    <span style={{ marginLeft: '-5px', color: '#1565C0' }}> pts</span>
+                  </span>
                 </div>
               );
             })}

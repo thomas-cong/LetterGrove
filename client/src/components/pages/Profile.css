@@ -152,6 +152,14 @@
   color: #333;
 }
 
+.rankings-header {
+  font-weight: bold;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+}
+
 /* Bottom Section - Match History */
 .match-history {
   background: rgba(255, 255, 255, 0.7);

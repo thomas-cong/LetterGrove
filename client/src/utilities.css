@@ -272,9 +272,9 @@ form {
 .match-stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 0.75rem;
-  margin-bottom: 1rem;
-  padding-bottom: 1rem;
+  gap: 0rem;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
   border-bottom: 1px solid var(--grey);
 }
 
@@ -312,7 +312,7 @@ form {
   font-size: 0.9rem;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid var(--grey);
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   letter-spacing: 0.5px;
 }
 
