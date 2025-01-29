@@ -131,9 +131,9 @@ const ProfilePicture = ({ pfp, className }) => {
   // Default profile picture if none is provided
   const defaultPicture = {
     Accessory: 0,
-    Hair: 0,
-    Eyes: 0,
-    Face: 0,
+    Hair: 19,
+    Eyes: 3,
+    Face: 1,
     Shirt: 0,
   };
 
