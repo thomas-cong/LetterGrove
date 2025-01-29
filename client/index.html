@@ -8,44 +8,44 @@
     <title>LetterGrove</title>
     <script>
       // Create audio element for button clicks
-      const buttonSound = new Audio('/src/assets/signsound.wav');
+      const buttonSound = new Audio("/signsound.wav");
 
       // Add click listener to document
-      document.addEventListener('click', (event) => {
+      document.addEventListener("click", (event) => {
         // Check if the clicked element is a button or has button-like classes
         const target = event.target;
         const isClickable =
-          target.tagName === 'BUTTON' ||
-          target.classList.contains('button-container') ||
-          target.parentElement?.classList.contains('button-container') ||
-          target.classList.contains('homepagesign') ||
-          target.parentElement?.classList.contains('homepagesign') ||
-          target.classList.contains('createdcloseButton') ||
-          target.parentElement?.classList.contains('createdcloseButton') ||
-          target.classList.contains('closeButton') ||
-          target.parentElement?.classList.contains('closeButton') ||
-          target.classList.contains('homebutton') ||
-          target.parentElement?.classList.contains('homebutton') ||
-          target.classList.contains('join-lobby-container') ||
-          target.parentElement?.classList.contains('join-lobby-container') ||
-          target.classList.contains('tutorial-nav') ||
-          target.parentElement?.classList.contains('tutorial-nav') ||
+          target.tagName === "BUTTON" ||
+          target.classList.contains("button-container") ||
+          target.parentElement?.classList.contains("button-container") ||
+          target.classList.contains("homepagesign") ||
+          target.parentElement?.classList.contains("homepagesign") ||
+          target.classList.contains("createdcloseButton") ||
+          target.parentElement?.classList.contains("createdcloseButton") ||
+          target.classList.contains("closeButton") ||
+          target.parentElement?.classList.contains("closeButton") ||
+          target.classList.contains("homebutton") ||
+          target.parentElement?.classList.contains("homebutton") ||
+          target.classList.contains("join-lobby-container") ||
+          target.parentElement?.classList.contains("join-lobby-container") ||
+          target.classList.contains("tutorial-nav") ||
+          target.parentElement?.classList.contains("tutorial-nav") ||
           // target.classList.contains('final-ranking-item') ||
           // target.parentElement?.classList.contains('final-ranking-item') ||
           // target.classList.contains('playerlink') ||
           // target.parentElement?.classList.contains('playerlink') ||
-          target.classList.contains('board-option') ||
-          target.parentElement?.classList.contains('board-option') ||
-          target.classList.contains('home-logoutbutton-container') ||
-          target.parentElement?.classList.contains('home-logoutbutton-container') ||
-          target.classList.contains('start-lobby-container') ||
-          target.parentElement?.classList.contains('start-lobby-container') ||
-          target.classList.contains('sign-container') ||
-          target.parentElement?.classList.contains('sign-container');
+          target.classList.contains("board-option") ||
+          target.parentElement?.classList.contains("board-option") ||
+          target.classList.contains("home-logoutbutton-container") ||
+          target.parentElement?.classList.contains("home-logoutbutton-container") ||
+          target.classList.contains("start-lobby-container") ||
+          target.parentElement?.classList.contains("start-lobby-container") ||
+          target.classList.contains("sign-container") ||
+          target.parentElement?.classList.contains("sign-container");
 
         if (isClickable) {
           buttonSound.currentTime = 0; // Reset sound to start
-          buttonSound.play().catch(err => console.log("Could not play sound:", err));
+          buttonSound.play().catch((err) => console.log("Could not play sound:", err));
         }
       });
     </script>
