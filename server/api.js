@@ -92,12 +92,12 @@ router.post("/openLobby", (req, res) => {
   const username = req.body.username;
 
   // Debug session state
-  console.log("Session debug:", {
-    hasSession: !!req.session,
-    sessionUser: req.session?.user,
-    reqUser: req.user,
-    sessionID: req.sessionID,
-  });
+  // console.log("Session debug:", {
+  //   hasSession: !!req.session,
+  //   sessionUser: req.session?.user,
+  //   reqUser: req.user,
+  //   sessionID: req.sessionID,
+  // });
 
   // Check if user is authenticated
   if (!req.user) {
@@ -105,12 +105,12 @@ router.post("/openLobby", (req, res) => {
     return res.status(401).send({ error: "Not authenticated" });
   }
 
-  console.log("Auth state:", {
-    hasUser: !!req.user,
-    userId: req.user._id,
-    username: req.body.username,
-  });
-  console.log("Username:", username);
+  // console.log("Auth state:", {
+  //   hasUser: !!req.user,
+  //   userId: req.user._id,
+  //   username: req.body.username,
+  // });
+  // console.log("Username:", username);
 
   // map lobbyCode to lobby information
   openLobbies[lobbyCode] = {
@@ -147,12 +147,12 @@ router.post("/joinLobby", (req, res) => {
   const username = req.body.username;
 
   // Debug session state
-  console.log("Session debug:", {
-    hasSession: !!req.session,
-    sessionUser: req.session?.user,
-    reqUser: req.user,
-    sessionID: req.sessionID,
-  });
+  // console.log("Session debug:", {
+  //   hasSession: !!req.session,
+  //   sessionUser: req.session?.user,
+  //   reqUser: req.user,
+  //   sessionID: req.sessionID,
+  // });
 
   // Check if user is authenticated
   if (!req.user) {
@@ -194,15 +194,14 @@ router.get("/isLobbyOwner", (req, res) => {
 
 router.post("/lobbyToGameTransition", (req, res) => {
   const gameInfo = openLobbies[req.body.lobbyCode];
-  console.log(req.body.lobbyCode);
-  console.log(openLobbies);
+  // console.log(req.body.lobbyCode);
+  // console.log(openLobbies);
   if (gameInfo.lobbyOwner != req.user._id) {
     return res.status(401).send({ error: "Not authorized" });
   }
   if (!gameInfo) {
     return res.status(404).send({ error: "Lobby not found" });
   }
-  console.log("MADE IT HERE!");
   socketManager.lobbyToGameTransition({
     lobbyCode: req.body.lobbyCode,
   });
@@ -214,8 +213,8 @@ router.post("/startGame", (req, res) => {
   if (!gameInfo) {
     return res.status(404).send({ error: "Lobby not found" });
   }
-  console.log(req.body.lobbyCode);
-  console.log(openLobbies);
+  // console.log(req.body.lobbyCode);
+  // console.log(openLobbies);
   if (gameInfo.lobbyOwner != req.user._id) {
     return res.status(401).send({ error: "Not authorized" });
   }
@@ -232,7 +231,7 @@ router.post("/startTutorial", (req, res) => {
   if (!gameInfo) {
     return res.status(404).send({ error: "Lobby not found" });
   }
-  console.log(gameInfo);
+  // console.log(gameInfo);
   socketManager.initiateGame({
     gameInfo: gameInfo,
     lobbyCode: req.body.lobbyCode,
@@ -258,13 +257,13 @@ router.get("/players", (req, res) => {
     res.status(404);
     res.send({ error: "Lobby not found" });
   }
-  console.log(openLobbies[lobbyCode].players);
+  // console.log(openLobbies[lobbyCode].players);
   res.send(Object.values(Object.keys(openLobbies[lobbyCode].players)));
 });
 
 router.get("/currentGame", (req, res) => {
-  console.log("currentGame notification");
-  console.log("CurrentGame Request Body", req.query);
+  // console.log("currentGame notification");
+  // console.log("CurrentGame Request Body", req.query);
   socketManager.sendUserInitialGame(req.user._id, req.query.lobbyCode);
   res.send({});
 });
@@ -297,7 +296,7 @@ router.get("/gameSettings", (req, res) => {
     sameBoard: lobby.sameBoard,
     difficulty: lobby.difficulty,
   };
-  console.log(gameSettings);
+  // console.log(gameSettings);
   res.send(gameSettings);
 });
 

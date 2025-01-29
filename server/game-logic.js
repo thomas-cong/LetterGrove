@@ -328,7 +328,7 @@ const randomlyGenerateBoard = (props) => {
   const generatePosition = createRandomPositionGenerator(ARRAY_SIZE);
   let attempts = 0;
   const MAX_ATTEMPTS = 1000;
-  console.log("remainingLetters: " + remainingLetters);
+  // console.log("remainingLetters: " + remainingLetters);
 
   // Track available positions for crops and powerups
   const availablePositions = new Set();
@@ -452,8 +452,8 @@ const enterWord = (userId, props) => {
       let currentX = x;
       let currentY = y;
       for (let i = 0; i < word.length; i++) {
-        console.log("Board Tile:", board[currentY][currentX].letter);
-        console.log("Word Tile:", word[i]);
+        // console.log("Board Tile:", board[currentY][currentX].letter);
+        // console.log("Word Tile:", word[i]);
 
         // use the y first, since it is getting the row then getting the column
         if (
@@ -464,7 +464,7 @@ const enterWord = (userId, props) => {
           continue direction;
         }
         // If works out, add to suggestion, move to next tile in same direction
-        console.log("Letter matched:", currentX, currentY, "Letter:", word[i]);
+        // console.log("Letter matched:", currentX, currentY, "Letter:", word[i]);
         suggestion.push([currentX, currentY, word[i]]);
         currentX += dx;
         currentY += dy;
@@ -544,11 +544,10 @@ const confirmWord = (userId, props) => {
   };
   let pointsGained = 0;
   let letterUpdates = [];
-  console.log();
   for (let i = 0; i < word.length; i++) {
-    console.log(
-      "x: " + currentX + " y: " + currentY + " board: " + board[currentY][currentX].letter
-    );
+    // console.log(
+    //   "x: " + currentX + " y: " + currentY + " board: " + board[currentY][currentX].letter
+    // );
     if (i === 0) {
       currentX += dx;
       currentY += dy;
@@ -573,7 +572,7 @@ const confirmWord = (userId, props) => {
       powerupsCollected[powerup] += 1;
     }
     if (board[currentY][currentX].crop !== null) {
-      console.log("Crop Found: " + board[currentY][currentX].crop);
+      // console.log("Crop Found: " + board[currentY][currentX].crop);
       crop = board[currentY][currentX].crop;
       board[currentY][currentX].crop = null;
       cropsCollected[crop] += 1;
@@ -613,7 +612,7 @@ const confirmWord = (userId, props) => {
   for (i = 0; i < powerupsCollected.wateringCan; i++) {
     userGameState.powerupsUsed += 1;
     let randomPositionGenerator = createRandomPositionGenerator(15);
-    console.log("randomPositionGenerator: ", randomPositionGenerator());
+    // console.log("randomPositionGenerator: ", randomPositionGenerator());
 
     // Place each crop type once
     const cropTypes = ["cherry", "grape", "orange"];
@@ -680,9 +679,9 @@ const confirmWord = (userId, props) => {
   game.log.push(...logMessages);
 
   // Log the board state after word confirmation
-  console.log("\nBoard State after word confirmation:");
-  console.log("Word:", word);
-  console.log("Points gained:", pointsGained);
+  // console.log("\nBoard State after word confirmation:");
+  // console.log("Word:", word);
+  // console.log("Points gained:", pointsGained);
   let boardLog = "";
   for (let i = 0; i < ARRAY_SIZE; i++) {
     let row = "";
