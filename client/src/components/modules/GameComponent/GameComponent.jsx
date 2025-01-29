@@ -12,6 +12,10 @@ import AlertBox from "../AlertBox/AlertBox";
 import TurnDisplay from "./TurnDisplay";
 import GameEndPopup from "./GameEndPopup/GameEndPopup.jsx";
 import Legend from "./Legend";
+import tilePlaceSound from "../../../../public/tileplace.mp3";
+
+// Create audio element for tile placement
+const tileSound = new Audio(tilePlaceSound);
 
 // @props isTutorial: boolean
 
@@ -101,6 +105,8 @@ const GameComponent = (props) => {
       ...prevState,
       board: newBoard,
     }));
+    // Play sound when board updates
+    tileSound.play().catch((err) => console.log("Error playing sound:", err));
   };
 
   // useEffect(() => {
