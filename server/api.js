@@ -394,7 +394,7 @@ router.get("/userProfilePicture", (req, res) => {
         res.status(404).send({ error: "User not found" });
         return;
       }
-      res.send(user.profilePicture || {
+      res.send(user.pfp || {
         Accessory: 0,
         Hair: 0,
         Eyes: 0,
@@ -456,14 +456,14 @@ router.get("/matches", (req, res) => {
   res.send(mockMatches);
 });
 
-router.get("/profilePicture", (req, res) => {
+router.get("/pfp", (req, res) => {
   const userId = req.query.userId;
   User.findById(userId)
     .then((user) => {
       if (!user) {
         return res.status(404).send({ error: "User not found" });
       }
-      res.send(user.profilePicture);
+      res.send(user.pfp);
     })
     .catch((err) => {
       console.log(`Failed to get user profile picture: ${err}`);
@@ -471,6 +471,25 @@ router.get("/profilePicture", (req, res) => {
     });
 });
 
+router.post("/setPfp", (req, res) => {
+  const userId = req.body.userId;
+  const pfp = req.body.pfp;
+  User.findById(userId)
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send({ error: "User not found" });
+      }
+      user.pfp = pfp;
+      return user.save();
+    })
+    .then((user) => {
+      res.send(user.pfp);
+    })
+    .catch((err) => {
+      console.log(`Failed to set user profile picture: ${err}`);
+      res.status(500).send({ error: "Failed to set user profile picture" });
+    });
+})
 // anything else falls to this "not found" case
 
 router.all("*", (req, res) => {

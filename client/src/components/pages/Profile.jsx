@@ -10,6 +10,7 @@ import homebutton from "../../assets/homebutton.png";
 import "./Profile.css";
 
 const Profile = () => {
+  const { userId } = useContext(UserContext);
   const { identifier } = useParams();
   const navigate = useNavigate();
   const [userStats, setUserStats] = useState(null);
@@ -41,7 +42,11 @@ const Profile = () => {
       />
       <div className="profile-content">
         <div className="profile-top">
-          <BasicInfo userStats={userStats} />
+          <BasicInfo 
+            userStats={userStats} 
+            identifier={identifier}
+            currentUserId={userId} 
+          />
           <DetailedStats userStats={userStats} />
         </div>
         <MatchHistory matches={matchHistory} />

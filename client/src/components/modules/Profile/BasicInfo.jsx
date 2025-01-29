@@ -2,30 +2,37 @@ import React, { useState, useEffect } from "react";
 import { get } from "../../../utilities";
 import "./BasicInfo.css";
 import ProfilePicture from "./ProfilePicture";
+import ProfilePictureEditor from "./ProfilePictureEditor";
+import { useNavigate, useParams } from "react-router-dom";
 
-const BasicInfo = ({ userStats }) => {
-  const [profilePicture, setProfilePicture] = useState(null);
+const BasicInfo = ({ userStats, identifier, currentUserId }) => {
+  const [pfp, setPfp] = useState({
+    default: true,
+  });
+  const [showEditor, setShowEditor] = useState(false);
 
   useEffect(() => {
-    setProfilePicture({
-      Accessory: 0,
-      Hair: 0,
-      Eyes: 0,
-      Face: 0,
-      Shirt: 0
-    })
-    // if (userStats._id) {
-    //   get("/api/userProfilePicture", { userId: userStats._id }).then((pfp) => {
-    //     setProfilePicture(pfp);
-    //   });
-    // }
-  }, [userStats._id]);
+    if (identifier) {
+      get("/api/userProfilePicture", { userId: identifier }).then((pfp) => {
+        setPfp(pfp);
+      });
+    }
+  }, [identifier]);
+
+  const handlePfpUpdate = (newPfp) => {
+    setPfp(newPfp);
+  };
 
   return (
     <div className="profile-basic">
       <div className="profile-header">
-        <ProfilePicture profilePicture={profilePicture} className="profile-picture" />
-        {/* <h2 className="profile-name">{userStats.name}</h2> */}
+        <ProfilePicture pfp={pfp} className="profile-picture" />
+        {currentUserId === identifier && (
+          <button className="edit-pfp-button" onClick={() => setShowEditor(true)}>
+            Change Profile Picture
+          </button>
+        )}
+        <div className="profile-name">{userStats.name}</div>
       </div>
       <div className="profile-stats-basic">
         <div className="stat-item">
@@ -45,6 +52,15 @@ const BasicInfo = ({ userStats }) => {
           <span>{((userStats.wins / userStats.games_played) * 100).toFixed(1)}%</span>
         </div>
       </div>
+
+      {showEditor && (
+        <ProfilePictureEditor
+          initialPfp={pfp}
+          userId={identifier}
+          onClose={() => setShowEditor(false)}
+          onUpdate={handlePfpUpdate}
+        />
+      )}
     </div>
   );
 };

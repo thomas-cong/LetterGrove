@@ -2,11 +2,29 @@
   position: relative;
   width: 200px;
   height: 200px;
-  border-radius: 8px;
-  border: 4px solid var(--primary--dim);
+  background-color: rgba(226, 226, 226, 0.584);
+  /* border: 4px solid var(--primary--dim); */
   overflow: hidden;
   aspect-ratio: 1;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Override size for player display */
+.pfp.profile-picture-container {
+  width: 60px;
+  height: 60px;
+  background: none;
+  transform: translateY(-8px);
+}
+
+/* Special case for final rankings */
+.final-ranking-item .pfp.profile-picture-container {
+  transform: translateY(-10px);
+}
+
+.ranking-slip .pfp.profile-picture-container {
+  width: calc(60px * 0.8);
+  height: calc(60px * 0.8);
 }

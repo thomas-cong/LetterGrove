@@ -1,5 +1,8 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import animation404 from "../../assets/404animation.gif";
+import homebutton from "../../assets/homebutton.png";
+import "../../utilities.css";
 
 const NotFound = () => {
   return (
@@ -27,6 +30,9 @@ const NotFound = () => {
           The page you requested couldn't be found.
         </p>
       </div>
+        <Link to="/" style={{ position: "absolute", top: "20px", right: "150px" }}>
+          <img src={homebutton} alt="Home" className="homebutton" />
+        </Link>
     </div>
   );
 };

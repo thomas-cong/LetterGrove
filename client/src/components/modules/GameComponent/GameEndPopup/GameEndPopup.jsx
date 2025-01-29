@@ -75,7 +75,7 @@ const GameEndPopup = (props) => {
                       playerId={player.playerId}
                       currentUserId={props.currentUserId}
                       name={player.username}
-                      profilePicture={testProfilePicture}
+                      isSpecialCase={true}
                     />
                     <span className="score">{player.score} pts</span>
                   </div>

@@ -34,7 +34,7 @@ function getOrCreateUser(user) {
       points: 0,
       score: -1,
       rank: -1,
-      profilePicture: {
+      pfp: {
         Accessory: 0,
         Hair: 0,
         Eyes: 0,

@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const UserSchema = new mongoose.Schema({
   name: String,
   googleid: String,
-  profilePicture: {
+  pfp: {
     Accessory: { type: Number, default: 0 },
     Hair: { type: Number, default: 0 },
     Eyes: { type: Number, default: 0 },
