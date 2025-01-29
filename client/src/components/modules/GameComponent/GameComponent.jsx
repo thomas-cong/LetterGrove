@@ -330,9 +330,7 @@ const GameComponent = (props) => {
               </div>
             </div>
           </div>
-          <div className="gamecomplegendcontainer">
-            {!props.isTutorial && <Legend />}
-          </div>
+          <div className="gamecomplegendcontainer">{!props.isTutorial && <Legend />}</div>
         </div>
         <div className="gamecomprightcontainer">
           <div className="gamecomprankings">
