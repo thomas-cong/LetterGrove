@@ -61,14 +61,12 @@ const App = () => {
 
   return (
     <UserContext.Provider value={authContextValue}>
-      <div className="app-container">
-        <BackgroundMusic />
-        <DisconnectModal 
-          show={showDisconnectModal} 
-          message="You have been disconnected. Please refresh the page to reconnect."
-        />
-        <Outlet />
-      </div>
+      <BackgroundMusic />
+      <DisconnectModal 
+        show={showDisconnectModal} 
+        message="You have been disconnected. Please refresh the page to reconnect."
+      />
+      <Outlet />
     </UserContext.Provider>
   );
 };
