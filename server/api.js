@@ -167,6 +167,11 @@ router.post("/joinLobby", (req, res) => {
   });
 
   if (lobbyCode in openLobbies) {
+    if (Object.keys(openLobbies[lobbyCode].players).length >= 4) {
+      console.log("Lobby is full");
+      res.status(400).send({ error: "Lobby is full" });
+      return;
+    }
     openLobbies[lobbyCode].players[req.user._id] = username;
     console.log("Lobby Joined");
     // socketManager.joinSocket({ lobbyCode: lobbyCode });
