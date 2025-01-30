@@ -119,8 +119,8 @@ const Lobby = () => {
 
   useEffect(() => {
     const handleYouHaveBeenDisconnected = () => {
-      setShowDisconnectModal(true);
-      setDisconnectMessage("You have been disconnected. Please refresh the page to reconnect.");
+      // setShowDisconnectModal(true);
+      // setDisconnectMessage("You have been disconnected. Please refresh the page to reconnect.");
     };
 
     socket.on("you have been disconnected", handleYouHaveBeenDisconnected);

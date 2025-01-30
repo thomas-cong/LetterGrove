@@ -255,7 +255,7 @@ const initiateGame = (props) => {
       userGameStates: {},
       players: players,
       gameStatus: "waiting",
-      secondsRemaining: mode === "Time" ? gameInfo.steps : 36000, // default to 10 hours if mode isn't time
+      secondsRemaining: mode === "Time" ? gameInfo.steps : 9000, // default to 10 hours if mode isn't time
       pointsToWin: mode === "Points" ? gameInfo.steps : null,
       rankings: [],
       log: [],
@@ -273,7 +273,7 @@ const initiateGame = (props) => {
       userGameStates: {},
       players: players,
       gameStatus: "waiting",
-      secondsRemaining: mode === "Time" ? gameInfo.steps : 36000, // default to 10 hours if mode isn't time
+      secondsRemaining: mode === "Time" ? gameInfo.steps : 9000, // default to 10 hours if mode isn't time
       pointsToWin: mode === "Points" ? gameInfo.steps : null,
       rankings: [],
       log: [],
