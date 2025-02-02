@@ -227,6 +227,7 @@ router.post("/startGame", (req, res) => {
   socketManager.initiateGame({
     gameInfo: gameInfo,
     lobbyCode: req.body.lobbyCode,
+    isTutorial: false,
   });
   res.send({ message: "Game Started" });
 });
