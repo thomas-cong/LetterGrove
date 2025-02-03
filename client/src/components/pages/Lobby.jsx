@@ -56,7 +56,7 @@ const Lobby = (props) => {
       get("/api/players", { lobbyCode: lobbyId }).then((players) => {
         let found = false;
         for (const value of players) {
-          if (value == user._id) {
+          if (value === user._id) {
             // console.log("found it");
             found = true;
           }
@@ -119,8 +119,8 @@ const Lobby = (props) => {
 
   useEffect(() => {
     const handleYouHaveBeenDisconnected = () => {
-      setShowDisconnectModal(true);
-      setDisconnectMessage("You have been disconnected. Please refresh the page to reconnect.");
+      // setShowDisconnectModal(true);
+      // setDisconnectMessage("You have been disconnected. Please refresh the page to reconnect.");
     };
 
     socket.on("you have been disconnected", handleYouHaveBeenDisconnected);

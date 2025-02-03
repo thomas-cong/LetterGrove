@@ -5,21 +5,24 @@ import jwt_decode from "jwt-decode";
 
 import "../utilities.css";
 
-import { socket } from "../client-socket";
+import { socket, setDisconnectHandler } from "../client-socket";
 
 import { get, post } from "../utilities";
 
 import BackgroundMusic from "./modules/BackgroundMusic";
 
-export const UserContext = createContext(null);
+import DisconnectModal from "./modules/DisconnectModal/DisconnectModal";
 
 import "../assets/font.css";
+
+export const UserContext = createContext(null);
 
 /**
  * Define the "App" component
  */
 const App = () => {
   const [userId, setUserId] = useState(undefined);
+  const [showDisconnectModal, setShowDisconnectModal] = useState(false);
 
   useEffect(() => {
     get("/api/whoami").then((user) => {
@@ -27,6 +30,11 @@ const App = () => {
         // they are registed in the database, and currently logged in.
         setUserId(user._id);
       }
+    });
+
+    // Set up disconnect handler
+    setDisconnectHandler(() => {
+      setShowDisconnectModal(true);
     });
   }, []);
 
@@ -54,7 +62,11 @@ const App = () => {
   return (
     <UserContext.Provider value={authContextValue}>
       <BackgroundMusic />
-      <Outlet userId={userId} />
+      <DisconnectModal
+        show={showDisconnectModal}
+        message="You have been disconnected. Please refresh the page to reconnect."
+      />
+      <Outlet />
     </UserContext.Provider>
   );
 };

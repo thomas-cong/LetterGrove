@@ -255,7 +255,7 @@ const initiateGame = (props) => {
       userGameStates: {},
       players: players,
       gameStatus: "waiting",
-      secondsRemaining: mode === "Time" ? gameInfo.steps : 36000, // default to 10 hours if mode isn't time
+      secondsRemaining: mode === "Time" ? gameInfo.steps : 9000, // default to 10 hours if mode isn't time
       pointsToWin: mode === "Points" ? gameInfo.steps : null,
       rankings: [],
       log: [],
@@ -273,7 +273,7 @@ const initiateGame = (props) => {
       userGameStates: {},
       players: players,
       gameStatus: "waiting",
-      secondsRemaining: mode === "Time" ? gameInfo.steps : 36000, // default to 10 hours if mode isn't time
+      secondsRemaining: mode === "Time" ? gameInfo.steps : 9000, // default to 10 hours if mode isn't time
       pointsToWin: mode === "Points" ? gameInfo.steps : null,
       rankings: [],
       log: [],
@@ -397,6 +397,7 @@ const initiateGame = (props) => {
     }
   }
   startTimer({
+    isTutorial: game.isTutorial,
     lobbyCode: lobbyCode,
     secondsRemaining: game.secondsRemaining,
   });
@@ -446,7 +447,8 @@ const startTimer = (props) => {
     if (game.secondsRemaining === 0) {
       game.gameStatus = "ended";
       handleEndGame({
-        isTutorial: false,
+        secondsElapsed: game.secondsElapsed,
+        isTutorial: props.isTutorial,
         lobbyCode: lobbyCode,
         reason:
           "Time's up! " +
@@ -492,7 +494,7 @@ const handleEndGame = (props) => {
   for (const userId in game.players) {
     endpoints[userId] = game.userGameStates[userId].endpoints;
   }
-  if (!props.isTutorial) {
+  if (!props.isTutorial && props.secondsElapsed < 8900) {
     const completedGame = new CompletedGame({
       boards: boards,
       players: game.players,

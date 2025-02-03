@@ -6,9 +6,9 @@ import tutorialRight from "../../../../assets/TutorialRight.png";
 // Define positions for each step
 const LOCATION_POSITIONS = {
   1: { top: "30%", left: "1%" },
-  2: { top: "15%", left: "28%" },
+  2: { top: "15%", left: "40%" }, 
   3: { top: "25%", left: "69%" },
-  4: { top: "15%", left: "40%" },
+  4: { top: "15%", left: "45%" },
   5: { bottom: "18%", left: "10%" },
 };
 

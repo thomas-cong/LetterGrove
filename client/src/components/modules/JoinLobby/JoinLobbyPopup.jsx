@@ -60,7 +60,11 @@ const JoinLobbyPopup = (props) => {
                 navigate(`/${props.lobbyCode}`);
               })
               .catch((error) => {
-                setAlertMessage("Please refresh the page: user not authenticated");
+                if (error.includes("response status 400")) {
+                  setAlertMessage("Lobby is full!");
+                } else {
+                  setAlertMessage("Please refresh the page: user not authenticated")
+                }
                 setShowAlert(true);
               });
           }}
