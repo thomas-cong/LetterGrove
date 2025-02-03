@@ -62,8 +62,8 @@ const App = () => {
   return (
     <UserContext.Provider value={authContextValue}>
       <BackgroundMusic />
-      <DisconnectModal 
-        show={showDisconnectModal} 
+      <DisconnectModal
+        show={showDisconnectModal}
         message="You have been disconnected. Please refresh the page to reconnect."
       />
       <Outlet />

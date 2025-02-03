@@ -25,7 +25,7 @@ import thirdTopRight from "../../assets/CLOUDENTERING/THIRD_CLOUDENTERING_TOP_RI
 import lastBottomLeft from "../../assets/CLOUDENTERING/LAST_CLOUDENTERING_BOTTOM_LEFT.png";
 import lastTopRight from "../../assets/CLOUDENTERING/LAST_CLOUDENTERING_TOP_RIGHT.png";
 
-const Lobby = () => {
+const Lobby = (props) => {
   let { lobbyId } = useParams();
 
   const [u_id, setU_id] = useState("");
