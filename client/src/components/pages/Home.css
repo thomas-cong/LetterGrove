@@ -48,7 +48,6 @@
   cursor: pointer;
   overflow: hidden;
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 1));
-  /* transition: all 0.3s ease; */
 
 }
 
@@ -101,7 +100,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* justify-content: center; */
   width: auto;
   height: auto;
   gap: 3vw;
@@ -123,7 +121,6 @@
   order: -1;
   position: relative;
   width: 40vw;
-  /* max-width: 600px; */
   min-width: 300px;
   height: auto;
   z-index: 1;

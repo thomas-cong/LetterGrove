@@ -19,7 +19,6 @@
   min-height: calc(80px * 0.8);
   display: flex;
   align-items: center;
-  /* filter: drop-shadow(0 0 10px rgba(0, 0, 0, 1)); */
 }
 
 .playerDisplay.ranking-slip .playerName {
@@ -33,7 +32,6 @@
   margin: 0;
   position: relative;
   z-index: 1;
-  /* transform: translateY(-5px); */
 }
 
 .pfp {

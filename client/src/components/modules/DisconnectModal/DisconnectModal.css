@@ -49,7 +49,6 @@
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-  /* background-color: #3498db; */
   color: white;
   border: none;
   padding: 1rem 1.5rem;
@@ -64,7 +63,6 @@
 }
 
 .disconnect-modal-button:hover {
-  /* background-color: #2980b9; */
   transform: scale(1.1);
 }
 

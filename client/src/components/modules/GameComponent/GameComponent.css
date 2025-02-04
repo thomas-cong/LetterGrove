@@ -37,7 +37,6 @@
 
 .gamecompleftcontainer {
   width: 48%;
-  /* background-color: red; */
   order: 1;
   display: flex;
   flex-direction: row;
@@ -71,9 +70,6 @@
 }
 
 .gamecompboardcontainer {
-  /* background-color: red; */
-  /* position: relative; */
-  /* width: auto; */
   order: 1;
   display: flex;
   justify-content: center;
@@ -91,8 +87,6 @@
 
 .gamecompboard {
   order: 1;
-  /* justify-content: center;
-  align-items: center; */
   transform-origin: center;
   transform: scale(var(--board-scale, 1));
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 1));
@@ -122,7 +116,6 @@
 }
 
 .gamecomprightcontainer {
-  /* background-color: green; */
   order: 2;
   display: flex;
   flex-direction: column;

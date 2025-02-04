@@ -312,7 +312,6 @@ form {
   font-size: 0.9rem;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid var(--grey);
-  /* text-transform: uppercase; */
   letter-spacing: 0.5px;
 }
 

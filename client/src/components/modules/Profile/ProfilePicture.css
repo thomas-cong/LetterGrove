@@ -3,7 +3,6 @@
   width: 200px;
   height: 200px;
   background-color: rgba(226, 226, 226, 0.584);
-  /* border: 4px solid var(--primary--dim); */
   overflow: hidden;
   aspect-ratio: 1;
   display: flex;

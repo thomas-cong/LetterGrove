@@ -8,7 +8,6 @@
 
 .legend-background {
   display: flex;
-  /* background-color: black; */
   width: max(80px, 22vh);
   height: auto;
   align-self: center;
